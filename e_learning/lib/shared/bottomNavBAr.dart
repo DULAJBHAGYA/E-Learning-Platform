@@ -1,9 +1,9 @@
 import 'package:e_learning/color.dart';
+import 'package:e_learning/student/all%20courses/allCourses.dart';
 import 'package:e_learning/student/my%20courses/myCourses.dart';
 import 'package:e_learning/student/profile/stdProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:enefty_icons/enefty_icons.dart';
-import 'package:unicons/unicons.dart';
 
 import '../student/home/stdHome.dart';
 
@@ -33,7 +33,7 @@ class BottomNavBar extends StatelessWidget {
             break;
           case 2:
             // Navigate to All Courses screen
-            Navigator.pushNamed(context, '/all_courses');
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const StdAllCourses()));
             break;
           case 3:
             // Navigate to Profile screen

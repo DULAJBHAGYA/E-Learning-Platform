@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../shared/bottomNavBAr.dart';
+import '../../shared/bottomNavBar.dart';
 
 class StudentProfile extends StatelessWidget {
   const StudentProfile({super.key});

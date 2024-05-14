@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:e_learning/shared/bottomNavBAr.dart'; // Adjust the import path as per your project structure
+import 'package:e_learning/shared/bottomNavBar.dart'; // Adjust the import path as per your project structure
 import 'package:percent_indicator/percent_indicator.dart';
 
 import '../../color.dart';
@@ -60,7 +60,7 @@ class _MyCoursesState extends State<MyCourses> with SingleTickerProviderStateMix
                           height: 20,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
-                            color: grey, 
+                            color: lightgrey, 
                           ),
                           child: Center(
                             child: Text(
