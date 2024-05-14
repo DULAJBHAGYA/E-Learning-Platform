@@ -46,6 +46,8 @@ dependencies:
   carousel_slider: ^4.2.1
   lucide_icons_flutter: ^1.0.9
   enefty_icons: ^1.0.7
+  pie_chart: ^5.4.0
+  percent_indicator: ^4.2.3
 
 dev_dependencies:
   flutter_test:
