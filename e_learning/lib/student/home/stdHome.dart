@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../color.dart';
-import '../../shared/bottomNavBAr.dart';
+import '../../shared/bottomNavBar.dart';
 
 class StudentHome extends StatelessWidget {
   const StudentHome({Key? key}) : super(key: key);
@@ -448,7 +448,7 @@ class HorizontalListview extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: darkblue, width: 2),
                     ),
-                    child: Text('All 🔥', style: GoogleFonts.sourceSans3(fontSize: 15, fontWeight: FontWeight.w600, color: darkblue),),
+                    child: Text('All Courses 🔥', style: GoogleFonts.sourceSans3(fontSize: 15, fontWeight: FontWeight.w600, color: darkblue),),
                   ),
     
                   SizedBox(width: 10),
