@@ -17,8 +17,8 @@ class BottomNavBar extends StatelessWidget {
       height: 70,
       destinations: const [
         NavigationDestination(icon: Icon(EneftyIcons.home_2_outline), label: 'Home'),
-        NavigationDestination(icon: Icon(EneftyIcons.book_2_outline), label: 'My Courses'),
         NavigationDestination(icon: Icon(EneftyIcons.a_3d_cube_outline), label: 'All Courses'), 
+        NavigationDestination(icon: Icon(EneftyIcons.book_outline), label: 'My Courses'),
         NavigationDestination(icon: Icon(EneftyIcons.user_outline), label: 'Profile'),
       ],
       onDestinationSelected: (int index) {
@@ -29,11 +29,11 @@ class BottomNavBar extends StatelessWidget {
             break;
           case 1:
             // Navigate to My Courses screen
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const MyCourses()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const StdAllCourses()));
             break;
           case 2:
             // Navigate to All Courses screen
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const StdAllCourses()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const MyCourses()));
             break;
           case 3:
             // Navigate to Profile screen
