@@ -1,8 +1,7 @@
 
-import 'package:e_learning/student/course%20display/courseDescription.dart';
+import 'package:e_learning/student/course%20content/courseContent.dart';
 import 'package:flutter/material.dart';
 
-import 'student/profile/stdProfile.dart';
 
 
 
@@ -18,7 +17,7 @@ class MyApp extends StatelessWidget {
       title: 'U-Learn',
       initialRoute: '/',
       routes: {
-        '/': (context) => CourseDescription(),
+        '/': (context) => CourseContent(),
       },
     );
   }
