@@ -62,8 +62,8 @@ class UserStats extends StatelessWidget {
               children: [
                 
                 Container(
-                  height: 100,
-                  width: 100,
+                  height: 110,
+                  width: 110,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     color: lightblue,
@@ -72,18 +72,18 @@ class UserStats extends StatelessWidget {
                     padding: const EdgeInsets.all(10.0),
                     child: Column(
                       children: [
-                        Text('10', style: GoogleFonts.sourceSans3(fontSize: 20, fontWeight: FontWeight.bold, color: black),),
-                        Text('Courses', style: GoogleFonts.sourceSans3(fontSize: 15, fontWeight: FontWeight.w600, color: black),),
+                        Text('10', style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.bold, color: black),),
+                        Text('Courses', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600, color: black),),
                       ],
                     ),    
                   )
                 )  ,
     
-                SizedBox(width: 20),
+                SizedBox(width: 10),
     
                 Container(
-                  height: 100,
-                  width: 100,
+                  height: 110,
+                  width: 110,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     color: darkblue,
@@ -92,18 +92,18 @@ class UserStats extends StatelessWidget {
                     padding: const EdgeInsets.all(10.0),
                     child: Column(
                       children: [
-                        Text('10', style: GoogleFonts.sourceSans3(fontSize: 20, fontWeight: FontWeight.bold, color: white),),
-                        Text('Registered \nCourses', style: GoogleFonts.sourceSans3(fontSize: 15, fontWeight: FontWeight.w600, color: white),),
+                        Text('10', style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.bold, color: white),),
+                        Text('Registered \nCourses', textAlign: TextAlign.center, style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600, color: white),),
                       ],
                     ),    
                   )
                 )  ,
     
-                SizedBox(width: 20),
+                SizedBox(width: 10),
     
                 Container(
-                  height: 100,
-                  width: 100,
+                  height: 110,
+                  width: 110,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     color: lightblue,
@@ -112,8 +112,8 @@ class UserStats extends StatelessWidget {
                     padding: const EdgeInsets.all(10.0),
                     child: Column(
                       children: [
-                        Text('10', style: GoogleFonts.sourceSans3(fontSize: 20, fontWeight: FontWeight.bold, color: black),),
-                        Text('Ongoing \nCourses', style: GoogleFonts.sourceSans3(fontSize: 15, fontWeight: FontWeight.w600, color: black),),
+                        Text('10', style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.bold, color: black),),
+                        Text('Ongoing \nCourses', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600, color: black),),
                       ],
                     ),    
                   )
@@ -426,11 +426,11 @@ class HorizontalListview extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text('Popular Courses', style: GoogleFonts.sourceSans3(fontSize: 18, fontWeight: FontWeight.bold, color: black),),
+                Text('Popular Courses', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.bold, color: black),),
 
                 Spacer(),
 
-                Text('See All', style: GoogleFonts.sourceSans3(fontSize: 15, fontWeight: FontWeight.w600, color: darkblue),),
+                Text('See All', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600, color: darkblue),),
               ],
             ),
     
@@ -448,7 +448,7 @@ class HorizontalListview extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: darkblue, width: 2),
                     ),
-                    child: Text('All Courses 🔥', style: GoogleFonts.sourceSans3(fontSize: 15, fontWeight: FontWeight.w600, color: darkblue),),
+                    child: Text('All Courses 🔥', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600, color: darkblue),),
                   ),
     
                   SizedBox(width: 10),
@@ -461,7 +461,7 @@ class HorizontalListview extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: darkblue, width: 2),
                     ),
-                    child: Text('Data Science 📈', style: GoogleFonts.sourceSans3(fontSize: 15, fontWeight: FontWeight.w600, color: darkblue),),
+                    child: Text('Data Science 📈', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600, color: darkblue),),
                   ),
     
                   SizedBox(width: 10),
@@ -474,7 +474,7 @@ class HorizontalListview extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: darkblue, width: 2),
                     ),
-                    child: Text('Machine Learning 👨‍💻', style: GoogleFonts.sourceSans3(fontSize: 15, fontWeight: FontWeight.w600, color: darkblue),),
+                    child: Text('Machine Learning 👨‍💻', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600, color: darkblue),),
                   ),
     
                   SizedBox(width: 10),
@@ -487,7 +487,7 @@ class HorizontalListview extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: darkblue, width: 2),
                     ),
-                    child: Text('Artificial Intelligence 🤖', style: GoogleFonts.sourceSans3(fontSize: 15, fontWeight: FontWeight.w600, color: darkblue),),
+                    child: Text('Artificial Intelligence 🤖', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600, color: darkblue),),
                   ),
     
                   SizedBox(width: 10),
@@ -500,7 +500,7 @@ class HorizontalListview extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: darkblue, width: 2),
                     ),
-                    child: Text('Cyber Security 🔒', style: GoogleFonts.sourceSans3(fontSize: 15, fontWeight: FontWeight.w600, color: darkblue),),
+                    child: Text('Cyber Security 🔒', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600, color: darkblue),),
                   ),
                   
                 ],
@@ -538,8 +538,8 @@ class UserInfo extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Hello! 👋', style: GoogleFonts.sourceSans3(fontSize: 20, fontWeight: FontWeight.w400, color: black),),
-            Text('Dulaj Bhagya', style: GoogleFonts.sourceSans3(fontSize: 20, fontWeight: FontWeight.bold, color: black),),
+            Text('Hello! 👋', style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.w400, color: black),),
+            Text('Dulaj Bhagya', style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.bold, color: black),),
           ],
         ),
     
@@ -582,7 +582,7 @@ class SearchBar extends StatelessWidget {
         children: [
           Icon(UniconsLine.search, size: 20, color: lightgrey,),
           SizedBox(width: 10),
-          Text('search courses here', style: GoogleFonts.sourceSans3(fontSize: 16, fontWeight: FontWeight.w400, color: lightgrey),),
+          Text('search courses here', style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w400, color: lightgrey),),
         ],
       ),
     );

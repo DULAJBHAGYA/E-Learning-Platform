@@ -8,3 +8,6 @@ const Color black = Color(0xFF000000);
 const Color grey = Color(0xFF5D5A5A);
 const Color lightgrey = Color(0xFF878484);
 const Color background = Color(0xFFF4F1F1);
+const Color background2 = Color(0xFFD7D1D1);
+
+const Color red = Color(0xFF9A3F3F);

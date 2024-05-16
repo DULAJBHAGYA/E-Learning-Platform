@@ -1,3 +1,4 @@
+import 'package:e_learning/shared/searchBar.dart';
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -21,7 +22,7 @@ class StdAllCourses extends StatelessWidget {
 
             SizedBox(height: 20,),
 
-            SearchBar(),
+            CustomSearchBar(),
 
             SizedBox(height: 20,),
 
@@ -135,32 +136,7 @@ class CourseViewCard extends StatelessWidget {
   }
 }
 
-class SearchBar extends StatelessWidget {
-  const SearchBar({
-    super.key,
-  });
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      width:MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width,
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: white,
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: lightgrey, width: 1),
-      ),
-      child: Row(
-        children: [
-          Icon(EneftyIcons.search_normal_outline, size: 20, color: lightgrey,),
-          SizedBox(width: 10),
-          Text('search courses here', style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w500, color: lightgrey),),
-        ],
-      ),
-    );
-  }
-}
 
 
 class HorizontalListview extends StatelessWidget {

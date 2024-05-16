@@ -26,7 +26,7 @@ class StudentProfile extends StatelessWidget {
 
                         Spacer(),
 
-                        Icon(EneftyIcons.login_2_outline, size: 25, color: black,),
+                        Icon(EneftyIcons.login_outline, size: 40, color: black, weight: 5,),
                       ],
                     ),
                   ],
@@ -53,14 +53,134 @@ class StudentProfile extends StatelessWidget {
                 Container(  
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(15),
                     color: lightgrey,
                   ),
-                  child: Column(
-                    children: [
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text('Dulaj', style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.w500, color: black),),
+                    
+                            Spacer(),
+                    
+                            Icon(EneftyIcons.edit_outline, size: 20, color: black, weight: 5,),
+                          ]
+                        )
+                        
+                      ],
+                    ),
+                  )
+                ),
 
-                      SizedBox(height: 20,),
-                    ],
+                SizedBox(height: 20,),
+
+
+                Container(  
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: lightgrey,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text('Upananda', style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.w500, color: black),),
+                    
+                            Spacer(),
+                    
+                            Icon(EneftyIcons.edit_outline, size: 20, color: black, weight: 5,),
+                          ]
+                        )
+                        
+                      ],
+                    ),
+                  )
+                ),
+
+                SizedBox(height: 20,),
+
+                Container(  
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: lightgrey,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text('dbhagya', style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.w500, color: black),),
+                    
+                            Spacer(),
+                    
+                            Icon(EneftyIcons.edit_outline, size: 20, color: black, weight: 5,),
+                          ]
+                        )
+                        
+                      ],
+                    ),
+                  )
+                ),
+
+                SizedBox(height: 20,),
+
+                Container(  
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: lightgrey,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text('dulajupananda@gmail.com', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w400, color: black),),
+                    
+                            Spacer(),
+                    
+                            Icon(EneftyIcons.edit_outline, size: 20, color: black, weight: 5,),
+                          ]
+                        )
+                        
+                      ],
+                    ),
+                  )
+                ),
+
+                SizedBox(height: 20,),
+
+                Container(  
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: lightgrey,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text('Change Password', style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.w500, color: black),),
+                    
+                            Spacer(),
+                    
+                            Icon(EneftyIcons.arrow_right_3_outline, size: 20, color: black, weight: 5,),
+                          ]
+                        )
+                        
+                      ],
+                    ),
                   )
                 )
 
