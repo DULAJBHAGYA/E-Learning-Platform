@@ -61,16 +61,16 @@ class AdminDashCoursessDisplayCard extends StatelessWidget {
           color: white,
         ),
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(5.0),
           child: Row(
             children: [
               //image
               Container(
-                height: 90,
-                width: 90,
+                height: 95,
+                width: 95,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('/images/dsadvanced.png'),
+                    image: AssetImage('/images/ai1.jpg'),
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.circular(20),

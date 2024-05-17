@@ -1,7 +1,12 @@
 
+import 'package:e_learning/login/login.dart';
+import 'package:e_learning/student/all%20courses/allCourses.dart';
+import 'package:e_learning/student/my%20courses/myCourses.dart';
 import 'package:flutter/material.dart';
 
 import 'admin/admin home/adminDash.dart';
+import 'student/course display/courseDescription.dart';
+import 'student/home/stdHome.dart';
 
 
 
@@ -18,7 +23,7 @@ class MyApp extends StatelessWidget {
       title: 'U-Learn',
       initialRoute: '/',
       routes: {
-        '/': (context) =>  AdminDash(),
+        '/': (context) =>  MyCourses(),
       },
     );
   }
