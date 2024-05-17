@@ -2,6 +2,7 @@
 import 'package:e_learning/admin/admin%20courses/adminCourses.dart';
 import 'package:e_learning/admin/admin%20students/adminStudents.dart';
 import 'package:e_learning/login/login.dart';
+import 'package:e_learning/register/register.dart';
 import 'package:e_learning/student/all%20courses/allCourses.dart';
 import 'package:e_learning/student/my%20courses/myCourses.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       title: 'U-Learn',
       initialRoute: '/',
       routes: {
-        '/': (context) =>  AdminStudents(),
+        '/': (context) =>  RegisterScreen(),
       },
     );
   }

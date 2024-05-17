@@ -2,14 +2,15 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'baseurl.dart';
+
 class UserService {
   late final Dio _dio;
 
   static final UserService _instance = UserService._internal();
 
 
-//base url 
-  static const String baseUrl = 'http://192.168.1.63:8080';
+
 
   UserService._internal() {
     _dio = Dio(
@@ -25,12 +26,13 @@ class UserService {
   static UserService get instance => _instance;
 
 //method for registering a student
- Future<dynamic> registerUser(String full_name, String user_name, String email, String hashed_password, String role) async {
+ Future<dynamic> registerUser(String full_name, String user_name, String email, String hashed_password,String last_name, String role) async {
   try {
     final response = await _dio.post(
-      '/signup',
+      '/api/v1/signup',
       data: jsonEncode({
         'full_name': full_name,
+        'last_name': last_name,
         'user_name': user_name,
         'email': email,
         'hashed_password': hashed_password,
@@ -45,6 +47,7 @@ class UserService {
         redirectUrl,
         data: jsonEncode({
           'full_name': full_name,
+          'last_name': last_name,
           'user_name': user_name,
           'email': email,
           'hashed_password': hashed_password,
