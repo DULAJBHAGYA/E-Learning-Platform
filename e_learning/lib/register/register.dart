@@ -1,281 +1,502 @@
+import 'package:e_learning/services/userServices.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 
 import '../color.dart';
+import '../login/login.dart';
 
-class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  RegisterScreen({Key? key}) : super(key: key);
+
+  _RegisterScreenState createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
+
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController userNameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController roleController = TextEditingController();
+
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    firstNameController.dispose();
+    lastNameController.dispose();
+    emailController.dispose();
+    userNameController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  String? _validateFirstName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your first name';
+    }
+    return null;
+  }
+
+   String? _validateLastName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your last name';
+    }
+    return null;
+  }
+
+  String? _validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter an email';
+    } else if (!value.contains('@')) {
+      return 'Please enter a valid email';
+    }
+    return null;
+  }
+
+  String? _validateUserName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a username';
+    }
+    return null;
+  }
+
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a password';
+    }
+    return null;
+  }
+
+  String? _validateConfirmPassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please confirm your password';
+    } else if (value != passwordController.text) {
+      return 'Passwords do not match';
+    }
+    return null;
+  }
+
+  void _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        final response = await UserService.instance.registerUser(
+          firstNameController.text,
+          lastNameController.text,
+          userNameController.text,
+          emailController.text,
+          passwordController.text,
+          roleController.text,
+          // You may add any text here if required
+        );
+
+        // Check response and handle accordingly
+        if (response != null && response['statusCode'] == 200) {
+          // Registration successful, show success message
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Registration Successful'),
+                content: Text('You have successfully registered.'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Login()),
+                      );
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+              print('Registration successful');
+            },
+          );
+        } else {
+          // Handle other response status codes, if needed
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Registration Suucessful'),
+                content: Text(
+                  'Login into continue',
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Login()),
+                      ); // Close the dialog
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      } catch (e) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Registration Failed'),
+              content: Text(
+                'An error occurred during registration. Please try again later.',
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+        print('Registration failed: $e');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Container(
-          color: Colors.white,
+      body: SingleChildScrollView(
+          child: Padding(
+        padding: EdgeInsets.all(0),
+        child: Form(
+          key: _formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(
-                height: 80,
-              ),
-              Align(
-                alignment: Alignment.centerLeft, // Align text to the left
+              
+              Padding(
+                padding: const EdgeInsets.all(10.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Let\'s Create an Account',
-                      style: GoogleFonts.poppins(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: black),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'Welcome back,',
-                      style: GoogleFonts.poppins(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                          color: grey),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      'You\'ve been missed!',
-                      style: GoogleFonts.poppins(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                          color: grey),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Full name',
-                    style: GoogleFonts.poppins(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: black),
-                  ),
-                  Container(
-                    height: 45,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      color: white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: lightgrey,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'someone@example.com',
-                          hintStyle: GoogleFonts.poppins(color: lightgrey),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'User name',
-                    style: GoogleFonts.poppins(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: black),
-                  ),
-                  Container(
-                    height: 45,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      color: white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: lightgrey,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'someone@example.com',
-                          hintStyle: GoogleFonts.poppins(color: lightgrey),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-
-                  Text(
-                    'Email Address',
-                    style: GoogleFonts.poppins(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: black),
-                  ),
-                  Container(
-                    height: 45,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      color: white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: lightgrey,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'someone@example.com',
-                          hintStyle: GoogleFonts.poppins(color: lightgrey),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Password',
-                    style: GoogleFonts.poppins(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: black),
-                  ),
-                  Container(
-                    height: 50,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      color: white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: lightgrey,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'please enter your password',
-                          hintStyle: GoogleFonts.poppins(color: lightgrey),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(
-                    height: 20,
-                  ),
-
-                  Text(
-                    'Confirm Password',
-                    style: GoogleFonts.poppins(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: black),
-                  ),
-                  Container(
-                    height: 45,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      color: white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: lightgrey,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'someone@example.com',
-                          hintStyle: GoogleFonts.poppins(color: lightgrey),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-
-                  
-                  const SizedBox(
-                    height: 20,
-                  ),
-                 
-
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width, // Example width
-                    height: 50, // Example height
-                    child: TextButton(
-                      onPressed: () {},
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(20)),
-                        backgroundColor: MaterialStateProperty.all(darkblue),
-                        foregroundColor: MaterialStateProperty.all(darkblue),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                        ),
-                      ), 
-                      child: Text(
-                        'Sign up',
-                        style: GoogleFonts.poppins(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: white),
-                      ),
-                    ),
-                  ),
-
-
-                 
-
-                 
-                  const SizedBox(height: 40,),
-
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Create an account',
-                          style: GoogleFonts.inter(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: darkblue),
+                      Text(
+                        'Let\'s create your account',
+                        style: GoogleFonts.openSans(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
+                          color: black,
                         ),
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(10),
+                          ),
+                          TextFormField(
+                            controller: firstNameController,
+                            validator: _validateFirstName,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(width: 2, color: lightgrey),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              prefixIcon: ColorFiltered(
+                                colorFilter: ColorFilter.mode(
+                                  lightgrey,
+                                  BlendMode.srcIn,
+                                ),
+                                child: Icon(Iconsax.user),
+                              ),
+                              iconColor: lightgrey,
+                              labelText: 'First Name',
+                              labelStyle: GoogleFonts.nunito(
+                                fontWeight: FontWeight.bold,
+                                color: lightgrey,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            controller: lastNameController,
+                            validator: _validateLastName,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(width: 2, color: lightgrey),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              prefixIcon: ColorFiltered(
+                                colorFilter: ColorFilter.mode(
+                                  lightgrey,
+                                  BlendMode.srcIn,
+                                ),
+                                child: Icon(Iconsax.user),
+                              ),
+                              iconColor: lightgrey,
+                              labelText: 'Last Name',
+                              labelStyle: GoogleFonts.nunito(
+                                fontWeight: FontWeight.bold,
+                                color: lightgrey,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            controller: userNameController,
+                            validator: _validateUserName,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(width: 2, color: lightgrey),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              prefixIcon: ColorFiltered(
+                                colorFilter: ColorFilter.mode(
+                                  lightgrey,
+                                  BlendMode.srcIn,
+                                ),
+                                child: Icon(Iconsax.direct_right),
+                              ),
+                              iconColor: lightgrey,
+                              labelText: 'User Name',
+                              labelStyle: GoogleFonts.nunito(
+                                fontWeight: FontWeight.bold,
+                                color: lightgrey,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            controller: emailController,
+                            validator: _validateEmail,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(width: 2, color: lightgrey),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              prefixIcon: ColorFiltered(
+                                colorFilter: ColorFilter.mode(
+                                  lightgrey,
+                                  BlendMode.srcIn,
+                                ),
+                                child: Icon(Iconsax.sms),
+                              ),
+                              labelText: 'Email',
+                              labelStyle: GoogleFonts.nunito(
+                                fontWeight: FontWeight.bold,
+                                color: lightgrey,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            controller: passwordController,
+                            obscureText: _obscurePassword,
+                            validator: _validatePassword,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(width: 2, color: lightgrey),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              prefixIcon: ColorFiltered(
+                                colorFilter: ColorFilter.mode(
+                                  lightgrey,
+                                  BlendMode.srcIn,
+                                ),
+                                child: Icon(Iconsax.password_check),
+                              ),
+                              labelText: 'Password',
+                              labelStyle: GoogleFonts.nunito(
+                                fontWeight: FontWeight.bold,
+                                color: lightgrey,
+                              ),
+                              suffixIcon: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    _obscurePassword = !_obscurePassword;
+                                  });
+                                },
+                                child: ColorFiltered(
+                                  colorFilter: ColorFilter.mode(
+                                    lightgrey,
+                                    BlendMode.srcIn,
+                                  ),
+                                  child: Icon(_obscurePassword
+                                      ? Iconsax.eye_slash
+                                      : Iconsax.eye),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            controller: confirmPasswordController,
+                            obscureText: _obscureConfirmPassword,
+                            validator: _validateConfirmPassword,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(width: 2, color: lightgrey),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              prefixIcon: ColorFiltered(
+                                colorFilter: ColorFilter.mode(
+                                  lightgrey,
+                                  BlendMode.srcIn,
+                                ),
+                                child: Icon(Iconsax.password_check),
+                              ),
+                              labelText: 'Confirm Password',
+                              labelStyle: GoogleFonts.nunito(
+                                fontWeight: FontWeight.bold,
+                                color: lightgrey,
+                              ),
+                              suffixIcon: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    _obscureConfirmPassword =
+                                        !_obscureConfirmPassword;
+                                  });
+                                },
+                                child: ColorFiltered(
+                                  colorFilter: ColorFilter.mode(
+                                    lightgrey,
+                                    BlendMode.srcIn,
+                                  ),
+                                  child: Icon(_obscureConfirmPassword
+                                      ? Iconsax.eye_slash
+                                      : Iconsax.eye),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Checkbox(
+                            value: false,
+                            onChanged: (value) {},
+                          ),
+                          Text(
+                            'Agree with terms and conditions',
+                            style: GoogleFonts.nunito(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          OutlinedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                // Form is validated, perform your action here
+                                _submitForm();
+                              }
+                            },
+                            style: ButtonStyle(
+                              elevation:
+                                  MaterialStateProperty.all<double>(100.0),
+                              side: MaterialStateProperty.all<BorderSide>(
+                                BorderSide(
+                                  width: 0.0,
+                                  color: lightgrey,
+                                ),
+                              ),
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.all(25.0),
+                              ),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              backgroundColor:
+                                  MaterialStateProperty.all<Color>(darkblue),
+                            ),
+                            child: Text(
+                              'CREATE ACCOUNT',
+                              style: GoogleFonts.nunito(
+                                fontWeight: FontWeight.w900,
+                                fontSize: 20,
+                                color: white,
+                              ),
+                            ),
+                          ),
+                          Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Already have an account?',
+                                  style: GoogleFonts.nunito(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Login()),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Login',
+                                    style: GoogleFonts.nunito(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: darkblue,
+                                    ),
+                                  ),
+                                ),
+                              ]),
+                        ],
+                      ),
+                    ]),
+              )
             ],
           ),
         ),
-      ),
+      )),
     );
   }
 }
