@@ -44,7 +44,7 @@ class _CourseDescriptionState extends State<CourseDescription>
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: AssetImage('/images/bg.jpg'),
+                              image: AssetImage('/images/ai1.jpg'),
                               fit: BoxFit.cover)),
                     ),
                     Padding(
@@ -58,7 +58,7 @@ class _CourseDescriptionState extends State<CourseDescription>
                             child: Icon(
                               EneftyIcons.arrow_left_4_outline,
                               size: 30,
-                              color: Colors.white,
+                              color: white,
                             ),
                           ),
 
@@ -75,26 +75,26 @@ class _CourseDescriptionState extends State<CourseDescription>
                     children: [
                       Text(
                         'Data Science Basic',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.openSans(
                             fontSize: 30,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w700,
                             color: black),
                       ),
                       SizedBox(height: 5),
                       Container(
-                        width: 150,
+                        width: 120,
                         alignment: Alignment.center,
-                        padding: EdgeInsets.all(5),
+                        padding: EdgeInsets.all(3),
                         decoration: BoxDecoration(
                           color: lightblue,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
-                          'Data Science',
-                          style: GoogleFonts.poppins(
+                        'DATA SCIENCE',
+                          style: GoogleFonts.openSans(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
-                              color: blue),
+                              color: darkblue),
                         ),
                       ),
                       SizedBox(height: 20),
@@ -104,10 +104,10 @@ class _CourseDescriptionState extends State<CourseDescription>
                           Row(
                             children: [
                               Icon(EneftyIcons.people_bold,
-                                  size: 20, color: blue),
+                                  size: 20, color: darkblue),
                               SizedBox(width: 10),
                               Text('120 Students',
-                                  style: GoogleFonts.poppins(
+                                  style: GoogleFonts.openSans(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w400,
                                       color:black)),
@@ -117,10 +117,10 @@ class _CourseDescriptionState extends State<CourseDescription>
                           Row(
                             children: [
                               Icon(EneftyIcons.clock_2_bold,
-                                  size: 20, color: blue),
+                                  size: 20, color: darkblue),
                               SizedBox(width: 10),
                               Text('2.5 Hours',
-                                  style: GoogleFonts.poppins(
+                                  style: GoogleFonts.openSans(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w400,
                                       color: black)),
@@ -130,10 +130,10 @@ class _CourseDescriptionState extends State<CourseDescription>
                           Row(
                             children: [
                               Icon(EneftyIcons.document_bold,
-                                  size: 20, color: blue),
+                                  size: 20, color: darkblue),
                               SizedBox(width: 10),
                               Text('Certificate',
-                                  style: GoogleFonts.poppins(
+                                  style: GoogleFonts.openSans(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w400,
                                       color: black)),
@@ -148,7 +148,7 @@ class _CourseDescriptionState extends State<CourseDescription>
                           Tab(
                             child: Text(
                               'About',
-                              style: GoogleFonts.poppins(
+                              style: GoogleFonts.openSans(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w500,
                                 color: lightgrey,
@@ -158,7 +158,7 @@ class _CourseDescriptionState extends State<CourseDescription>
                           Tab(
                             child: Text(
                               'Lessons',
-                              style: GoogleFonts.poppins(
+                              style: GoogleFonts.openSans(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w500,
                                 color: lightgrey,
@@ -218,60 +218,60 @@ class Lessons extends StatelessWidget {
             children: [
               ListTile(
                 leading: Icon(EneftyIcons.chart_success_outline, color: black),
-                title: Text('Introduction to Data Science', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, color: black),),
+                title: Text('Introduction to Data Science', style: GoogleFonts.openSans(fontSize: 18,fontWeight: FontWeight.w600, color: black),),
                 subtitle: Text('Students will learn about the role of data science in today\'s world, its applications across various industries, and the skills required to become proficient in the field.', 
                 textAlign: TextAlign.justify,
-                style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w400, color: black),),
+                style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w400, color: black),),
               ),
               SizedBox(height: 10),
 
 
               ListTile(
                 leading: Icon(EneftyIcons.chart_success_outline, color: black),
-                title: Text('Data Exploration and Visualization', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, color: black),),
+                title: Text('Data Exploration and Visualization', style: GoogleFonts.openSans(fontSize: 18, fontWeight: FontWeight.w600, color: black),),
                 subtitle: Text('This module will cover techniques for exploring and visualizing data, including descriptive statistics, data cleaning, and visualization libraries such as Matplotlib and Seaborn.', 
                 textAlign: TextAlign.justify,
-                style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w400, color: black),),
+                style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w400, color: black),),
               ),
 
               SizedBox(height: 10),
 
               ListTile(
                 leading: Icon(EneftyIcons.chart_success_outline, color: black),
-                title: Text('Statistical Analysis', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, color: black),),
+                title: Text('Statistical Analysis', style: GoogleFonts.openSans(fontSize: 18, fontWeight: FontWeight.w600, color: black),),
                 subtitle: Text('Students will delve into statistical concepts essential for data analysis, including probability distributions, hypothesis testing, and regression analysis.', 
                 textAlign: TextAlign.justify,
-                style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w400, color: black),),
+                style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w400, color: black),),
               ),
 
               SizedBox(height: 10),
 
               ListTile(
                 leading: Icon(EneftyIcons.chart_success_outline, color: black),
-                title: Text('Machine Learning Basics', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, color: black),),
+                title: Text('Machine Learning Basics', style: GoogleFonts.openSans(fontSize: 18, fontWeight: FontWeight.w600, color: black),),
                 subtitle: Text('An introduction to machine learning algorithms and techniques, including supervised and unsupervised learning, classification, regression, and clustering.', 
                 textAlign: TextAlign.justify,
-                style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w400, color: black),),
+                style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w400, color: black),),
               ),
 
               SizedBox(height: 10),
 
               ListTile(
                 leading: Icon(EneftyIcons.chart_success_outline, color: black),
-                title: Text('Introduction to Python for Data Science', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, color: black),),
+                title: Text('Introduction to Python for Data Science', style: GoogleFonts.openSans(fontSize: 18, fontWeight: FontWeight.w600, color: black),),
                 subtitle: Text('A hands-on introduction to the Python programming language, focusing on its applications in data science, data manipulation with Pandas, and data visualization with Matplotlib and Seaborn.', 
                 textAlign: TextAlign.justify,
-                style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w400, color: black),),
+                style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w400, color: black),),
               ),
 
               SizedBox(height: 10),
 
               ListTile(
                 leading: Icon(EneftyIcons.chart_success_outline, color: black),
-                title: Text('Capstone Project', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, color: black),),
+                title: Text('Capstone Project', style: GoogleFonts.openSans(fontSize: 18, fontWeight: FontWeight.w600, color: black),),
                 subtitle: Text('Students will apply their knowledge and skills acquired throughout the course to complete a real-world data science project. This project will involve data acquisition, preprocessing, analysis, modeling, and presentation of findings.', 
                 textAlign: TextAlign.justify,
-                style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w400, color: black),),
+                style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w400, color: black),),
               ),
             ],
           )
@@ -299,7 +299,7 @@ class AboutCourse extends StatelessWidget {
                 children: [
                   Text(
                     'About Course',
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.openSans(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                       color: black,
@@ -309,7 +309,7 @@ class AboutCourse extends StatelessWidget {
                   Text(
                     'In this introductory course to data science, students will embark on a journey to understand the fundamental concepts, techniques, and tools used in the field of data science. The course aims to equip learners with a solid foundation in data science principles, enabling them to extract insights from data and make informed decisions.',
                     textAlign: TextAlign.justify,
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.openSans(
                       fontSize: 15,
                       fontWeight: FontWeight.w400,
                       color: black,
@@ -327,7 +327,7 @@ class AboutCourse extends StatelessWidget {
                 children: [
                   Text(
                     'Prerequisites',
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.openSans(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                       color: black,
@@ -341,12 +341,16 @@ class AboutCourse extends StatelessWidget {
                       ListTile(
                         leading: Icon(EneftyIcons.check_outline),
                         title: Text(
-                            'Basic understanding of mathematics and statistics'),
+                            'Basic understanding of mathematics and statistics',
+                            style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w400, color: black),
+                            ),
                       ),
                       ListTile(
                         leading: Icon(EneftyIcons.chrome_outline),
                         title: Text(
-                            'Familiarity with programming concepts (preferably Python)'),
+                            'Familiarity with programming concepts (preferably Python)', 
+                            style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w400, color: black),
+                            ),
                       ),
                     ],
                   )
@@ -363,7 +367,7 @@ class AboutCourse extends StatelessWidget {
                 children: [
                   Text(
                     'Who can take this course',
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.openSans(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                       color: black,
@@ -373,7 +377,7 @@ class AboutCourse extends StatelessWidget {
                   Text(
                     'This course is ideal for beginners with an interest in data science and analytics. It is suitable for students, professionals, and anyone looking to embark on a career in data science or related fields.',
                     textAlign: TextAlign.justify,
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.openSans(
                       fontSize: 15,
                       fontWeight: FontWeight.w400,
                       color: black,
@@ -389,15 +393,20 @@ class AboutCourse extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Container(
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: darkblue,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Text('Enroll', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600, color: white),),
-                            ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    color: darkblue,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Text('ENROLL', style: GoogleFonts.openSans(fontSize: 18, fontWeight: FontWeight.w600, color: white),),
+                                ),
+                  ],
+                ),
               ],
             ),
           ]

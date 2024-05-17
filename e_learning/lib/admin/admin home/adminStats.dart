@@ -1,5 +1,6 @@
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:unicons/unicons.dart';
 
@@ -36,7 +37,7 @@ class AdminStats extends StatelessWidget {
                     children: [
                      
 
-                      Text('233', style: GoogleFonts.openSans(fontSize: 30, fontWeight: FontWeight.bold, color: white),),
+                      Text('233', style: GoogleFonts.openSans(fontSize: 30, fontWeight: FontWeight.w900, color: white),),
                       Text('Registered Students', style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w700, color: white),),
                     ],
                   ),    
@@ -60,8 +61,19 @@ class AdminStats extends StatelessWidget {
                     children: [
                      
 
-                      Text('17', style: GoogleFonts.openSans(fontSize: 30, fontWeight: FontWeight.bold, color: white),),
-                      Text('Courses', style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w700, color: white),),
+                      Stack(
+                        children: [
+                          
+                           Column(
+                             crossAxisAlignment: CrossAxisAlignment.start,
+                             children: [
+                               Text('17', style: GoogleFonts.openSans(fontSize: 30, fontWeight: FontWeight.w900, color: white),),
+                               Text('Courses', style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.bold, color: white),),
+                             ],
+                           ),
+                            
+
+                        ])
                     ],
                   ),    
                 )
@@ -90,8 +102,8 @@ class AdminStats extends StatelessWidget {
                     children: [
                      
 
-                      Text('176', style: GoogleFonts.openSans(fontSize: 30, fontWeight: FontWeight.bold, color: white),),
-                      Text('Enrolled Students', style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w700, color: white),),
+                      Text('176', style: GoogleFonts.openSans(fontSize: 30, fontWeight: FontWeight.w900, color: white),),
+                      Text('Enrolled Students', style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.bold, color: white),),
                     ],
                   ),    
                 )
@@ -112,7 +124,7 @@ class AdminStats extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text('7', style: GoogleFonts.openSans(fontSize: 30, fontWeight: FontWeight.bold, color: white),),
+                      Text('7', style: GoogleFonts.openSans(fontSize: 30, fontWeight: FontWeight.w900, color: white),),
                       Text('Admins', style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w700, color: white),),
                     ],
                   ),    

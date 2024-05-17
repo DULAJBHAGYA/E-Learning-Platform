@@ -32,7 +32,7 @@ class AdminInfo extends StatelessWidget {
                     'Nick Madison',
                     style: GoogleFonts.openSans(
                       fontSize: 25,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w700,
                       color: black,
                     ),
                   ),

@@ -6,6 +6,7 @@ import 'package:e_learning/shared/bottomNavBar.dart'; // Adjust the import path 
 import 'package:percent_indicator/percent_indicator.dart';
 
 import '../../color.dart';
+import 'completedCourses.dart';
 
 class MyCourses extends StatefulWidget {
   const MyCourses({Key? key}) : super(key: key);
@@ -26,6 +27,7 @@ class _MyCoursesState extends State<MyCourses> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: background,
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -33,95 +35,100 @@ class _MyCoursesState extends State<MyCourses> with SingleTickerProviderStateMix
           children: [
             Text(
               'MyCourses',
-              style: GoogleFonts.poppins(
-                fontSize: 30,
-                fontWeight: FontWeight.w600,
+              style: GoogleFonts.nunito(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
                 color: black,
               ),
             ),
             SizedBox(height: 20),
             TabBar(
-              controller: _tabController,
-              tabs: [
-                Tab(
-                  child: Row(
-                      children: [
-                        Text(
-                          'Ongoing',
-                          style: GoogleFonts.poppins(
-                            fontSize: 15, 
-                            fontWeight: FontWeight.w500, 
-                            color: lightgrey, 
+            controller: _tabController,
+            tabs: [
+              Tab(
+                child: Row(
+                  children: [
+                    Text(
+                      'Ongoing',
+                      style: GoogleFonts.nunito(
+                        fontSize: 15, 
+                        fontWeight: FontWeight.w500, 
+                        color: _tabController.index == 0 ? darkblue : lightgrey, 
+                      ),
+                    ),
+                    SizedBox(width: 10), 
+                    Container(
+                      width: 20, 
+                      height: 20,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: _tabController.index == 0 ? darkblue : lightgrey,  
+                      ),
+                      child: Center(
+                        child: Text(
+                          '5',
+                          style: GoogleFonts.nunito(
+                            fontSize:15,
+                            color: white, 
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                        SizedBox(width: 10), 
-                        Container(
-                          width: 20, 
-                          height: 20,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: lightgrey, 
-                          ),
-                          child: Center(
-                            child: Text(
-                              '5',
-                              style: GoogleFonts.poppins(
-                                color: white, 
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-
+                      ),
+                    ),
+                  ],
                 ),
+              ),
 
-
-                Tab(
-                  child: Row(
-                      children: [
-                        Text(
-                          'Completed',
-                          style: GoogleFonts.poppins(
-                            fontSize: 15, 
-                            fontWeight: FontWeight.w500, 
-                            color: lightgrey, 
+              Tab(
+                child: Row(
+                  children: [
+                    Text(
+                      'Completed',
+                      style: GoogleFonts.nunito(
+                        fontSize: 15, 
+                        fontWeight: FontWeight.w500, 
+                        color: _tabController.index == 1 ? darkblue : lightgrey, 
+                      ),
+                    ),
+                    SizedBox(width: 10), 
+                    Container(
+                      width: 20, 
+                      height: 20, 
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: _tabController.index == 1 ? darkblue : lightgrey, 
+                      ),
+                      child: Center(
+                        child: Text(
+                          '10', 
+                          style: GoogleFonts.nunito(
+                            fontSize:15,
+                            color: white, 
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                        SizedBox(width: 10), 
-                        Container(
-                          width: 20, 
-                          height: 20, 
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: lightgrey, 
-                          ),
-                          child: Center(
-                            child: Text(
-                              '10', 
-                              style: GoogleFonts.poppins(
-                                color: white, 
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-              indicator: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: darkblue, 
-                    width: 2, 
-                    style: BorderStyle.solid,
-                  ),
+              ),
+            ],
+            indicator: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: darkblue, 
+                  width: 2, 
+                  style: BorderStyle.solid,
                 ),
               ),
             ),
+            onTap: (index) {
+              setState(() {
+                _tabController.index = index;
+              });
+            },
+          ),
+
             SizedBox(height: 20),
             Expanded(
               child: TabBarView(
@@ -150,149 +157,6 @@ class _MyCoursesState extends State<MyCourses> with SingleTickerProviderStateMix
   }
 }
 
-class CompletedCourses extends StatelessWidget {
-  const CompletedCourses({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-          height: 170,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: white,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
-              children: [
-                //image
-                Container(
-                  height: 140,
-                  width: 140,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('/images/mlbasic.png'),
-                      fit: BoxFit.cover,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                  
-                SizedBox(width: 20),
-                  
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 10),
-                    Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: lightblue,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text('Machine Learning', style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600, color: darkblue),),
-                    ),
-                  
-                    SizedBox(height: 5),
-                  
-                    Text('Machine Learning \nBasic', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.bold, color: black),),
-                  
-                    SizedBox(height: 5),
-                  
-                    Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: darkblue,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text('Review Course', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600, color: white),),
-                    ),
-                  ]
-                ),
-              
-              ]
-            ),
-          )
-        ),
-    
-        SizedBox(height: 20),
-    
-        Container(
-          height: 170,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: white,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
-              children: [
-                //image
-                Container(
-                  height: 140,
-                  width: 140,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('/images/mlbasic.png'),
-                      fit: BoxFit.cover,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                  
-                SizedBox(width: 20),
-                  
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 10),
-                    Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: lightblue,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text('Machine Learning', style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600, color: darkblue),),
-                    ),
-                  
-                    SizedBox(height: 5),
-                  
-                    Text('Machine Learning \nBasic', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.bold, color: black),),
-                  
-                    SizedBox(height: 5),
-                  
-                    Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: darkblue,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text('View Details', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600, color: white),),
-                    ),
-                  ]
-                ),
-              
-              ]
-            ),
-          )
-        ),
-    
-        ]
-      ),
-    );
-  }
-}
 
 class OnGoingCourses extends StatelessWidget {
   const OnGoingCourses({
@@ -304,12 +168,13 @@ class OnGoingCourses extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
+
           Container(
         height: 120,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: background,
+          color: white,
         ),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -317,11 +182,11 @@ class OnGoingCourses extends StatelessWidget {
             children: [
               //image
               Container(
-                height: 100,
-                width: 100,
+                height: 110,
+                width: 110,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('/images/dsadvanced.png'),
+                    image: AssetImage('/images/python.png'),
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.circular(20),
@@ -334,19 +199,21 @@ class OnGoingCourses extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 10),
+                  
+                
+                
+                  Text('Python \nProgramming', style: GoogleFonts.nunito(fontSize: 18, fontWeight: FontWeight.w700, color: black),),
+
                   Container(
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                      color: white,
-                      borderRadius: BorderRadius.circular(20),
+                      color: background2,
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                    child: Text('Data Science', style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600, color: grey),),
+                    child: Text('IT', overflow: TextOverflow.clip, style: GoogleFonts.nunito(fontSize: 12, fontWeight: FontWeight.bold, color: lightgrey),),
                   ),
-                
-                  SizedBox(height: 5),
-                
-                  Text('Data Science \nAdvanced', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w700, color: black),),
+
                 
                   SizedBox(height: 5),
                 
@@ -354,18 +221,18 @@ class OnGoingCourses extends StatelessWidget {
                 ]
               ),
     
-              SizedBox(width: 20),
+              Spacer(),
     
               CircularPercentIndicator(
                 radius: 40.0,
                 lineWidth: 8.0,
-                progressColor: darkblue,
+                progressColor: it,
                 animation: true,
                 percent: 0.7,
                 center: new Text(
                   "70.0%",
                   style:
-                      GoogleFonts.poppins(fontWeight: FontWeight.w700, fontSize: 15.0),
+                      GoogleFonts.nunito(fontWeight: FontWeight.w900, fontSize: 15.0),
                 ),
               )
             
@@ -381,7 +248,7 @@ class OnGoingCourses extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: background,
+          color: white,
         ),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -389,11 +256,11 @@ class OnGoingCourses extends StatelessWidget {
             children: [
               //image
               Container(
-                height: 100,
-                width: 100,
+                height: 110,
+                width: 110,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('/images/dsadvanced.png'),
+                    image: AssetImage('/images/physics.jpg'),
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.circular(20),
@@ -406,19 +273,21 @@ class OnGoingCourses extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 10),
+                  
+                
+                
+                  Text('Physics', style: GoogleFonts.nunito(fontSize: 18, fontWeight: FontWeight.w700, color: black),),
+
                   Container(
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                      color: white,
-                      borderRadius: BorderRadius.circular(20),
+                      color: background2,
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                    child: Text('Machine Learning', style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600, color: grey),),
+                    child: Text('SCIENCE', overflow: TextOverflow.clip, style: GoogleFonts.nunito(fontSize: 12, fontWeight: FontWeight.bold, color: lightgrey),),
                   ),
-                
-                  SizedBox(height: 5),
-                
-                  Text('ML \nAdvanced', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w700, color: black),),
+
                 
                   SizedBox(height: 5),
                 
@@ -426,18 +295,18 @@ class OnGoingCourses extends StatelessWidget {
                 ]
               ),
     
-              SizedBox(width: 20),
+              Spacer(),
     
               CircularPercentIndicator(
                 radius: 40.0,
                 lineWidth: 8.0,
-                progressColor: darkblue,
+                progressColor: science,
                 animation: true,
-                percent: 0.2,
+                percent: 0.7,
                 center: new Text(
-                  "20.0%",
+                  "34.0%",
                   style:
-                      GoogleFonts.poppins(fontWeight: FontWeight.w700, fontSize: 15.0),
+                      GoogleFonts.nunito(fontWeight: FontWeight.w900, fontSize: 15.0),
                 ),
               )
             
@@ -445,78 +314,230 @@ class OnGoingCourses extends StatelessWidget {
           ),
         )
       ),
+
+      SizedBox(height: 20),
+
+      Container(
+        height: 120,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: white,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            children: [
+              //image
+              Container(
+                height: 110,
+                width: 110,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('/images/geometry.jpg'),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+                
+              SizedBox(width: 20),
+                
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 10),
+                  
+                
+                
+                  Text('Geometric \nAnalysis', style: GoogleFonts.nunito(fontSize: 18, fontWeight: FontWeight.w700, color: black),),
+
+                  Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: background2,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Text('MATHS', overflow: TextOverflow.clip, style: GoogleFonts.nunito(fontSize: 12, fontWeight: FontWeight.bold, color: lightgrey),),
+                  ),
+
+                
+                  SizedBox(height: 5),
+                
+                  
+                ]
+              ),
+    
+              Spacer(),    
+              CircularPercentIndicator(
+                radius: 40.0,
+                lineWidth: 8.0,
+                progressColor: maths,
+                animation: true,
+                percent: 0.7,
+                center: new Text(
+                  "89.0%",
+                  style:
+                      GoogleFonts.nunito(fontWeight: FontWeight.w900, fontSize: 15.0),
+                ),
+              )
+            
+            ]
+          ),
+        )
+      ),
+
+      SizedBox(height: 20),
+
+      Container(
+        height: 120,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: white,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            children: [
+              //image
+              Container(
+                height: 110,
+                width: 110,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('/images/german.jpg'),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+                
+              SizedBox(width: 20),
+                
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 10),
+                  
+                
+                
+                  Text('German \nLanguage', style: GoogleFonts.nunito(fontSize: 18, fontWeight: FontWeight.w700, color: black),),
+
+                  Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: background2,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Text('LANGUAGE', overflow: TextOverflow.clip, style: GoogleFonts.nunito(fontSize: 12, fontWeight: FontWeight.bold, color: lightgrey),),
+                  ),
+
+                
+                  SizedBox(height: 5),
+                
+                  
+                ]
+              ),
+    
+              Spacer(),
+    
+              CircularPercentIndicator(
+                radius: 40.0,
+                lineWidth: 8.0,
+                progressColor: language,
+                animation: true,
+                percent: 0.7,
+                center: new Text(
+                  "12.0%",
+                  style:
+                      GoogleFonts.nunito(fontWeight: FontWeight.w900, fontSize: 15.0),
+                ),
+              )
+            
+            ]
+          ),
+        )
+      ),
+
+      SizedBox(height: 20),
+
+      Container(
+        height: 120,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: white,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            children: [
+              //image
+              Container(
+                height: 110,
+                width: 110,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('/images/3dmodeling.png'),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+                
+              SizedBox(width: 20),
+                
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 10),
+                  
+                
+                
+                  Text('3D Modeling', style: GoogleFonts.nunito(fontSize: 18, fontWeight: FontWeight.w700, color: black),),
+
+                  Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: background2,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Text('OTHER', overflow: TextOverflow.clip, style: GoogleFonts.nunito(fontSize: 12, fontWeight: FontWeight.bold, color: lightgrey),),
+                  ),
+
+                
+                  SizedBox(height: 5),
+                
+                  
+                ]
+              ),
+    
+              Spacer(),
+    
+              CircularPercentIndicator(
+                radius: 40.0,
+                lineWidth: 8.0,
+                progressColor: other,
+                animation: true,
+                percent: 0.7,
+                center: new Text(
+                  "94.0%",
+                  style:
+                      GoogleFonts.nunito(fontWeight: FontWeight.w900, fontSize: 15.0),
+                ),
+              )
+            
+            ]
+          ),
+        )
+      ),
+
+      SizedBox(height: 20),
       
-      SizedBox(height: 20),
-
-      Container(
-        height: 120,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: background,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            children: [
-              //image
-              Container(
-                height: 100,
-                width: 100,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('/images/dsadvanced.png'),
-                    fit: BoxFit.cover,
-                  ),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-                
-              SizedBox(width: 20),
-                
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 10),
-                  Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: white,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text('Artifical Intelligence', style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600, color: grey),),
-                  ),
-                
-                  SizedBox(height: 5),
-                
-                  Text('Natural Lang. \nProcessing', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w700, color: black),),
-                
-                  SizedBox(height: 5),
-                
-                  
-                ]
-              ),
-    
-              SizedBox(width: 10),
-    
-              CircularPercentIndicator(
-                radius: 40.0,
-                lineWidth: 8.0,
-                progressColor: darkblue,
-                animation: true,
-                percent: 0.4,
-                center: new Text(
-                  "40.0%",
-                  style:
-                      GoogleFonts.poppins(fontWeight: FontWeight.w700, fontSize: 15.0),
-                ),
-              )
-            
-            ]
-          ),
-        )
-      ),
 
         ],
       ),
