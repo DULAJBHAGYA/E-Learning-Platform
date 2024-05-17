@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../color.dart';
@@ -34,13 +35,22 @@ class _AdminCoursesState extends State<AdminCourses>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'AllCourses',
-              style: GoogleFonts.openSans(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-                color: black,
-              ),
+            Row(
+              children: [
+                Text(
+                  'AllCourses',
+                  style: GoogleFonts.nunito(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: black,
+                  ),
+                ),
+                Spacer(),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(UniconsLine.bars, size: 25, color: black,),
+                ),
+              ],
             ),
             SizedBox(height: 20),
             CustomSearchBar(),
@@ -101,9 +111,9 @@ class AdminCourseView extends StatelessWidget {
                   height: 100,
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.zero,
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
                     image: DecorationImage(
-                      image:AssetImage('/images/aibasic.png'),
+                      image:AssetImage('/images/python.png'),
                       fit: BoxFit.cover
                     )
                   ),
@@ -113,7 +123,7 @@ class AdminCourseView extends StatelessWidget {
                   alignment: Alignment.topRight,
                  child: Padding(
                    padding: const EdgeInsets.all(10.0),
-                   child: Icon(UniconsThinline.ellipsis_h, color: black, size: 30,),
+                   child: Icon(UniconsThinline.ellipsis_h, color: white, size: 30,),
                  )),
               ],
             ),
@@ -136,12 +146,12 @@ class AdminCourseView extends StatelessWidget {
                          alignment: Alignment.center,
                          padding: EdgeInsets.all(5),
                          decoration: BoxDecoration(
-                           color: white,
-                           borderRadius: BorderRadius.circular(20),
+                           color: background2,
+                           borderRadius: BorderRadius.circular(10),
                          ),
                          child: Text(
-                           'ARTIFICAL INTELLIGENCE',
-                           style: GoogleFonts.openSans(fontSize: 12, fontWeight: FontWeight.w500, color: lightgrey),
+                           'IT',
+                           style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: lightgrey),
                          ),
                        ),
                      ],
@@ -150,7 +160,7 @@ class AdminCourseView extends StatelessWidget {
     
                    SizedBox(height: 5,),
     
-                    Text('Data Science Basic', style: GoogleFonts.openSans(fontSize: 18, fontWeight: FontWeight.w700, color: black),),
+                    Text('Python Programming', style: GoogleFonts.nunito(fontSize: 18, fontWeight: FontWeight.w700, color: black),),
     
                      Row(
                        children: [
@@ -159,9 +169,9 @@ class AdminCourseView extends StatelessWidget {
                            children: [
                              Row(
                                children: [
-                                 Icon(EneftyIcons.video_play_outline, color: lightgrey, size: 15,),
+                                 Icon(EneftyIcons.video_play_bold, color: darkblue, size: 15,),
                                  SizedBox(width: 5,),
-                                 Text('7 lessons', style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w500, color: lightgrey),),
+                                 Text('11 lessons', style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w500, color: lightgrey),),
                                ],
                              ),
     
@@ -169,9 +179,9 @@ class AdminCourseView extends StatelessWidget {
     
                              Row(
                                children: [
-                                 Icon(EneftyIcons.clock_2_outline, color: lightgrey, size: 15,),
+                                 Icon(EneftyIcons.clock_2_bold, color: darkblue, size: 15,),
                                  SizedBox(width: 5,),
-                                 Text('2.5 Hours', style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w500, color: lightgrey),),
+                                 Text('3.5 Hours', style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w500, color: lightgrey),),
                                ],
                              ),
                            ],
@@ -187,7 +197,7 @@ class AdminCourseView extends StatelessWidget {
                              borderRadius: BorderRadius.circular(8),
                              border: Border.all(color: darkblue, width: 2),
                            ),
-                           child: Text('View Details', style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w500, color: darkblue),),
+                           child: Text('View Details', style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: darkblue),),
                          )
                        ],
                      )

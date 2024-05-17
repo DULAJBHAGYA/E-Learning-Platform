@@ -16,11 +16,11 @@ class HorizontalListview extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text('Popular Courses', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.bold, color: black),),
+                Text('Most Popular Courses', style: GoogleFonts.nunito(fontSize: 20, fontWeight: FontWeight.bold, color: black),),
 
                 Spacer(),
 
-                Text('See All', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600, color: darkblue),),
+                Text('See All', style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: darkblue),),
               ],
             ),
     
@@ -34,11 +34,10 @@ class HorizontalListview extends StatelessWidget {
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                      color: white,
+                      color: background2,
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: darkblue, width: 2),
                     ),
-                    child: Text('ALL COURSES 🔥', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600, color: darkblue),),
+                    child: Text('ALL COURSES', style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: lightgrey),),
                   ),
     
                   SizedBox(width: 10),
@@ -47,11 +46,10 @@ class HorizontalListview extends StatelessWidget {
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                      color: white,
+                      color: background2,
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: darkblue, width: 2),
                     ),
-                    child: Text('DATA SCIENCE 📈', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600, color: darkblue),),
+                    child: Text('IT', style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: lightgrey),),
                   ),
     
                   SizedBox(width: 10),
@@ -60,11 +58,10 @@ class HorizontalListview extends StatelessWidget {
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                      color: white,
+                      color: background2,
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: darkblue, width: 2),
                     ),
-                    child: Text('MACHINE LEARNING 👨‍💻', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600, color: darkblue),),
+                    child: Text('SCIENCE', style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: lightgrey),),
                   ),
     
                   SizedBox(width: 10),
@@ -73,11 +70,10 @@ class HorizontalListview extends StatelessWidget {
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                      color: white,
+                      color: background2,
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: darkblue, width: 2),
                     ),
-                    child: Text('ARTIFICIAL INTELLIGENCE 🤖', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600, color: darkblue),),
+                    child: Text('MATH', style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: lightgrey),),
                   ),
     
                   SizedBox(width: 10),
@@ -86,11 +82,22 @@ class HorizontalListview extends StatelessWidget {
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                      color: white,
+                      color: background2,
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: darkblue, width: 2),
                     ),
-                    child: Text('CYBER SECURITY 🔒', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600, color: darkblue),),
+                    child: Text('LANGUAGE', style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: lightgrey),),
+                  ),
+
+                  SizedBox(width: 10),
+    
+                  Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: background2,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text('OTHER', style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: lightgrey),),
                   ),
                   
                 ],

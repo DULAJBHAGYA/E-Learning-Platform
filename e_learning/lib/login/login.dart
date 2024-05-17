@@ -1,292 +1,381 @@
+import 'dart:convert';
+import 'package:e_learning/admin/admin%20home/adminDash.dart';
+import 'package:e_learning/register/register.dart';
 import 'package:e_learning/student/home/stdHome.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../color.dart';
-import '../register/register.dart';
+import '../services/userServices.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+
+
+class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
+
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  bool _obscurePassword = true;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Container(
-          color: Colors.white,
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 80,
-              ),
-              Align(
-                alignment: Alignment.centerLeft, // Align text to the left
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Let\'s Sign you in',
-                      style: GoogleFonts.poppins(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: black),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'Welcome back,',
-                      style: GoogleFonts.poppins(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                          color: grey),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      'You\'ve been missed!',
-                      style: GoogleFonts.poppins(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                          color: grey),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Email Address',
-                    style: GoogleFonts.poppins(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: black),
-                  ),
-                  Container(
-                    height: 45,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      color: white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: lightgrey,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'someone@example.com',
-                          hintStyle: GoogleFonts.poppins(color: lightgrey),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Password',
-                    style: GoogleFonts.poppins(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: black),
-                  ),
-                  Container(
-                    height: 50,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      color: white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: lightgrey,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'please enter your password',
-                          hintStyle: GoogleFonts.poppins(color: lightgrey),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
+      backgroundColor: background,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(5),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        width: 17,
-                        height: 17,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(3), // Adjust the border radius as needed
-                          color: darkblue, // Set the color to match your background color
-                        ),
-                        child: Theme(
-                          data: ThemeData(
-                            unselectedWidgetColor: darkblue, // Set the color for the border and checkmark
-                          ),
-                          child: Checkbox(
-                            value: true, 
-                            onChanged: (value) {
-                              // Handle onChanged event here
-                            },
-                            activeColor: Colors.transparent, // Make the checkmark transparent
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
                       Text(
-                        'Keep me signed in',
-                        style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: grey),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 20,),
-
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width, // Example width
-                    height: 50, // Example height
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const StudentHome()));
-                      },
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(20)),
-                        backgroundColor: MaterialStateProperty.all(darkblue),
-                        foregroundColor: MaterialStateProperty.all(darkblue),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                        ),
-                      ), 
-                      child: Text(
-                        'Sign in',
-                        style: GoogleFonts.poppins(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: white),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 20,),
-
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          color: lightgrey,
-                          height: 36, // Adjust the height of the divider
-                          thickness: 1, // Adjust the thickness of the divider
-                          endIndent: 10, // Adjust the space between the text and the divider
+                        'Welcome back,',
+                        style: GoogleFonts.openSans(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
+                          color: black,
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          'or sign in with',
-                          style: GoogleFonts.inter(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: lightgrey,
-                          ),
+                      SizedBox(height: 10),
+                      Text(
+                        'Sign in to continue',
+                        style: GoogleFonts.openSans(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: black,
                         ),
                       ),
-                      Expanded(
-                        child: Divider(
-                          color: lightgrey,
-                          height: 36, // Adjust the height of the divider
-                          thickness: 1, // Adjust the thickness of the divider
-                          indent: 10, // Adjust the space between the text and the divider
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 20,),
-
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width, // Example width
-                    height: 50, // Example height
-                    child: TextButton(
-                      onPressed: () {},
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(20)),
-                        backgroundColor: MaterialStateProperty.all(lightgrey),
-                        foregroundColor: MaterialStateProperty.all(lightgrey),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                        ),
-                      ), 
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      SizedBox(height: 20),
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Image.asset('/images/google.png',
-                            width: 25,
-                            height: 25,
+                          Padding(padding: EdgeInsets.all(10)),
+                          Container(
+                            child: TextFormField(
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Username is required';
+                                }
+                                return null;
+                              },
+                              controller: _usernameController,
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(width: 2, color: lightgrey),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                prefixIcon: ColorFiltered(
+                                  colorFilter: ColorFilter.mode(
+                                    lightgrey, // Change the color here
+                                    BlendMode.srcIn,
+                                  ),
+                                  child: Icon(Iconsax.direct_right),
+                                ),
+                                iconColor: lightgrey,
+                                labelText: 'User name',
+                                labelStyle: GoogleFonts.nunito(
+                                  fontWeight: FontWeight.bold,
+                                  color: lightgrey,
+                                ),
+                              ),
+                            ),
                           ),
-                          const SizedBox(width: 10,),
+                          SizedBox(height: 30),
+                          TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Password is required';
+                              }
+                              return null;
+                            },
+                            controller: _passwordController,
+                            obscureText: _obscurePassword,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(width: 2, color: lightgrey),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              prefixIcon: ColorFiltered(
+                                colorFilter: ColorFilter.mode(
+                                  lightgrey, 
+                                  BlendMode.srcIn,
+                                ),
+                                child: Icon(Iconsax.password_check),
+                              ),
+                              labelText: 'Password',
+                              labelStyle: GoogleFonts.nunito(
+                                fontWeight: FontWeight.bold,
+                                color: lightgrey,
+                              ),
+                              suffixIcon: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    _obscurePassword = !_obscurePassword;
+                                  });
+                                },
+                                child: ColorFiltered(
+                                  colorFilter: ColorFilter.mode(
+                                    lightgrey, // Change the color here
+                                    BlendMode.srcIn,
+                                  ),
+                                  child: Icon(
+                                    _obscurePassword
+                                        ? Iconsax.eye_slash
+                                        : Iconsax.eye,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          SizedBox(width: 10),
+                          Checkbox(
+                            value: true,
+                            activeColor: darkblue,
+                            onChanged: (value) {
+                              
+
+                            },
+                          ),
                           Text(
-                            'Continue with Google',
-                            style: GoogleFonts.poppins(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: grey),
+                            'Remember me',
+                            style: GoogleFonts.nunito(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Spacer(),
+                          InkWell(
+                            onTap: () {},
+                            child: Text(
+                              'Forgot Password?',
+                              style: TextStyle(
+                                color: darkblue,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 30),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          OutlinedButton(
+                            onPressed: () {
+                              _login(context);
+                            },
+                            style: ButtonStyle(
+                              elevation:
+                                  MaterialStateProperty.all<double>(100.0),
+                              side: MaterialStateProperty.all<BorderSide>(
+                                BorderSide(
+                                  width: 0.0,
+                                  color: darkblue,
+                                ),
+                              ),
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.all(25.0),
+                              ),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
+                              ),
+                              backgroundColor:
+                                  MaterialStateProperty.all<Color>(darkblue),
+                            ),
+                            child: Text(
+                              'SIGN IN',
+                              style: GoogleFonts.nunito(
+                                fontWeight: FontWeight.w900,
+                                fontSize: 20,
+                                color: white,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          OutlinedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const RegisterScreen()),
+                              );
+                            },
+                            style: ButtonStyle(
+                              elevation:
+                                  MaterialStateProperty.all<double>(100.0),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
+                              ),
+                              side: MaterialStateProperty.all<BorderSide>(
+                                BorderSide(
+                                  width: 1.0,
+                                  color: lightgrey,
+                                ),
+                              ),
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.all(25.0),
+                              ),
+                              backgroundColor:
+                                  MaterialStateProperty.all<Color>(white),
+                            ),
+                            child: Text(
+                              'SIGN UP',
+                              style: GoogleFonts.nunito(
+                                fontWeight: FontWeight.w900,
+                                fontSize: 20,
+                                color: black,
+                              ),
+                            ),
                           ),
                         ],
                       ),
-                    ),
+                    ],
                   ),
-
-                  const SizedBox(height: 80,),
-
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) =>  RegisterScreen()));
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Create an account',
-                            style: GoogleFonts.inter(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: darkblue),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+
+  void _login(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        final userName = _usernameController.text.trim();
+        final password = _passwordController.text;
+
+        final userData =
+            await UserService.instance.loginUser(userName, password);
+        print(userData);
+
+        final Map<String, dynamic> decodedToken =
+            parseJwt(userData['access_token']);
+
+        final String accessToken = userData['access_token'];
+
+        await saveUserData(
+            userName, decodedToken['role'], decodedToken['user_id'], accessToken, userData['refresh_token']);
+
+        print('Username: $userName');
+        print('Role: ${decodedToken['role']}');
+        print('User ID: ${decodedToken['user_id']}');
+
+        switch (decodedToken['role']) {
+          case 'admin':
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AdminDash(
+                  
+                ),
+              ),
+            );
+            break;
+          case 'student':
+          default:
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => StudentHome(
+                  
+                ),
+              ),
+            );
+            break;
+        }
+      } catch (e) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                'Login failed',
+                style: GoogleFonts.nunito(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: black,
+                ),
+              ),
+              content: Text(
+                'Invalid user name or password. ',
+                style: GoogleFonts.nunito(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: black,
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    }
+  }
+
+  Map<String, dynamic> parseJwt(String token) {
+    final parts = token.split('.');
+    if (parts.length != 3) {
+      throw Exception('Invalid token');
+    }
+
+    final payload = parts[1];
+    final String normalized = base64Url.normalize(payload);
+    final String decoded = utf8.decode(base64Url.decode(normalized));
+
+    return json.decode(decoded);
+  }
+
+Future<void> saveUserData(String username, String role, int user_id, String accessToken, String refreshToken) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('username', username);
+  await prefs.setString('role', role);
+  await prefs.setInt('user_id', user_id);
+  
+  await saveToken(accessToken, refreshToken);
+}
+
+Future<void> saveToken(String accessToken, String refreshToken) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('access_token', accessToken);
+  await prefs.setString('refresh_token', refreshToken);
+}
+
 }

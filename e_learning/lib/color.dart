@@ -9,6 +9,7 @@ const Color grey = Color(0xFF5D5A5A);
 const Color lightgrey = Color(0xFF7C7A7A);
 const Color background = Color(0xFFf8f8f8);
 const Color background2 = Color(0xFFD7D1D1);
+const Color red = Color(0xFFC34E4E);
 
 
 //percentage indicator colors
