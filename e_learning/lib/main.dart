@@ -8,6 +8,7 @@ import 'package:e_learning/email%20verified/emailVerified.dart';
 import 'package:e_learning/login/login.dart';
 import 'package:e_learning/on%20board%20screens/onBoardingScreens.dart';
 import 'package:e_learning/register/register.dart';
+import 'package:e_learning/splash%20screen/splashscreen.dart';
 import 'package:e_learning/student/all%20courses/allCourses.dart';
 import 'package:e_learning/student/course%20content/courseContent.dart';
 import 'package:e_learning/student/my%20courses/myCourses.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
       title: 'U-Learn',
       initialRoute: '/',
       routes: {
-        '/': (context) =>  AdminDash(username: '', accessToken: '', refreshToken: ''),
+        '/': (context) =>  SplashScreen(),
       },
     );
   }

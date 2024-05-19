@@ -4,9 +4,18 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../color.dart';
 
 class RegisterdStudentsCard extends StatelessWidget {
+  final String user_name;
+  final String first_name;
+  final String last_name;
+  final String email;
+
   const RegisterdStudentsCard({
-    super.key,
-  });
+    required this.user_name,
+    required this.first_name,
+    required this.last_name,
+    required this.email,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +39,12 @@ class RegisterdStudentsCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Dulaj Bhagya',
+                  '$first_name + $last_name',
                   style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: black),
                 ),
                 SizedBox(height: 5),
                 Text(
-                  'dbhagya',
+                  '$user_name',
                   style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color:lightgrey),
                 ),
                 
