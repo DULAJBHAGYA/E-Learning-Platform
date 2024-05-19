@@ -31,7 +31,7 @@ class _LoginState extends State<Login> {
       backgroundColor: background,
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(5),
+          padding: EdgeInsets.all(10),
           child: Form(
             key: _formKey,
             child: Column(
@@ -297,7 +297,9 @@ class _LoginState extends State<Login> {
               context,
               MaterialPageRoute(
                 builder: (context) => AdminDash(
-                  
+                  username: userName,
+                  accessToken: accessToken,
+                  refreshToken: userData['refresh_token'],
                 ),
               ),
             );
@@ -308,7 +310,9 @@ class _LoginState extends State<Login> {
               context,
               MaterialPageRoute(
                 builder: (context) => StudentHome(
-                  
+                  username: userName,
+                  accessToken: accessToken,
+                  refreshToken: userData['refresh_token'],
                 ),
               ),
             );

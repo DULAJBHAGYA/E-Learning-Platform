@@ -25,7 +25,7 @@ class BottomNavBar extends StatelessWidget {
         switch (index) {
           case 0:
             // Navigate to Home screen
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const StudentHome()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const StudentHome( username: '', accessToken: '', refreshToken: '')));
             break;
           case 1:
             // Navigate to My Courses screen

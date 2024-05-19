@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:e_learning/shared/bottomNavBar.dart'; // Adjust the import path as per your project structure
+import 'package:e_learning/shared/bottomNavBar.dart'; 
 import 'package:percent_indicator/percent_indicator.dart';
 
 import '../../color.dart';
@@ -35,7 +35,7 @@ class _MyCoursesState extends State<MyCourses> with SingleTickerProviderStateMix
           children: [
             Text(
               'MyCourses',
-              style: GoogleFonts.nunito(
+              style: GoogleFonts.inter(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
                 color: black,
@@ -50,7 +50,7 @@ class _MyCoursesState extends State<MyCourses> with SingleTickerProviderStateMix
                   children: [
                     Text(
                       'Ongoing',
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.inter(
                         fontSize: 15, 
                         fontWeight: FontWeight.w500, 
                         color: _tabController.index == 0 ? darkblue : lightgrey, 
@@ -67,7 +67,7 @@ class _MyCoursesState extends State<MyCourses> with SingleTickerProviderStateMix
                       child: Center(
                         child: Text(
                           '5',
-                          style: GoogleFonts.nunito(
+                          style: GoogleFonts.inter(
                             fontSize:15,
                             color: white, 
                             fontWeight: FontWeight.w500,
@@ -84,7 +84,7 @@ class _MyCoursesState extends State<MyCourses> with SingleTickerProviderStateMix
                   children: [
                     Text(
                       'Completed',
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.inter(
                         fontSize: 15, 
                         fontWeight: FontWeight.w500, 
                         color: _tabController.index == 1 ? darkblue : lightgrey, 
@@ -101,7 +101,7 @@ class _MyCoursesState extends State<MyCourses> with SingleTickerProviderStateMix
                       child: Center(
                         child: Text(
                           '10', 
-                          style: GoogleFonts.nunito(
+                          style: GoogleFonts.inter(
                             fontSize:15,
                             color: white, 
                             fontWeight: FontWeight.w500,

@@ -10,14 +10,14 @@ import 'introPage1.dart';
 import 'introPage2.dart';
 import 'introPage3.dart';
 
-class OnBoardScreen extends StatefulWidget {
-  const OnBoardScreen({Key? key}) : super(key: key);
+class OnBoardScreens extends StatefulWidget {
+  const OnBoardScreens({Key? key}) : super(key: key);
 
   @override
-  State<OnBoardScreen> createState() => _OnBoardScreenState();
+  State<OnBoardScreens> createState() => _OnBoardScreenState();
 }
 
-class _OnBoardScreenState extends State<OnBoardScreen> {
+class _OnBoardScreenState extends State<OnBoardScreens> {
   //controller to keep track of which page we are on
   PageController _controller = PageController();
 
@@ -50,7 +50,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                 children: [
                   GestureDetector(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
                       },
                       child: Text('skip', style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w600, color: black),)
                       ),
@@ -64,7 +64,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
 
                   onLastPage ? GestureDetector(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
                     },
                     child: Text('done', 
                     style: GoogleFonts.inter(

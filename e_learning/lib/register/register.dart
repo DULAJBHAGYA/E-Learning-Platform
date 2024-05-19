@@ -2,12 +2,13 @@ import 'package:e_learning/services/userServices.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../color.dart';
 import '../login/login.dart';
 
 class RegisterScreen extends StatefulWidget {
-  RegisterScreen({Key? key}) : super(key: key);
+  const RegisterScreen({Key? key}) : super(key: key);
 
   _RegisterScreenState createState() => _RegisterScreenState();
 }
@@ -18,8 +19,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
   TextEditingController userNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController roleController = TextEditingController();
@@ -30,8 +31,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void dispose() {
     firstNameController.dispose();
     lastNameController.dispose();
-    emailController.dispose();
     userNameController.dispose();
+    emailController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
     super.dispose();
@@ -44,7 +45,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return null;
   }
 
-   String? _validateLastName(String? value) {
+  String? _validateLastName(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your last name';
     }
@@ -93,12 +94,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
           emailController.text,
           passwordController.text,
           roleController.text,
-          // You may add any text here if required
         );
 
-        // Check response and handle accordingly
         if (response != null && response['statusCode'] == 200) {
-          // Registration successful, show success message
           showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -117,7 +115,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ],
               );
-              print('Registration successful');
             },
           );
         } else {
@@ -175,13 +172,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       body: SingleChildScrollView(
           child: Padding(
-        padding: EdgeInsets.all(0),
+        padding: EdgeInsets.all(10),
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
@@ -210,7 +206,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             validator: _validateFirstName,
                             decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(width: 2, color: lightgrey),
+                                borderSide:
+                                    BorderSide(width: 2, color: lightgrey),
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               prefixIcon: ColorFiltered(
@@ -236,7 +233,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             validator: _validateLastName,
                             decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(width: 2, color: lightgrey),
+                                borderSide:
+                                    BorderSide(width: 2, color: lightgrey),
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               prefixIcon: ColorFiltered(
@@ -262,7 +260,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             validator: _validateUserName,
                             decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(width: 2, color: lightgrey),
+                                borderSide:
+                                    BorderSide(width: 2, color: lightgrey),
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               prefixIcon: ColorFiltered(
@@ -288,7 +287,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             validator: _validateEmail,
                             decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(width: 2, color: lightgrey),
+                                borderSide:
+                                    BorderSide(width: 2, color: lightgrey),
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               prefixIcon: ColorFiltered(
@@ -314,7 +314,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             validator: _validatePassword,
                             decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(width: 2, color: lightgrey),
+                                borderSide:
+                                    BorderSide(width: 2, color: lightgrey),
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               prefixIcon: ColorFiltered(
@@ -356,7 +357,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             validator: _validateConfirmPassword,
                             decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(width: 2, color: lightgrey),
+                                borderSide:
+                                    BorderSide(width: 2, color: lightgrey),
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               prefixIcon: ColorFiltered(
@@ -499,4 +501,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       )),
     );
   }
+}
+
+Future<void> saveEmailData(bool is_Email_Verified, String username) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('username', username);
+  await prefs.setBool('is_email_verified', is_Email_Verified);
 }

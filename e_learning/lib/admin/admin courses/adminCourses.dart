@@ -47,6 +47,7 @@ class _AdminCoursesState extends State<AdminCourses>
                 ),
                 Spacer(),
                 IconButton(
+                  splashColor: Colors.white,
                   onPressed: () {},
                   icon: Icon(UniconsLine.bars, size: 25, color: black,),
                 ),
@@ -86,6 +87,7 @@ class _AdminCoursesState extends State<AdminCourses>
   }
 }
 
+
 class AdminCourseView extends StatelessWidget {
   const AdminCourseView({
     super.key,
@@ -93,12 +95,12 @@ class AdminCourseView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container (
+    return Container(
       width: MediaQuery.of(context).size.width,
       height: 250,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: white,
+        color: Colors.white, // Assuming 'white' is a Color variable
       ),
       child: Padding(
         padding: const EdgeInsets.all(0.0),
@@ -113,99 +115,120 @@ class AdminCourseView extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
                     image: DecorationImage(
-                      image:AssetImage('/images/python.png'),
-                      fit: BoxFit.cover
-                    )
+                      image: AssetImage('/images/python.png'), 
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-                Align
-                (
+                Align(
                   alignment: Alignment.topRight,
-                 child: Padding(
-                   padding: const EdgeInsets.all(10.0),
-                   child: Icon(UniconsThinline.ellipsis_h, color: white, size: 30,),
-                 )),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: PopupMenuButton<String>(
+                      icon: Icon(UniconsLine.ellipsis_h, color: Colors.white, size: 30), // Assuming 'white' is a Color variable
+                      onSelected: (value) {
+                        switch (value) {
+                          case 'Edit Course':
+                            // Handle Edit Course action
+                            print('Edit Course');
+                            break;
+                          case 'Delete Course':
+                            // Handle Delete Course action
+                            print('Delete Course');
+                            break;
+                        }
+                      },
+                      itemBuilder: (BuildContext context) {
+                        return {'Edit Course', 'Delete Course'}.map((String choice) {
+                          return PopupMenuItem<String>(
+                            value: choice,
+                            child: Text(choice),
+                          );
+                        }).toList();
+                      },
+                    ),
+                  ),
+                ),
               ],
             ),
-    
-            SizedBox(height: 10,),
-    
-           
-    
+            SizedBox(height: 10),
             Container(
               width: MediaQuery.of(context).size.width,
               child: Padding(
                 padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0, top: 10.0),
                 child: Column(
-                 crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                   Row(
-                     mainAxisSize: MainAxisSize.min,
-                     children: [
-                       Container(
-                         alignment: Alignment.center,
-                         padding: EdgeInsets.all(5),
-                         decoration: BoxDecoration(
-                           color: background2,
-                           borderRadius: BorderRadius.circular(10),
-                         ),
-                         child: Text(
-                           'IT',
-                           style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: lightgrey),
-                         ),
-                       ),
-                     ],
-                   ),
-    
-    
-                   SizedBox(height: 5,),
-    
-                    Text('Python Programming', style: GoogleFonts.nunito(fontSize: 18, fontWeight: FontWeight.w700, color: black),),
-    
-                     Row(
-                       children: [
-                         Column(
-                           crossAxisAlignment: CrossAxisAlignment.start,
-                           children: [
-                             Row(
-                               children: [
-                                 Icon(EneftyIcons.video_play_bold, color: darkblue, size: 15,),
-                                 SizedBox(width: 5,),
-                                 Text('11 lessons', style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w500, color: lightgrey),),
-                               ],
-                             ),
-    
-                             SizedBox(height: 10,),
-    
-                             Row(
-                               children: [
-                                 Icon(EneftyIcons.clock_2_bold, color: darkblue, size: 15,),
-                                 SizedBox(width: 5,),
-                                 Text('3.5 Hours', style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w500, color: lightgrey),),
-                               ],
-                             ),
-                           ],
-                         ),
-    
-                         Spacer(),
-    
-                         Container(
-                           alignment: Alignment.center,
-                           padding: EdgeInsets.all(5),
-                           decoration: BoxDecoration(
-                             color: white,
-                             borderRadius: BorderRadius.circular(8),
-                             border: Border.all(color: darkblue, width: 2),
-                           ),
-                           child: Text('View Details', style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: darkblue),),
-                         )
-                       ],
-                     )
-                    
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: Colors.blue.shade50, // Assuming 'background2' is a Color variable
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            'IT',
+                            style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.grey), // Assuming 'lightgrey' is a Color variable
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      'Python Programming',
+                      style: GoogleFonts.nunito(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.black), // Assuming 'black' is a Color variable
+                    ),
+                    Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(EneftyIcons.video_play_bold, color: Colors.blue, size: 15), // Assuming 'darkblue' is a Color variable
+                                SizedBox(width: 5),
+                                Text(
+                                  '11 lessons',
+                                  style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.grey), // Assuming 'lightgrey' is a Color variable
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              children: [
+                                Icon(EneftyIcons.clock_2_bold, color: Colors.blue, size: 15), // Assuming 'darkblue' is a Color variable
+                                SizedBox(width: 5),
+                                Text(
+                                  '3.5 Hours',
+                                  style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.grey), // Assuming 'lightgrey' is a Color variable
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Spacer(),
+                        Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: Colors.white, // Assuming 'white' is a Color variable
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.blue, width: 2), // Assuming 'darkblue' is a Color variable
+                          ),
+                          child: Text(
+                            'View Details',
+                            style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.blue), // Assuming 'darkblue' is a Color variable
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
