@@ -4,9 +4,23 @@ import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AddCourses extends StatelessWidget {
-  const AddCourses({super.key});
+class AddCourses extends StatefulWidget {
+  const AddCourses({
+    Key? key,
+    required this.username,
+    required this.accessToken,
+    required this.refreshToken,
+  }) : super(key: key);
 
+  final String username;
+  final String accessToken;
+  final String refreshToken;
+
+  @override
+  _AddCoursesState createState() => _AddCoursesState();
+}
+
+class _AddCoursesState extends State<AddCourses> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

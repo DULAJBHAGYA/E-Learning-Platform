@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../color.dart';
+import '../admin home/adminDash.dart';
 import 'registerStudents.dart';
 import 'registerrequests.dart';
 
@@ -25,6 +26,7 @@ Key? key,
 }
 
 class _AdminStudentsState extends State<AdminStudents> with SingleTickerProviderStateMixin {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late TabController _tabController;
 
   @override
@@ -33,17 +35,33 @@ class _AdminStudentsState extends State<AdminStudents> with SingleTickerProvider
     _tabController = TabController(length: 2, vsync: this);
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
+      key: _scaffoldKey,  // Assign the GlobalKey to the Scaffold
+      drawer: NavDrawer(),  // Adding the NavDrawer
+      appBar: AppBar(
+        backgroundColor: background,
+        elevation: 0,
+        leading: IconButton(
+          icon: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Icon(UniconsLine.bars, size: 30, color: black),
+          ),
+          onPressed: () {
+            _scaffoldKey.currentState?.openDrawer();  // Opens the drawer using the GlobalKey
+          },
+        ),
+        
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
                 Text(
                   'Students',
                   style: GoogleFonts.nunito(
@@ -52,10 +70,6 @@ class _AdminStudentsState extends State<AdminStudents> with SingleTickerProvider
                     color: black,
                   ),
                 ),
-                Spacer(),
-                Icon(UniconsLine.bars, size: 30, color: black,),
-              ],
-            ),
             SizedBox(height: 20),
             TabBar(
               controller: _tabController,
@@ -154,7 +168,7 @@ class _AdminStudentsState extends State<AdminStudents> with SingleTickerProvider
                 controller: _tabController,
                 children: [
                   // Content of the first tab ('Registered Students')
-                  RegiseredStudents(),
+                  RegisteredStudents(),
 
 
                   // Content of the second tab ('Registered Requests')
