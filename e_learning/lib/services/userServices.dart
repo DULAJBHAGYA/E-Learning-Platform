@@ -26,12 +26,12 @@ class UserService {
   static UserService get instance => _instance;
 
 //method for registering a student
- Future<dynamic> registerUser(String full_name, String user_name, String email, String hashed_password,String last_name, String role) async {
+ Future<dynamic> registerUser(String first_name,String last_name, String user_name, String email, String hashed_password, String role) async {
   try {
     final response = await _dio.post(
       '/api/v1/signup',
       data: jsonEncode({
-        'full_name': full_name,
+        'first_name': first_name,
         'last_name': last_name,
         'user_name': user_name,
         'email': email,
@@ -46,7 +46,7 @@ class UserService {
       final redirectedResponse = await _dio.post(
         redirectUrl,
         data: jsonEncode({
-          'full_name': full_name,
+          'first_name': first_name,
           'last_name': last_name,
           'user_name': user_name,
           'email': email,
@@ -70,7 +70,7 @@ class UserService {
   Future<Map<String, dynamic>> loginUser(String user_name, String hashed_password) async {
     try {
       final response = await _dio.post(
-        '/login',
+        '/api/v1/login',
         data: {
           'user_name': user_name,
           'hashed_password': hashed_password,

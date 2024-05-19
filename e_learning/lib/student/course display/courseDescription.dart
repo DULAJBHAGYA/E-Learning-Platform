@@ -1,7 +1,9 @@
 import 'package:e_learning/student/all%20courses/allCourses.dart';
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 
 import '../../color.dart';
 
@@ -39,13 +41,16 @@ class _CourseDescriptionState extends State<CourseDescription>
               children: [
                 Stack(
                   children: [
-                    Container(
-                      height: 300,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage('/images/ai1.jpg'),
-                              fit: BoxFit.cover)),
+                    ClipPath(
+                      clipper: MyClipper(),
+                      child: Container(
+                        height: 300,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage('/images/3dmodeling.png'),
+                                fit: BoxFit.cover)),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(20.0),
@@ -55,10 +60,26 @@ class _CourseDescriptionState extends State<CourseDescription>
                             onTap: () {
                               Navigator.push(context, MaterialPageRoute(builder: (context) => const StdAllCourses()));
                             },
-                            child: Icon(
-                              EneftyIcons.arrow_left_4_outline,
-                              size: 30,
-                              color: white,
+                            child: Row(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: white,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Align(
+                                    alignment: Alignment.bottomLeft,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        Iconsax.arrow_left_2,
+                                        size: 20,
+                                        color: black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
 
@@ -67,101 +88,101 @@ class _CourseDescriptionState extends State<CourseDescription>
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Data Science Basic',
-                        style: GoogleFonts.openSans(
-                            fontSize: 30,
-                            fontWeight: FontWeight.w700,
+                        '3D Modeling',
+                        style: GoogleFonts.nunito(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
                             color: black),
                       ),
                       SizedBox(height: 5),
                       Container(
                         width: 120,
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.all(3),
                         decoration: BoxDecoration(
-                          color: lightblue,
+                          color: white,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
-                        'DATA SCIENCE',
+                        'OTHER',
                           style: GoogleFonts.openSans(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: darkblue),
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: other),
                         ),
                       ),
-                      SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(EneftyIcons.people_bold,
-                                  size: 20, color: darkblue),
-                              SizedBox(width: 10),
-                              Text('120 Students',
-                                  style: GoogleFonts.openSans(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400,
-                                      color:black)),
-                            ],
-                          ),
-                          SizedBox(width: 15),
-                          Row(
-                            children: [
-                              Icon(EneftyIcons.clock_2_bold,
-                                  size: 20, color: darkblue),
-                              SizedBox(width: 10),
-                              Text('2.5 Hours',
-                                  style: GoogleFonts.openSans(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400,
-                                      color: black)),
-                            ],
-                          ),
-                          SizedBox(width: 15),
-                          Row(
-                            children: [
-                              Icon(EneftyIcons.document_bold,
-                                  size: 20, color: darkblue),
-                              SizedBox(width: 10),
-                              Text('Certificate',
-                                  style: GoogleFonts.openSans(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400,
-                                      color: black)),
-                            ],
-                          ),
-                        ],
+                      SizedBox(height: 5),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(EneftyIcons.people_bold,
+                                    size: 20, color: lightgrey),
+                                SizedBox(width: 2),
+                                Text('120 Students',
+                                    style: GoogleFonts.nunito(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600,
+                                        color:black)),
+                              ],
+                            ),
+                            SizedBox(width: 10),
+                            Row(
+                              children: [
+                                Icon(EneftyIcons.clock_2_bold,
+                                    size: 20, color: lightgrey),
+                                SizedBox(width: 2),
+                                Text('2.5 Hours',
+                                    style: GoogleFonts.nunito(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600,
+                                        color: black)),
+                              ],
+                            ),
+                            SizedBox(width: 10),
+                            Row(
+                              children: [
+                                Icon(EneftyIcons.document_bold,
+                                    size: 20, color: lightgrey),
+                                SizedBox(width: 2),
+                                Text('Certificate',
+                                    style: GoogleFonts.nunito(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600,
+                                        color: black)),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 10),
                       TabBar(
                         controller: _tabController,
                         tabs: [
                           Tab(
                             child: Text(
                               'About',
-                              style: GoogleFonts.openSans(
+                              style: GoogleFonts.nunito(
                                 fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                color: lightgrey,
+                                fontWeight: FontWeight.w600,
+                                color: _tabController.index == 0 ? black : lightgrey,
                               ),
                             ),
                           ),
                           Tab(
                             child: Text(
                               'Lessons',
-                              style: GoogleFonts.openSans(
+                              style: GoogleFonts.nunito(
                                 fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                color: lightgrey,
+                                fontWeight: FontWeight.w600,
+                                color: _tabController.index == 1 ? black : lightgrey,
                               ),
                             ),
                           )
@@ -175,6 +196,11 @@ class _CourseDescriptionState extends State<CourseDescription>
                             ),
                           ),
                         ),
+                        onTap: (index) {
+                          setState(() {
+                            _tabController.index = index;
+                          });
+                        },
                       ),
                       SizedBox(height: 20),
                       Container(
@@ -203,6 +229,42 @@ class _CourseDescriptionState extends State<CourseDescription>
   }
 }
 
+class MyClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+
+    // Start from top-left corner
+    path.lineTo(0, 0);
+
+    // Draw line to the bottom left corner
+    path.lineTo(0, size.height);
+
+    final firstCurve = Offset(0, size.height-30);
+    final lastCurve = Offset(40, size.height-30);
+    path.quadraticBezierTo(firstCurve.dx, firstCurve.dy, lastCurve.dx, lastCurve.dy);
+
+    final secondCurve = Offset(size.width-40, size.height-30);
+    final thirdCurve = Offset(size.width-40, size.height-30);
+    path.quadraticBezierTo(secondCurve.dx, secondCurve.dy, thirdCurve.dx, thirdCurve.dy);
+
+    final lastCurve2 = Offset(size.width, size.height-30);
+    final firstCurve2 = Offset(size.width, size.height);
+    path.quadraticBezierTo(lastCurve2.dx, lastCurve2.dy, firstCurve2.dx, firstCurve2.dy);
+    // Draw line to the top-right corner
+    path.lineTo(size.width, 0);
+
+    // Close the path to form the shape
+    path.close();
+
+    return path;
+  }
+  
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+    return false; // Return true if the new instance needs to repaint the path
+  }
+}
 class Lessons extends StatelessWidget {
   const Lessons({
     super.key,
@@ -403,7 +465,7 @@ class AboutCourse extends StatelessWidget {
                                     color: darkblue,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
-                                  child: Text('ENROLL', style: GoogleFonts.openSans(fontSize: 18, fontWeight: FontWeight.w600, color: white),),
+                                  child: Text('Enroll', style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: white),),
                                 ),
                   ],
                 ),

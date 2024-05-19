@@ -13,37 +13,41 @@ class CourseContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: background,
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(0.0),
         child: Column(
           children: [
             CourseContentHeader(),
-            SizedBox(height: 40),
+            SizedBox(height: 10),
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
-                child: Column(
-                  children: [
-                    LessonDisplayWidget(),
-                    SizedBox(height: 20),
-                    QuizDisplayWidget(),
-                    SizedBox(height: 20),
-                    LessonDisplayWidget(),
-                    SizedBox(height: 20),
-                    LessonDisplayWidget(),
-                    SizedBox(height: 20),
-                    LessonDisplayWidget(),
-                    SizedBox(height: 20),
-                    QuizDisplayWidget(),
-                    SizedBox(height: 20),
-                    LessonDisplayWidget(),
-                    SizedBox(height: 20),
-                    LessonDisplayWidget(),
-                    SizedBox(height: 20),
-                    LessonDisplayWidget(),
-                    SizedBox(height: 20),
-                    QuizDisplayWidget(),
-                  ],
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    children: [
+                      LessonDisplayWidget(),
+                      SizedBox(height: 5),
+                      QuizDisplayWidget(),
+                      SizedBox(height: 5),
+                      LessonDisplayWidget(),
+                      SizedBox(height: 5),
+                      LessonDisplayWidget(),
+                      SizedBox(height: 5),
+                      LessonDisplayWidget(),
+                      SizedBox(height: 5),
+                      QuizDisplayWidget(),
+                      SizedBox(height: 5),
+                      LessonDisplayWidget(),
+                      SizedBox(height: 5),
+                      LessonDisplayWidget(),
+                      SizedBox(height: 5),
+                      LessonDisplayWidget(),
+                      SizedBox(height: 5),
+                      QuizDisplayWidget(),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -66,7 +70,7 @@ class QuizDisplayWidget extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       height: 80,
       decoration: BoxDecoration(
-        color: darkblue,
+        color: white,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
@@ -81,7 +85,7 @@ class QuizDisplayWidget extends StatelessWidget {
                 style: GoogleFonts.poppins(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: white,
+                  color: black,
                 ),
     )
     
@@ -94,7 +98,7 @@ class QuizDisplayWidget extends StatelessWidget {
     
               Align(
                 alignment: Alignment.centerRight,
-                child: Icon(EneftyIcons.message_question_bold, color: white, size: 40)),
+                child: Icon(EneftyIcons.message_question_bold, color: it, size: 40)),
     
                       ],
                     ),
@@ -114,7 +118,7 @@ class LessonDisplayWidget extends StatelessWidget {
     width: MediaQuery.of(context).size.width,
     height: 100,
     decoration: BoxDecoration(
-      color: darkblue,
+      color: white,
       borderRadius: BorderRadius.circular(20),
     ),
     child: Padding(
@@ -126,19 +130,18 @@ class LessonDisplayWidget extends StatelessWidget {
           Flexible(
             child: Text(
               'Introduction to Data Science',
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.nunito(
                 fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: white,
+                fontWeight: FontWeight.w800,
+                color: black,
               ),
-              overflow: TextOverflow.clip,
             ),
           ),
     
           Spacer(),
     
           
-        Icon(EneftyIcons.play_circle_bold, color: white, size: 40),
+        Icon(EneftyIcons.play_circle_bold, color: it, size: 30),
     
               
             ],
@@ -161,83 +164,117 @@ class CourseContentHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const MyCourses()));
-            },
-            child: Icon(
-              EneftyIcons.arrow_left_4_outline,
-              color: black,
-              size: 30,
+          Stack(
+            children: [ 
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 300,
+                decoration: BoxDecoration(
+                  color: it,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  ),
+                ),
+                child: Image.asset(
+                  'images/python.png',
+                  fit: BoxFit.cover,
+                ),
+              ),
+
+              GestureDetector(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const MyCourses()));
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(
+                    EneftyIcons.arrow_left_3_outline,
+                    color: black,
+                    size: 20,
+                  ),
+                ),
+              ),
             ),
+            ]
           ),
           SizedBox(
-            height: 20,
+            height: 5,
           ),
-          Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            Column(
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start, 
               children: [
-                Text(
-                  'Data Science Basic',
-                  style: GoogleFonts.poppins(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: black),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: lightblue,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    'Data Science',
-                    style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: darkblue),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(children: [
-                  Icon(
-                    EneftyIcons.video_play_outline,
-                    color: lightgrey,
-                    size: 15,
+              Column(
+                children: [
+                  Text(
+                    'Pyhton Programming',
+                    style: GoogleFonts.nunito(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: black),
                   ),
                   SizedBox(
-                    width: 5,
+                    height: 10,
                   ),
-                  Text(
-                    'Sessions 4/6',
-                    style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: lightgrey),
+                  Container(
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      'IT',
+                      style: GoogleFonts.poppins(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: it),
+                    ),
                   ),
-                ])
-              ],
-            ),
-            Spacer(),
-            CircularPercentIndicator(
-              radius: 45.0,
-              lineWidth: 8.0,
-              progressColor: darkblue,
-              animation: true,
-              percent: 0.7,
-              center: new Text(
-                "70.0%",
-                style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w700, fontSize: 15.0),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(children: [
+                    Icon(
+                      EneftyIcons.video_play_outline,
+                      color: lightgrey,
+                      size: 15,
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      'Sessions 4/6',
+                      style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: lightgrey),
+                    ),
+                  ])
+                ],
               ),
-            )
-          ]),
+              Spacer(),
+              CircularPercentIndicator(
+                radius: 45.0,
+                lineWidth: 8.0,
+                progressColor: it,
+                animation: true,
+                percent: 0.7,
+                center: new Text(
+                  "70.0%",
+                  style: GoogleFonts.nunito(
+                      fontWeight: FontWeight.w900, fontSize: 15.0),
+                ),
+              )
+            ]),
+          ),
         ],
       ),
     );

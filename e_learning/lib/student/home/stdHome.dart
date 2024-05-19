@@ -10,9 +10,23 @@ import 'courseList.dart';
 import 'userInfo.dart';
 import 'userStats.dart';
 
-class StudentHome extends StatelessWidget {
-  const StudentHome({Key? key}) : super(key: key);
+class StudentHome extends StatefulWidget {
+  const StudentHome({
+    Key? key,
+    required this.username,
+    required this.accessToken,
+    required this.refreshToken,
+  }) : super(key: key);
 
+  final String username;
+  final String accessToken;
+  final String refreshToken;
+
+  @override
+  _StudentHomeState createState() => _StudentHomeState();
+}
+
+class _StudentHomeState extends State<StudentHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

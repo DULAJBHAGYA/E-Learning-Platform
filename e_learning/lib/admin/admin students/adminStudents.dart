@@ -9,8 +9,17 @@ import 'registerStudents.dart';
 import 'registerrequests.dart';
 
 class AdminStudents extends StatefulWidget {
-  const AdminStudents({Key? key}) : super(key: key);
+  const AdminStudents({
+Key? key,
+    required this.username,
+    required this.accessToken,
+    required this.refreshToken,
+  }) : super(key: key);
 
+  final String username;
+  final String accessToken;
+  final String refreshToken;
+  
   @override
   _AdminStudentsState createState() => _AdminStudentsState();
 }
