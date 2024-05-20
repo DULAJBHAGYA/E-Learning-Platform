@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'baseurl.dart';
 
@@ -20,9 +21,19 @@ class CountService {
 
   static CountService get instance => _instance;
 
-  Future<dynamic> fetchCourseDetails() async {
+  Future<dynamic> getStudentCount() async {
     try {
-      final response = await _dio.get('/api/v3/all/counts');
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? accessToken = prefs.getString('access_token');
+
+      if (accessToken == null || accessToken.isEmpty) {
+        throw Exception('Access token not found');
+      }
+
+      _dio.options.headers['Authorization'] = 'Bearer $accessToken';
+
+      final response = await _dio.get('/api/v3/count/student');
+
 
       return response.data;
     } on DioError catch (e) {
