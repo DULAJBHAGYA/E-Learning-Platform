@@ -16,7 +16,6 @@ class CourseDescription extends StatefulWidget {
   final String category;
   final Map<String, dynamic> what_will;
 
-
   const CourseDescription({
     Key? key,
     required this.course_id,
@@ -279,11 +278,33 @@ class _CourseDescriptionState extends State<CourseDescription>
                                 controller: _tabController,
                                 children: [
                                   SingleChildScrollView(
-                                    child: AboutCourse(
-                                       what_will: {},
+                                    child: Column(
+                                      children: [
+                                        AboutCourse(
+                                          what_will: {
+                                            'what_will': widget.what_will
+                                          },
                                         ),
+                                        SizedBox(height: 20),
+                                        TextButton(
+                                          onPressed: () {
+
+
+                                          },
+                                          child: Text(
+                                            'Enroll Now',
+                                            style: GoogleFonts.nunito(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w600,
+                                              color: blue,
+                                            ),
+                                          ),
+                                            
+                                        )
+                                      ],
+                                    ),
+
                                   ),
-                                  // Content of the second tab ('Lessons')
                                   SingleChildScrollView(
                                     child:
                                         Lessons(courseDetails: courseDetails),
@@ -405,20 +426,87 @@ class AboutCourse extends StatelessWidget {
                     style: GoogleFonts.nunito(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: black,
+                      color: Colors.black,
                     ),
                   ),
                   SizedBox(height: 10),
-                  if (what_will != null && what_will!.containsKey('what_skil_you_gain'))
-                    for (var skill in (what_will!['what_skil_you_gain'] as Map<String, dynamic>).values)
+                  if (what_will != null) ...[
+                    if (what_will!['what_will_you_learn'] != null) ...[
                       Text(
-                        skill.toString(),
+                        'What You Will Learn:',
                         style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
                       ),
+                      SizedBox(height: 5),
+                      ...(what_will!['what_will_you_learn']
+                              as Map<String, dynamic>)
+                          .entries
+                          .map((entry) {
+                        return Text(
+                          '${entry.key}: ${entry.value}',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                          ),
+                        );
+                      }),
+                      SizedBox(height: 20),
+                    ],
+                    if (what_will!['what_skil_you_gain'] != null) ...[
+                      Text(
+                        'Skills You Will Gain:',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      ...(what_will!['what_skil_you_gain']
+                              as Map<String, dynamic>)
+                          .entries
+                          .map((entry) {
+                        return Text(
+                          '${entry.key}: ${entry.value}',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                          ),
+                        );
+                      }),
+                      SizedBox(height: 20),
+                    ],
+                    if (what_will!['who_should_learn'] != null) ...[
+                      Text(
+                        'Who Should Learn:',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      ...(what_will!['who_should_learn']
+                              as Map<String, dynamic>)
+                          .entries
+                          .map((entry) {
+                        return Text(
+                          '${entry.key}: ${entry.value}',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                          ),
+                        );
+                      }),
+                      SizedBox(height: 20),
+                    ],
+                  ],
                 ],
               ),
             ),

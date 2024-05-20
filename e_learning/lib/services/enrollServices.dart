@@ -23,7 +23,7 @@ class EnrollService {
   static EnrollService get instance => _instance;
 
   Future<dynamic> postEnrollment(
-      int userId, int courseId, int requestId) async {
+      int user_id, int course_id, int request_id) async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? accessToken = prefs.getString('access_token');
@@ -35,11 +35,11 @@ class EnrollService {
       _dio.options.headers['Authorization'] = 'Bearer $accessToken';
 
       final response = await _dio.post(
-        '/enrol',
+        '/api/v4/create/subscription?$user_id&$course_id',
         data: {
-          "user_id": userId,
-          "course_id": courseId,
-          "request_id": requestId,
+          "user_id": user_id,
+          "course_id": course_id,
+          "request_id": request_id,
         },
       );
 
