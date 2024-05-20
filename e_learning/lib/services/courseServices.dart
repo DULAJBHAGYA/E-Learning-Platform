@@ -1,14 +1,12 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'baseurl.dart';
 
 class CourseService {
   late final Dio _dio;
 
   static final CourseService _instance = CourseService._internal();
-
 
   CourseService._internal() {
     _dio = Dio(
@@ -24,50 +22,53 @@ class CourseService {
   static CourseService get instance => _instance;
 
   Future<dynamic> postCourse(FormData formData, int userId) async {
-    try {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      final String? accessToken = prefs.getString('access_token');
+  try {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? accessToken = prefs.getString('access_token');
 
-      if (accessToken == null || accessToken.isEmpty) {
-        throw Exception('Access token not found');
-      }
+    if (accessToken == null || accessToken.isEmpty) {
+      throw Exception('Access token not found');
+    }
 
-      _dio.options.headers['Authorization'] = 'Bearer $accessToken';
+    _dio.options.headers['Authorization'] = 'Bearer $accessToken';
 
-      final response = await _dio.post(
-        '/course/$userId',
+    final response = await _dio.post(
+      '/api/v3/create/course/$userId',
+      data: formData,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // Handle successful response
+      return response.data;
+    } else if (response.statusCode == 307) {
+      String redirectUrl = response.headers['location']?.first ?? '';
+      final redirectedResponse = await _dio.post(
+        redirectUrl,
         data: formData,
       );
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        // Handle successful response
-        return response.data;
-      } else if (response.statusCode == 307) {
-        String redirectUrl = response.headers['location']?.first ?? '';
-        final redirectedResponse = await _dio.post(
-          redirectUrl,
-          data: formData,
-        );
-
-        return redirectedResponse.data;
-      } else {
-        // Handle other status codes (e.g., 404, 500)
-        throw Exception(
-            'Failed to post course. Status code: ${response.statusCode}');
-      }
-    } on DioError catch (e) {
-      if (e.response != null && e.response!.statusCode == 404) {
-        throw Exception('Course not found. Please check your request.');
-      } else {
-        print("Dio Error: $e");
-        print("Response Data: ${e.response?.data}");
-        throw Exception(e.response?.data['detail'] ?? e.toString());
-      }
-    } catch (e) {
-      print("Unexpected Error: $e");
-      rethrow;
+      return redirectedResponse.data;
+    } else {
+      // Handle other status codes (e.g., 404, 500)
+      throw Exception(
+          'Failed to post course. Status code: ${response.statusCode}');
     }
+  } on DioError catch (e) {
+    if (e.response != null && e.response!.statusCode == 404) {
+      throw Exception('Course not found. Please check your request.');
+    } else {
+      print("Dio Error: $e");
+      print("Response Data: ${e.response?.data}");
+      throw Exception(e.response?.data['detail'] ?? e.toString());
+    }
+  } catch (e) {
+    print("Unexpected Error: $e");
+    rethrow;
   }
+}
+
+
+
 
   Future<dynamic> fetchAllCourses() async {
     try {

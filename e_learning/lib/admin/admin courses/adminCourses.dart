@@ -1,35 +1,75 @@
+import 'package:e_learning/services/courseServices.dart';
 import 'package:e_learning/shared/searchBar.dart';
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../color.dart';
+import '../admin home/adminDash.dart';
 
 class AdminCourses extends StatefulWidget {
-  const AdminCourses({Key? key}) : super(key: key);
+  const AdminCourses({
+Key? key,
+    required this.username,
+    required this.accessToken,
+    required this.refreshToken,
+  }) : super(key: key);
 
+  final String username;
+  final String accessToken;
+  final String refreshToken;
+  
   @override
   _AdminCoursesState createState() => _AdminCoursesState();
+
 }
 
-class _AdminCoursesState extends State<AdminCourses>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+
+class _AdminCoursesState extends State<AdminCourses> with SingleTickerProviderStateMixin {
+      List<dynamic> _courses = []; 
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    fetchAllCourses();
   }
+
+   Future<void> fetchAllCourses() async {
+    try {
+      final studentsData = await CourseService.instance.fetchAllCourses();
+      setState(() {
+        _courses = studentsData ?? [];
+      });
+    } catch (e) {
+      print('Error fetching students: $e');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,  // Assign the key to the Scaffold
       backgroundColor: background,
+      drawer: NavDrawer(),
+      appBar: AppBar(
+        backgroundColor: background,
+        elevation: 0,
+        leading: IconButton(
+          icon: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Icon(UniconsLine.bars, size: 30, color: black),
+          ),
+          onPressed: () {
+            _scaffoldKey.currentState?.openDrawer(); 
+          },
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -44,12 +84,6 @@ class _AdminCoursesState extends State<AdminCourses>
                     fontWeight: FontWeight.bold,
                     color: black,
                   ),
-                ),
-                Spacer(),
-                IconButton(
-                  splashColor: Colors.white,
-                  onPressed: () {},
-                  icon: Icon(UniconsLine.bars, size: 25, color: black,),
                 ),
               ],
             ),

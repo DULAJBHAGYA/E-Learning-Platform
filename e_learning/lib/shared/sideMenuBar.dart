@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
+
+import '../color.dart';
 
 class NavDrawer extends StatelessWidget {
   @override
@@ -24,8 +28,10 @@ class NavDrawer extends StatelessWidget {
             onTap: () => {},
           ),
           ListTile(
-            leading: Icon(Icons.verified_user),
-            title: Text('Profile'),
+            leading: Icon(Iconsax.user),
+            title: Text('Profile',
+            style: GoogleFonts.nunito(fontSize: 18, fontWeight: FontWeight.w600, color: black),
+            ),
             onTap: () => {Navigator.of(context).pop()},
           ),
           ListTile(
