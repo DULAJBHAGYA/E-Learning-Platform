@@ -41,8 +41,8 @@ class _AdminStudentsState extends State<AdminStudents> with SingleTickerProvider
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
-      key: _scaffoldKey,  // Assign the GlobalKey to the Scaffold
-      drawer: NavDrawer(),  // Adding the NavDrawer
+      key: _scaffoldKey,  
+      drawer: NavDrawer(),  
       appBar: AppBar(
         backgroundColor: background,
         elevation: 0,
@@ -52,7 +52,7 @@ class _AdminStudentsState extends State<AdminStudents> with SingleTickerProvider
             child: Icon(UniconsLine.bars, size: 30, color: black),
           ),
           onPressed: () {
-            _scaffoldKey.currentState?.openDrawer();  // Opens the drawer using the GlobalKey
+            _scaffoldKey.currentState?.openDrawer();  
           },
         ),
         

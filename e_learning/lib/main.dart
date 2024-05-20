@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       title: 'U-Learn',
       initialRoute: '/',
       routes: {
-        '/': (context) =>  Login(),
+        '/': (context) =>  SplashScreen(),
       },
     );
   }
