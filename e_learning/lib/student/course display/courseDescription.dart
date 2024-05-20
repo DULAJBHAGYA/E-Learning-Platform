@@ -1,3 +1,4 @@
+import 'package:e_learning/services/courseServices.dart'; // Import the service for fetching course details
 import 'package:e_learning/student/all%20courses/allCourses.dart';
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,23 @@ import 'package:iconsax/iconsax.dart';
 import '../../color.dart';
 
 class CourseDescription extends StatefulWidget {
-  const CourseDescription({Key? key}) : super(key: key);
+  final int course_id;
+  final String description;
+  final String image;
+  final String title;
+  final String category;
+  final Map<String, dynamic> what_will;
+
+
+  const CourseDescription({
+    Key? key,
+    required this.course_id,
+    required this.description,
+    required this.image,
+    required this.title,
+    required this.category,
+    required this.what_will,
+  }) : super(key: key);
 
   @override
   _CourseDescriptionState createState() => _CourseDescriptionState();
@@ -17,17 +34,36 @@ class CourseDescription extends StatefulWidget {
 class _CourseDescriptionState extends State<CourseDescription>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  Map<String, dynamic>? courseDetails;
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    fetchCourseDetails();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+  Future<void> fetchCourseDetails() async {
+    try {
+      final details = await CourseService.instance
+          .fetchCourseById(widget.course_id as String);
+      setState(() {
+        courseDetails = details;
+        isLoading = false;
+      });
+    } catch (e) {
+      print('Error fetching course details: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -47,9 +83,11 @@ class _CourseDescriptionState extends State<CourseDescription>
                         height: 300,
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage('/images/3dmodeling.png'),
-                                fit: BoxFit.cover)),
+                          image: DecorationImage(
+                            image: NetworkImage(widget.image),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
                     ),
                     Padding(
@@ -58,7 +96,16 @@ class _CourseDescriptionState extends State<CourseDescription>
                         children: [
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const StdAllCourses()));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const StdAllCourses(
+                                    username: '',
+                                    accessToken: '',
+                                    refreshToken: '',
+                                  ),
+                                ),
+                              );
                             },
                             child: Row(
                               children: [
@@ -82,7 +129,6 @@ class _CourseDescriptionState extends State<CourseDescription>
                               ],
                             ),
                           ),
-
                         ],
                       ),
                     ),
@@ -94,28 +140,46 @@ class _CourseDescriptionState extends State<CourseDescription>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '3D Modeling',
+                        widget.title,
                         style: GoogleFonts.nunito(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: black),
-                      ),
-                      SizedBox(height: 5),
-                      Container(
-                        width: 120,
-                        decoration: BoxDecoration(
-                          color: white,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                        'OTHER',
-                          style: GoogleFonts.openSans(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: other),
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: black,
                         ),
                       ),
                       SizedBox(height: 5),
+                      Row(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: background2,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Text(
+                                widget.category,
+                                style: GoogleFonts.nunito(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: other,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        widget.description,
+                        textAlign: TextAlign.justify,
+                        style: GoogleFonts.nunito(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: black,
+                        ),
+                      ),
+                      SizedBox(height: 10),
                       Container(
                         width: MediaQuery.of(context).size.width,
                         child: Row(
@@ -130,7 +194,7 @@ class _CourseDescriptionState extends State<CourseDescription>
                                     style: GoogleFonts.nunito(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w600,
-                                        color:black)),
+                                        color: black)),
                               ],
                             ),
                             SizedBox(width: 10),
@@ -172,7 +236,9 @@ class _CourseDescriptionState extends State<CourseDescription>
                               style: GoogleFonts.nunito(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
-                                color: _tabController.index == 0 ? black : lightgrey,
+                                color: _tabController.index == 0
+                                    ? black
+                                    : lightgrey,
                               ),
                             ),
                           ),
@@ -182,7 +248,9 @@ class _CourseDescriptionState extends State<CourseDescription>
                               style: GoogleFonts.nunito(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
-                                color: _tabController.index == 1 ? black : lightgrey,
+                                color: _tabController.index == 1
+                                    ? black
+                                    : lightgrey,
                               ),
                             ),
                           )
@@ -203,20 +271,26 @@ class _CourseDescriptionState extends State<CourseDescription>
                         },
                       ),
                       SizedBox(height: 20),
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        child: TabBarView(
-                          controller: _tabController,
-                          children: [
-                            // Content of the first tab ('About')
-                            SingleChildScrollView(child: AboutCourse()),
-                            // Content of the second tab ('Lessons')
-                            SingleChildScrollView(
-                              child: Lessons(),
+                      isLoading
+                          ? Center(child: CircularProgressIndicator())
+                          : Container(
+                              height: MediaQuery.of(context).size.height * 0.5,
+                              child: TabBarView(
+                                controller: _tabController,
+                                children: [
+                                  SingleChildScrollView(
+                                    child: AboutCourse(
+                                       what_will: {},
+                                        ),
+                                  ),
+                                  // Content of the second tab ('Lessons')
+                                  SingleChildScrollView(
+                                    child:
+                                        Lessons(courseDetails: courseDetails),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -234,117 +308,85 @@ class MyClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     var path = Path();
 
-    // Start from top-left corner
     path.lineTo(0, 0);
 
-    // Draw line to the bottom left corner
     path.lineTo(0, size.height);
 
-    final firstCurve = Offset(0, size.height-30);
-    final lastCurve = Offset(40, size.height-30);
-    path.quadraticBezierTo(firstCurve.dx, firstCurve.dy, lastCurve.dx, lastCurve.dy);
+    final firstCurve = Offset(0, size.height - 30);
+    final lastCurve = Offset(40, size.height - 30);
+    path.quadraticBezierTo(
+        firstCurve.dx, firstCurve.dy, lastCurve.dx, lastCurve.dy);
 
-    final secondCurve = Offset(size.width-40, size.height-30);
-    final thirdCurve = Offset(size.width-40, size.height-30);
-    path.quadraticBezierTo(secondCurve.dx, secondCurve.dy, thirdCurve.dx, thirdCurve.dy);
+    final secondCurve = Offset(size.width - 40, size.height - 30);
+    final thirdCurve = Offset(size.width - 40, size.height - 30);
+    path.quadraticBezierTo(
+        secondCurve.dx, secondCurve.dy, thirdCurve.dx, thirdCurve.dy);
 
-    final lastCurve2 = Offset(size.width, size.height-30);
+    final lastCurve2 = Offset(size.width, size.height - 30);
     final firstCurve2 = Offset(size.width, size.height);
-    path.quadraticBezierTo(lastCurve2.dx, lastCurve2.dy, firstCurve2.dx, firstCurve2.dy);
-    // Draw line to the top-right corner
+    path.quadraticBezierTo(
+        lastCurve2.dx, lastCurve2.dy, firstCurve2.dx, firstCurve2.dy);
     path.lineTo(size.width, 0);
 
-    // Close the path to form the shape
     path.close();
 
     return path;
   }
-  
+
   @override
   bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
     return false; // Return true if the new instance needs to repaint the path
   }
 }
+
 class Lessons extends StatelessWidget {
-  const Lessons({
-    super.key,
-  });
+  final Map<String, dynamic>? courseDetails;
+
+  const Lessons({Key? key, this.courseDetails}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          ListView(
-            shrinkWrap: true,
-            children: [
-              ListTile(
-                leading: Icon(EneftyIcons.chart_success_outline, color: black),
-                title: Text('Introduction to Data Science', style: GoogleFonts.openSans(fontSize: 18,fontWeight: FontWeight.w600, color: black),),
-                subtitle: Text('Students will learn about the role of data science in today\'s world, its applications across various industries, and the skills required to become proficient in the field.', 
-                textAlign: TextAlign.justify,
-                style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w400, color: black),),
-              ),
-              SizedBox(height: 10),
-
-
-              ListTile(
-                leading: Icon(EneftyIcons.chart_success_outline, color: black),
-                title: Text('Data Exploration and Visualization', style: GoogleFonts.openSans(fontSize: 18, fontWeight: FontWeight.w600, color: black),),
-                subtitle: Text('This module will cover techniques for exploring and visualizing data, including descriptive statistics, data cleaning, and visualization libraries such as Matplotlib and Seaborn.', 
-                textAlign: TextAlign.justify,
-                style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w400, color: black),),
-              ),
-
-              SizedBox(height: 10),
-
-              ListTile(
-                leading: Icon(EneftyIcons.chart_success_outline, color: black),
-                title: Text('Statistical Analysis', style: GoogleFonts.openSans(fontSize: 18, fontWeight: FontWeight.w600, color: black),),
-                subtitle: Text('Students will delve into statistical concepts essential for data analysis, including probability distributions, hypothesis testing, and regression analysis.', 
-                textAlign: TextAlign.justify,
-                style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w400, color: black),),
-              ),
-
-              SizedBox(height: 10),
-
-              ListTile(
-                leading: Icon(EneftyIcons.chart_success_outline, color: black),
-                title: Text('Machine Learning Basics', style: GoogleFonts.openSans(fontSize: 18, fontWeight: FontWeight.w600, color: black),),
-                subtitle: Text('An introduction to machine learning algorithms and techniques, including supervised and unsupervised learning, classification, regression, and clustering.', 
-                textAlign: TextAlign.justify,
-                style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w400, color: black),),
-              ),
-
-              SizedBox(height: 10),
-
-              ListTile(
-                leading: Icon(EneftyIcons.chart_success_outline, color: black),
-                title: Text('Introduction to Python for Data Science', style: GoogleFonts.openSans(fontSize: 18, fontWeight: FontWeight.w600, color: black),),
-                subtitle: Text('A hands-on introduction to the Python programming language, focusing on its applications in data science, data manipulation with Pandas, and data visualization with Matplotlib and Seaborn.', 
-                textAlign: TextAlign.justify,
-                style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w400, color: black),),
-              ),
-
-              SizedBox(height: 10),
-
-              ListTile(
-                leading: Icon(EneftyIcons.chart_success_outline, color: black),
-                title: Text('Capstone Project', style: GoogleFonts.openSans(fontSize: 18, fontWeight: FontWeight.w600, color: black),),
-                subtitle: Text('Students will apply their knowledge and skills acquired throughout the course to complete a real-world data science project. This project will involve data acquisition, preprocessing, analysis, modeling, and presentation of findings.', 
-                textAlign: TextAlign.justify,
-                style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w400, color: black),),
-              ),
-            ],
-          )
-        ]
-      ),
-    );
+    return courseDetails == null
+        ? Center(child: Text('No lessons available'))
+        : Container(
+            child: Column(children: [
+              ListView(
+                shrinkWrap: true,
+                children:
+                    List.generate(courseDetails!['content'].length, (index) {
+                  return ListTile(
+                    leading:
+                        Icon(EneftyIcons.chart_success_outline, color: black),
+                    title: Text(
+                      courseDetails!['content'][index]['title'],
+                      style: GoogleFonts.openSans(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: black),
+                    ),
+                    subtitle: Text(
+                      courseDetails!['content'][index]['description'],
+                      textAlign: TextAlign.justify,
+                      style: GoogleFonts.openSans(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: black),
+                    ),
+                  );
+                }),
+              )
+            ]),
+          );
   }
 }
 
 class AboutCourse extends StatelessWidget {
-  const AboutCourse({Key? key}) : super(key: key);
+  final Map<String, dynamic>? what_will;
+
+  const AboutCourse({
+    required this.what_will,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -354,127 +396,35 @@ class AboutCourse extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // About Course
             Container(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'About Course',
-                    style: GoogleFonts.openSans(
+                    style: GoogleFonts.nunito(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                       color: black,
                     ),
                   ),
                   SizedBox(height: 10),
-                  Text(
-                    'In this introductory course to data science, students will embark on a journey to understand the fundamental concepts, techniques, and tools used in the field of data science. The course aims to equip learners with a solid foundation in data science principles, enabling them to extract insights from data and make informed decisions.',
-                    textAlign: TextAlign.justify,
-                    style: GoogleFonts.openSans(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                      color: black,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
-
-            // Prerequisites
-            Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Prerequisites',
-                    style: GoogleFonts.openSans(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: black,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  ListView(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    children: [
-                      ListTile(
-                        leading: Icon(EneftyIcons.check_outline),
-                        title: Text(
-                            'Basic understanding of mathematics and statistics',
-                            style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w400, color: black),
-                            ),
+                  if (what_will != null && what_will!.containsKey('what_skil_you_gain'))
+                    for (var skill in (what_will!['what_skil_you_gain'] as Map<String, dynamic>).values)
+                      Text(
+                        skill.toString(),
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black,
+                        ),
                       ),
-                      ListTile(
-                        leading: Icon(EneftyIcons.chrome_outline),
-                        title: Text(
-                            'Familiarity with programming concepts (preferably Python)', 
-                            style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w400, color: black),
-                            ),
-                      ),
-                    ],
-                  )
                 ],
               ),
             ),
-
-            SizedBox(height: 20),
-
-            // Who can take this course
-            Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Who can take this course',
-                    style: GoogleFonts.openSans(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: black,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'This course is ideal for beginners with an interest in data science and analytics. It is suitable for students, professionals, and anyone looking to embark on a career in data science or related fields.',
-                    textAlign: TextAlign.justify,
-                    style: GoogleFonts.openSans(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                      color: black,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            
-            SizedBox(height: 20),
-
-            //enroll button
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                                  alignment: Alignment.center,
-                                  padding: EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                    color: darkblue,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Text('Enroll', style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: white),),
-                                ),
-                  ],
-                ),
-              ],
-            ),
-          ]
-        )
-      )
-        );
-      
+          ],
+        ),
+      ),
+    );
   }
 }

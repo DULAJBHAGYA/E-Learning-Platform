@@ -94,7 +94,7 @@ class CourseService {
     }
   }
 
-  Future<dynamic> fetchCourseDetails(int courseId) async {
+  Future<dynamic> fetchCourseDetails(int course_id) async {
      try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? accessToken = prefs.getString('access_token');
@@ -105,7 +105,7 @@ class CourseService {
 
       _dio.options.headers['Authorization'] = 'Bearer $accessToken';
 
-      final response = await _dio.get('/course/get?course_id=$courseId');
+      final response = await _dio.get('/api/v4/course?$course_id');
 
       return response.data;
     } on DioError catch (e) {
@@ -184,13 +184,13 @@ final response = await _dio.get('/courses/byuser?user_id=$user_id&page_id=1&page
 
 
 
-  postMaterial(String title, String description, int courseId) {}
+  postMaterial(String title, String description, int course_id) {}
 
 
 
 
 
-  Future<dynamic> fetchCourseById(String courseId) async {
+  Future<dynamic> fetchCourseById(String course_id) async {
   try {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? accessToken = prefs.getString('access_token');
@@ -201,7 +201,7 @@ final response = await _dio.get('/courses/byuser?user_id=$user_id&page_id=1&page
 
     _dio.options.headers['Authorization'] = 'Bearer $accessToken';
 
-    final response = await _dio.get('/course/get?course_id=$courseId');
+    final response = await _dio.get('/api/v4/course?$course_id');
 
     if (response.statusCode == 200) {
       return response.data;
