@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../color.dart';
+import '../../services/enrollServices.dart';
+
 
 class CourseDescription extends StatefulWidget {
   final int course_id;
@@ -286,20 +289,55 @@ class _CourseDescriptionState extends State<CourseDescription>
                                           },
                                         ),
                                         SizedBox(height: 20),
-                                        TextButton(
-                                          onPressed: () {
-
-
-                                          },
-                                          child: Text(
-                                            'Enroll Now',
-                                            style: GoogleFonts.nunito(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w600,
-                                              color: blue,
-                                            ),
+                                        Align(
+                                          alignment: Alignment.bottomRight,
+                                        child:TextButton(
+                                        style: TextButton.styleFrom(
+                                          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                          backgroundColor: white,
+                                          shape: StadiumBorder(
+                                            side: BorderSide(color: darkblue, width: 2),
                                           ),
+                                        ),
+                                        onPressed: () async {
+                                          try {
+                                            int? user_id = await SharedPreferencesHelper.getUserId();
+                                            if (user_id == null) {
+                                              print('User ID not found in SharedPreferences');
+                                              return;
+                                            }
+
+                                            await EnrollService.instance.postEnrollment(
+                                              user_id,
+                                              widget.course_id,
+                                            );
                                             
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(
+                                                content: Text('Enrolled Request sent successfully!'),
+                                                duration: Duration(seconds: 2),
+                                              ),
+                                            );
+                                          } catch (e) {
+                                            print('Enrollment Error: $e');
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(
+                                                content: Text('Failed to sent  enroll request. Please try again.'),
+                                                duration: Duration(seconds: 2),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                        child: Text(
+                                          'Enroll Now',
+                                          style: GoogleFonts.nunito(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w600,
+                                            color: darkblue,
+                                          ),
+                                        ),
+                                      ),
+
                                         )
                                       ],
                                     ),
@@ -321,6 +359,18 @@ class _CourseDescriptionState extends State<CourseDescription>
         ),
       ),
     );
+  }
+}
+
+class SharedPreferencesHelper {
+  static Future<int?> getUserId() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      return prefs.getInt('user_id');
+    } catch (e) {
+      print('Error fetching user ID from SharedPreferences: $e');
+      return null;
+    }
   }
 }
 
