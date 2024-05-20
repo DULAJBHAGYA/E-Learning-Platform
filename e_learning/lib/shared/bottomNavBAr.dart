@@ -29,7 +29,7 @@ class BottomNavBar extends StatelessWidget {
             break;
           case 1:
             // Navigate to My Courses screen
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const StdAllCourses()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const StdAllCourses(username: '', accessToken: '', refreshToken: '')));
             break;
           case 2:
             // Navigate to All Courses screen

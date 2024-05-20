@@ -1,6 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:e_learning/admin/add%20courses/addCourses.dart';
 import 'package:e_learning/services/courseServices.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,9 +35,9 @@ class _NewCourseState extends State<NewCourse> {
   TextEditingController _useridController = TextEditingController();
   TextEditingController _aboutCourseController = TextEditingController();
 
-  int? user_id;
+ int? user_id;
   File? _selectedImage;
-  String? _selectedFilePath; // Added variable to store file path
+  Uint8List? _selectedImageBytes;
   List<String> _typeOptions = ['Science', 'Math', 'IT', 'Language', 'Other'];
   String? _selectedType;
 
@@ -52,48 +55,53 @@ class _NewCourseState extends State<NewCourse> {
   }
 
   Future<void> _pickFile() async {
-  try {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['jpg', 'jpeg', 'png'], // Allow only image files
-    );
-
-    if (result != null) {
-      PlatformFile file = result.files.first;
-      print('File name: ${file.name}');
-      print('File bytes: ${file.bytes}');
-      setState(() {
-        _selectedImage = File(file.name!); // Use file name to create a new File object
-      });
-      // Display the file name in a snackbar
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Selected image: ${file.name}'),
-          duration: Duration(seconds: 2),
-        ),
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'jpeg', 'png'], // Allow only image files
       );
-    } else {
-      // User canceled the picker
-      print('No file selected.');
+
+      if (result != null) {
+        if (kIsWeb) {
+          // For web, get the bytes and create a Uint8List
+          Uint8List bytes = await result.files.first.bytes!;
+          setState(() {
+            _selectedImageBytes = bytes;
+          });
+        } else {
+          // For mobile, get the file directly
+          PlatformFile file = result.files.first;
+          setState(() {
+            _selectedImage = File(file.path!);
+          });
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Selected image: ${result.files.first.name}'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      } else {
+        print('No file selected.');
+      }
+    } catch (e) {
+      print('Error picking file: $e');
     }
-  } catch (e) {
-    // Handle errors if any
-    print('Error picking file: $e');
   }
-}
+
 
 
   FormData _buildFormData() {
-    return FormData.fromMap({
-      'user_id': _useridController.text.trim(),
-      'title': _titleController.text.trim(),
-      'description': _descriptionController.text.trim(),
-      'what_will': _aboutCourseController.text.trim(),
-      'category': _selectedType!,
-      'image': _selectedImage != null ? MultipartFile.fromFileSync(_selectedImage!.path) : null,
-      'file_path': _selectedFilePath ?? '', // Include the file path in the form data
-    });
-  }
+  return FormData.fromMap({
+    'user_id': _useridController.text.trim(),
+    'title': _titleController.text.trim(),
+    'description': _descriptionController.text.trim(),
+    'what_will': _aboutCourseController.text.trim(),
+    'category': _selectedType!, // Include the selected category
+    'image': _selectedImageBytes != null ? MultipartFile.fromBytes(_selectedImageBytes!, filename: 'image.jpg') : null,
+  });
+}
 
   void _showSuccessDialog(int courseId) {
     SharedPreferences.getInstance().then((prefs) {
@@ -191,27 +199,24 @@ class _NewCourseState extends State<NewCourse> {
                   onTap: _pickFile,
                   child: Container(
                     width: double.infinity,
-                    height: 50,
+                    height: 200,
                     decoration: BoxDecoration(
                       color: Colors.grey[300],
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: _selectedImage != null
-                        ? Image.file(
-                            _selectedImage!,
+                    child: _selectedImageBytes != null
+                        ? Image.memory(
+                            _selectedImageBytes!,
                             fit: BoxFit.cover,
                           )
                         : Icon(
                             Icons.file_upload,
                             color: Colors.grey[800],
+                            size: 50,
                           ),
                   ),
                 ),
-                SizedBox(height: 10),
-                Text(
-                  _selectedFilePath ?? 'No file selected',
-                  style: TextStyle(color: Colors.grey),
-                ), // Display the file path
+                // Display the file path
                 SizedBox(height: 20),
                 TextFormField(
                   controller: _titleController,
