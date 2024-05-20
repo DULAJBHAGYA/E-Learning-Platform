@@ -52,14 +52,14 @@ class _OnBoardScreenState extends State<OnBoardScreens> {
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
                       },
-                      child: Text('skip', style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w600, color: black),)
+                      child: Text('skip', style: GoogleFonts.nunito(fontSize: 18, fontWeight: FontWeight.w700, color: black),)
                       ),
 
 
 
                   SmoothPageIndicator(controller: _controller, count: 3, effect: SlideEffect(
                     activeDotColor: darkblue,
-                    dotColor: grey,
+                    dotColor: background2,
                   ),),
 
                   onLastPage ? GestureDetector(
@@ -67,10 +67,10 @@ class _OnBoardScreenState extends State<OnBoardScreens> {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
                     },
                     child: Text('done', 
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.nunito(
                       fontSize: 18, 
-                      fontWeight: FontWeight.w600, 
-                      color: onLastPage ? black : black
+                      fontWeight: FontWeight.w700, 
+                      color: onLastPage ? darkblue : black
                       ),)) : GestureDetector(
                     onTap: () {
                       _controller.nextPage(
@@ -78,10 +78,10 @@ class _OnBoardScreenState extends State<OnBoardScreens> {
                           curve: Curves.easeIn);
                     },
                     child: Text('next', 
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.nunito(
                       fontSize: 18, 
-                      fontWeight: FontWeight.w600, 
-                      color: onLastPage ? black : black
+                      fontWeight: FontWeight.w700, 
+                      color: onLastPage ? darkblue : black
                       ),)),
                   
 

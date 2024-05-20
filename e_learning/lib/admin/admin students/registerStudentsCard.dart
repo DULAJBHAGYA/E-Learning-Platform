@@ -39,7 +39,7 @@ class RegisterdStudentsCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '$first_name + $last_name',
+                  '$first_name $last_name',
                   style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: black),
                 ),
                 SizedBox(height: 5),

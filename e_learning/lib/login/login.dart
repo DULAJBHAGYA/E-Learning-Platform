@@ -44,6 +44,20 @@ class _LoginState extends State<Login> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.asset(
+                          '/logos/logo.png', 
+                          fit: BoxFit.fill,
+                          width: 100,
+                          height: 80,
+                        ),
+                      ),
+                    ),
                       Text(
                         'Welcome back,',
                         style: GoogleFonts.openSans(

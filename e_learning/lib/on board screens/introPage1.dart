@@ -9,15 +9,18 @@ class IntroPage1 extends StatelessWidget {
     return Container(
       color: Colors.white, 
       child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            Image.asset('/images/intro1.png'),
-            SizedBox(height: 20,),
-            Text("Learn and Earn", style: GoogleFonts.inter(fontSize: 30, fontWeight: FontWeight.bold),),
-            SizedBox(height: 20,),
-            Text('loren ipsum ssssssssssssss ssssssssssssss sssssssssss sssssssssss', style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w500),),
-          ],
+        padding: const EdgeInsets.all(40.0),
+        child: Align(
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              Image.asset('/images/intro1.png'),
+              SizedBox(height: 20,),
+              Text("Learn Anytime, Anywhere", textAlign: TextAlign.center, style: GoogleFonts.nunito(fontSize: 25, fontWeight: FontWeight.w800),),
+              SizedBox(height: 20,),
+              Text('Access a variety of courses and learn from experts from the comfort of your home.',textAlign: TextAlign.center, style: GoogleFonts.nunito(fontSize: 20, fontWeight: FontWeight.w400),),
+            ],
+          ),
         ),
       ),
     );

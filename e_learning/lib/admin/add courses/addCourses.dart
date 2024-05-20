@@ -1,6 +1,7 @@
+import 'package:e_learning/admin/add%20courses/newCourse.dart';
 import 'package:e_learning/color.dart';
 import 'package:e_learning/shared/searchBar.dart';
-import 'package:enefty_icons/enefty_icons.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -41,23 +42,28 @@ class _AddCoursesState extends State<AddCourses> {
 
               SizedBox(height: 20,),
 
-              Row(
-                     mainAxisSize: MainAxisSize.min,
-                     children: [
-                       Container(
-                         alignment: Alignment.center,
-                         padding: EdgeInsets.all(5),
-                         decoration: BoxDecoration(
-                           color: darkblue,
-                           borderRadius: BorderRadius.circular(5),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => NewCourse(username: widget.username, accessToken: widget.accessToken, refreshToken: widget.refreshToken,)));
+                },
+                child: Row(
+                       mainAxisSize: MainAxisSize.min,
+                       children: [
+                         Container(
+                           alignment: Alignment.center,
+                           padding: EdgeInsets.all(5),
+                           decoration: BoxDecoration(
+                             color: darkblue,
+                             borderRadius: BorderRadius.circular(5),
+                           ),
+                           child: Text(
+                             'ADD NEW COURSE',
+                             style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w700, color: white),
+                           ),
                          ),
-                         child: Text(
-                           'ADD NEW COURSE',
-                           style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w700, color: white),
-                         ),
-                       ),
-                     ],
-                   ),
+                       ],
+                     ),
+              ),
 
                    SizedBox(height: 20,),
 

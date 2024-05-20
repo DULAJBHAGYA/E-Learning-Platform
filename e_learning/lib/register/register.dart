@@ -184,6 +184,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.asset(
+                          '/logos/logo.png', 
+                          fit: BoxFit.fill,
+                          width: 100,
+                          height: 80,
+                        ),
+                      ),
+                    ),
+
                       Text(
                         'Let\'s create your account',
                         style: GoogleFonts.openSans(

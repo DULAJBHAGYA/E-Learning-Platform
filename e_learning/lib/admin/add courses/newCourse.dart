@@ -1,17 +1,15 @@
 import 'package:e_learning/admin/add%20courses/addCourses.dart';
 import 'package:e_learning/services/courseServices.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-
-
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
-
+import 'dart:io'; 
 import '../../color.dart';
 
-
-class NewPreview extends StatefulWidget {
-  const NewPreview({
+class NewCourse extends StatefulWidget {
+  const NewCourse({
     Key? key,
     required this.username,
     required this.accessToken,
@@ -23,18 +21,21 @@ class NewPreview extends StatefulWidget {
   final String refreshToken;
 
   @override
-  _NewPreviewState createState() => _NewPreviewState();
+  _NewCourseState createState() => _NewCourseState();
 }
 
-class _NewPreviewState extends State<NewPreview> {
+class _NewCourseState extends State<NewCourse> {
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController _titleController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
   TextEditingController _useridController = TextEditingController();
+  TextEditingController _aboutCourseController = TextEditingController();
 
   int? user_id;
-  List<String> _typeOptions = ['Beginner', 'Intermediate', 'Advanced'];
+  File? _selectedImage;
+  String? _selectedFilePath; // Added variable to store file path
+  List<String> _typeOptions = ['Science', 'Math', 'IT', 'Language', 'Other'];
   String? _selectedType;
 
   @override
@@ -50,20 +51,53 @@ class _NewPreviewState extends State<NewPreview> {
     });
   }
 
-  // Method to construct FormData object
+  Future<void> _pickFile() async {
+  try {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'jpeg', 'png'], // Allow only image files
+    );
+
+    if (result != null) {
+      PlatformFile file = result.files.first;
+      print('File name: ${file.name}');
+      print('File bytes: ${file.bytes}');
+      setState(() {
+        _selectedImage = File(file.name!); // Use file name to create a new File object
+      });
+      // Display the file name in a snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Selected image: ${file.name}'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } else {
+      // User canceled the picker
+      print('No file selected.');
+    }
+  } catch (e) {
+    // Handle errors if any
+    print('Error picking file: $e');
+  }
+}
+
+
   FormData _buildFormData() {
     return FormData.fromMap({
       'user_id': _useridController.text.trim(),
       'title': _titleController.text.trim(),
       'description': _descriptionController.text.trim(),
-      'type': _selectedType!,
-      'image': null,
+      'what_will': _aboutCourseController.text.trim(),
+      'category': _selectedType!,
+      'image': _selectedImage != null ? MultipartFile.fromFileSync(_selectedImage!.path) : null,
+      'file_path': _selectedFilePath ?? '', // Include the file path in the form data
     });
   }
 
   void _showSuccessDialog(int courseId) {
     SharedPreferences.getInstance().then((prefs) {
-      prefs.setInt('course_id', courseId); // Save course_id to SharedPreferences
+      prefs.setInt('course_id', courseId); 
     });
 
     showDialog(
@@ -127,136 +161,172 @@ class _NewPreviewState extends State<NewPreview> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Add Course Preview',
-                style: GoogleFonts.openSans(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Add Course Preview',
+                  style: GoogleFonts.openSans(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              TextFormField(
-                controller: _useridController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: 'User ID'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'User ID is required';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _titleController,
-                decoration: InputDecoration(labelText: 'Title'),
-              ),
-              SizedBox(height: 20),
-              DropdownButtonFormField<String>(
-                value: _selectedType,
-                onChanged: (newValue) {
-                  setState(() {
-                    _selectedType = newValue;
-                  });
-                },
-                items: _typeOptions.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                decoration: InputDecoration(labelText: 'Type'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Type is required';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20),
-              TextFormField(
-                controller: _descriptionController,
-                decoration: InputDecoration(labelText: 'Description'),
-                maxLines: null,
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(blue),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
+                TextFormField(
+                  controller: _useridController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: 'User ID'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'User ID is required';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 20),
+                GestureDetector(
+                  onTap: _pickFile,
+                  child: Container(
+                    width: double.infinity,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: _selectedImage != null
+                        ? Image.file(
+                            _selectedImage!,
+                            fit: BoxFit.cover,
+                          )
+                        : Icon(
+                            Icons.file_upload,
+                            color: Colors.grey[800],
+                          ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  _selectedFilePath ?? 'No file selected',
+                  style: TextStyle(color: Colors.grey),
+                ), // Display the file path
+                SizedBox(height: 20),
+                TextFormField(
+                  controller: _titleController,
+                  decoration: InputDecoration(labelText: 'Title'),
+                ),
+                SizedBox(height: 20),
+                DropdownButtonFormField<String>(
+                  value: _selectedType,
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedType = newValue;
+                    });
+                  },
+                  items: _typeOptions.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  decoration: InputDecoration(labelText: 'Category'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Category is required';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 20),
+                TextFormField(
+                  controller: _descriptionController,
+                  decoration: InputDecoration(labelText: 'Description'),
+                  maxLines: null,
+                ),
+                SizedBox(height: 20),
+                TextFormField(
+                  controller: _aboutCourseController,
+                  decoration: InputDecoration(labelText: 'About Course'),
+                  maxLines: null,
+                ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(blue),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        ),
+                        padding: MaterialStateProperty.all(EdgeInsets.all(15.0),
                         ),
                       ),
-                      padding: MaterialStateProperty.all(
-                        EdgeInsets.all(15.0),
+                      child: Text(
+                        'CANCEL',
+                        style: GoogleFonts.openSans(
+                          color: white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
                       ),
                     ),
-                    child: Text(
-                      'CANCEL',
-                      style: GoogleFonts.openSans(
-                        color: white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        try {
-                          final FormData formData = _buildFormData();
+                    SizedBox(width: 10),
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          try {
+                            final FormData formData = _buildFormData();
 
-                          final response = await CourseService.instance.postCourse(formData, user_id!);
+                            final response = await CourseService.instance.postCourse(formData, user_id!);
 
-                          if (response.containsKey('course_id') && response['course_id'] != null) {
-                            final courseId = int.parse(response['course_id'].toString());
-                            _showSuccessDialog(courseId);
-                          } else {
-                            _showErrorDialog("Course ID not found in the response");
+                            if (response.containsKey('course_id') && response['course_id'] != null) {
+                              final courseId = int.parse(response['course_id'].toString());
+                              _showSuccessDialog(courseId);
+                            } else {
+                              _showErrorDialog("Course ID not found in the response");
+                            }
+                          } catch (e) {
+                            print('Error: $e');
+                            _showErrorDialog(e.toString());
                           }
-                        } catch (e) {
-                          print('Error: $e');
-                          _showErrorDialog(e.toString());
                         }
-                      }
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(blue),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(blue),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        ),
+                        padding: MaterialStateProperty.all(
+                          EdgeInsets.all(15.0),
                         ),
                       ),
-                      padding: MaterialStateProperty.all(
-                        EdgeInsets.all(15.0),
+                      child: Text(
+                        'SAVE',
+                        style: GoogleFonts.openSans(
+                          color: white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
                       ),
                     ),
-                    child: Text(
-                      'SAVE',
-                      style: GoogleFonts.openSans(
-                        color: white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
+

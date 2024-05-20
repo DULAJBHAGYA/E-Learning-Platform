@@ -77,29 +77,35 @@ class AdminService {
     }
   }
 
-  Future<dynamic> fetchAllAdmins() async {
-    try {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      final String? accessToken = prefs.getString('access_token');
+  Future<dynamic> fetchAllAdmins({int pageID = 1, int pageSize = 10}) async {
+  try {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? accessToken = prefs.getString('access_token');
 
-      if (accessToken == null || accessToken.isEmpty) {
-        throw Exception('Access token not found');
-      }
-
-      _dio.options.headers['Authorization'] = 'Bearer $accessToken';
-
-      final response = await _dio.get('/listadmin?page_id=1&page_size=10');
-
-      return response.data;
-    } on DioError catch (e) {
-      print("Dio Error: $e");
-      print("Response Data: ${e.response?.data}");
-      throw Exception(e.response?.data['detail'] ?? e.toString());
-    } catch (e) {
-      print("Unexpected Error: $e");
-      rethrow;
+    if (accessToken == null || accessToken.isEmpty) {
+      throw Exception('Access token not found');
     }
+
+    _dio.options.headers['Authorization'] = 'Bearer $accessToken';
+
+    final response = await _dio.get(
+      '/api/v3/list/admins',
+      queryParameters: {
+        'PageID': 1,
+        'PageSize': 100,
+      },
+    );
+
+    return response.data;
+  } on DioError catch (e) {
+    print("Dio Error: $e");
+    print("Response Data: ${e.response?.data}");
+    throw Exception(e.response?.data['detail'] ?? e.toString());
+  } catch (e) {
+    print("Unexpected Error: $e");
+    rethrow;
   }
+}
 
   Future<dynamic> updateAdmin(
   String email,

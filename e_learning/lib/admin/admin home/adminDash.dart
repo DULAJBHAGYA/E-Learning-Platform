@@ -1,7 +1,10 @@
+import 'package:e_learning/admin/add%20courses/addCourses.dart';
 import 'package:e_learning/color.dart';
 import 'package:e_learning/login/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:unicons/unicons.dart';
 
 import '../add new admin/admins.dart';
@@ -34,9 +37,9 @@ class _AdminDashState extends State<AdminDash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,  // Assign the GlobalKey to the Scaffold
+      key: _scaffoldKey,  
       backgroundColor: background,
-      drawer: NavDrawer(),  // Adding the NavDrawer
+      drawer: NavDrawer(),  
       appBar: AppBar(
         backgroundColor: background,
         elevation: 0,
@@ -91,22 +94,31 @@ class NavDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
-        padding: EdgeInsets.zero,
+        padding: EdgeInsets.all(20),
         children: <Widget>[
-          DrawerHeader(
-            child: Text(
-              'Side menu',
-              style: TextStyle(color: Colors.white, fontSize: 25),
-            ),
-            decoration: BoxDecoration(
-                color: Colors.green,
-                image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: AssetImage('/images/python.jpg'))),
-          ),
+          Container(
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(10),
+  ),
+  child: ClipRRect(
+    borderRadius: BorderRadius.circular(10),
+    child: Image.asset(
+      '/logos/logo.png', 
+      width: 100,
+      height: 80,
+    ),
+  ),
+),
+          SizedBox(height: 20,),
           ListTile(
-            leading: Icon(Icons.input),
-            title: Text('Dashboard'),
+            leading: Icon(Iconsax.home),
+            title: Text('Dashboard',
+            style: GoogleFonts.nunito(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: black,
+            ),
+            ),
             onTap: () => {
               Navigator.push(
                 context,
@@ -115,28 +127,45 @@ class NavDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.verified_user),
-            title: Text('Courses'),
+            leading: Icon(Iconsax.book),
+            title: Text('Courses',
+            style: GoogleFonts.nunito(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: black,
+            ),
+            ),
             onTap: () => {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => AdminCourses()),
+                MaterialPageRoute(builder: (context) => AdminCourses(username: '', accessToken: '', refreshToken: ''),)
               ),
             },
           ),
           ListTile(
-            leading: Icon(Icons.verified_user),
-            title: Text('Add Courses'),
+            leading: Icon(Iconsax.book_saved),
+            title: Text('Add Courses',
+            style: GoogleFonts.nunito(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: black,
+            ),
+            ),
             onTap: () => {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => AdminCourses()),
-              ),
+                MaterialPageRoute(builder: (context) => AddCourses(username: '', accessToken: '', refreshToken: ''),),),
             },
           ),
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Students'),
+            leading: Icon(Iconsax.people),
+            title: Text('Students',
+            style: GoogleFonts.nunito(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: black,
+            ),
+            ),
             onTap: () => {
               Navigator.push(
                 context,
@@ -145,28 +174,51 @@ class NavDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.border_color),
-            title: Text('Enrollments'),
+            leading: Icon(Iconsax.add),
+            title: Text('Enrollments',
+            style: GoogleFonts.nunito(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: black,
+            ),
+            ),
             onTap: () => {},
           ),
           ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text('Admins'),
+            leading: Icon(Iconsax.people),
+            title: Text('Admins',
+            style: GoogleFonts.nunito(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: black,
+            ),
+            ),
             onTap: () => {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Admins()),
-              ),
+                MaterialPageRoute(builder: (context) => Admins(username: '', accessToken: '', refreshToken: ''),)),
             },
           ),
           ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text('Profile'),
+            leading: Icon(Iconsax.user),
+            title: Text('Profile',
+            style: GoogleFonts.nunito(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: black,
+            ),
+            ),
             onTap: () => {},
           ),
           ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text('Logout'),
+            leading: Icon(Iconsax.logout),
+            title: Text('Logout',
+            style: GoogleFonts.nunito(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: black,
+              ),
+            ),
             onTap: () => {
               Navigator.push(
                 context,

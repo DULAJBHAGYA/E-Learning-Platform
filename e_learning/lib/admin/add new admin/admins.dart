@@ -3,19 +3,33 @@ import 'package:e_learning/services/adminServices.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:unicons/unicons.dart';
 
 import '../../color.dart';
+import '../admin home/adminDash.dart';
 
 
 class Admins extends StatefulWidget {
-  const Admins({Key? key}) : super(key: key);
+  const Admins({
+Key? key,
+    required this.username,
+    required this.accessToken,
+    required this.refreshToken,
+  }) : super(key: key);
 
+  final String username;
+  final String accessToken;
+  final String refreshToken;
+  
   @override
   _AdminsState createState() => _AdminsState();
+  
 }
 
-class _AdminsState extends State<Admins> {
-  List<dynamic> _admins = [];
+class _AdminsState extends State<Admins> with SingleTickerProviderStateMixin {
+    List<dynamic> _admins = [];
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -23,7 +37,7 @@ class _AdminsState extends State<Admins> {
     fetchAdmins();
   }
 
-  Future<void> fetchAdmins() async {
+   Future<void> fetchAdmins() async {
     try {
       final adminsData = await AdminService.instance.fetchAllAdmins();
       setState(() {
@@ -34,9 +48,28 @@ class _AdminsState extends State<Admins> {
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: background,
+      key: _scaffoldKey,  // Assign the GlobalKey to the Scaffold
+      drawer: NavDrawer(),  // Adding the NavDrawer
+      appBar: AppBar(
+        backgroundColor: background,
+        elevation: 0,
+        leading: IconButton(
+          icon: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Icon(UniconsLine.bars, size: 30, color: black),
+          ),
+          onPressed: () {
+            _scaffoldKey.currentState?.openDrawer();  // Opens the drawer using the GlobalKey
+          },
+        ),
+        
+      ),
       body: Padding(
         padding: const EdgeInsets.all(0),
         child: Column(
@@ -108,9 +141,9 @@ class _AdminsState extends State<Admins> {
                       child: Column(
                         children: _admins.map((admin) {
                           return AdminDisplayCard(
-                            userId: admin['user_id'],
-                            userName: admin['user_name'],
-                            fullName: admin['full_name'],
+                            user_name: admin['user_name'],
+                            first_name: admin['first_name'],
+                            last_name: admin['last_name'],
                             email: admin['email'],
                             onUpdate: fetchAdmins,
                           );
@@ -130,16 +163,16 @@ class _AdminsState extends State<Admins> {
 
 //admin display card widget
 class AdminDisplayCard extends StatefulWidget {
-  final int userId;
-  final String userName;
-  final String fullName;
+  final String user_name;
+  final String first_name;
+  final String last_name;
   final String email;
   final VoidCallback onUpdate;
 
   const AdminDisplayCard({
-    required this.userId,
-    required this.userName,
-    required this.fullName,
+    required this.user_name,
+    required this.first_name,
+    required this.last_name,
     required this.email,
     required this.onUpdate,
     Key? key,
@@ -156,8 +189,8 @@ class _AdminDisplayCardState extends State<AdminDisplayCard> {
       context: context,
       builder: (BuildContext context) {
         return EditAdminForm(
-          userName: widget.userName,
-          fullName: widget.fullName,
+          user_name: widget.user_name,
+          fullName: widget.first_name + ' ' + widget.last_name,
           email: widget.email,
           onUpdate: widget.onUpdate,
         );
@@ -177,15 +210,12 @@ class _AdminDisplayCardState extends State<AdminDisplayCard> {
           children: [
             ListTile(
               contentPadding: EdgeInsets.all(16),
-              leading: CircleAvatar(
-                backgroundColor: white,
-                child: Text(widget.userId.toString(), style: GoogleFonts.openSans(fontWeight: FontWeight.bold, fontSize: 15, color:darkblue)),
-              ),
-              title: Text(widget.fullName, style: GoogleFonts.openSans(fontWeight: FontWeight.bold, fontSize: 20)),
+              
+              title: Text(widget.first_name + ' ' + widget.last_name, style: GoogleFonts.openSans(fontWeight: FontWeight.bold, fontSize: 20)),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('${widget.userName}', style: GoogleFonts.openSans(fontSize: 15)),
+                  Text('${widget.user_name}', style: GoogleFonts.openSans(fontSize: 15)),
                   Text('${widget.email}', style: GoogleFonts.openSans(fontSize: 15)),
                 ],
               ),
@@ -216,13 +246,13 @@ class _AdminDisplayCardState extends State<AdminDisplayCard> {
 
 //edit admin form widget
 class EditAdminForm extends StatefulWidget {
-  final String userName;
+  final String user_name;
   final String fullName;
   final String email;
   final VoidCallback onUpdate;
 
   const EditAdminForm({
-    required this.userName,
+    required this.user_name,
     required this.fullName,
     required this.email,
     required this.onUpdate,
@@ -242,7 +272,7 @@ class _EditAdminFormState extends State<EditAdminForm> {
   void initState() {
     super.initState();
     _fullNameController = TextEditingController(text: widget.fullName);
-    _userNameController = TextEditingController(text: widget.userName);
+    _userNameController = TextEditingController(text: widget.user_name);
     _emailController = TextEditingController(text: widget.email);
     _passwordController = TextEditingController();
   }

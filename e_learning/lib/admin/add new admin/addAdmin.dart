@@ -160,7 +160,7 @@ class _AddAdminState extends State<AddAdmin> {
                                     onPressed: () {
                                       Navigator.pushReplacement(
                                         context,
-                                        MaterialPageRoute(builder: (context) => Admins()),
+                                        MaterialPageRoute(builder: (context) => Admins(username: '', accessToken: '', refreshToken: '')),
                                       );
                                     },
                                     child: Text('OK'),

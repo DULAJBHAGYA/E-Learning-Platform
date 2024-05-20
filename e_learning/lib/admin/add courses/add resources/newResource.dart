@@ -48,7 +48,8 @@ class _NewResourcesState extends State<NewResources> {
           filename: file.name,
         ), 
         'type': type,
-      });
+      }
+      );
 
       final response = await ResourceService.instance.postResource(formData, materialId);
       
