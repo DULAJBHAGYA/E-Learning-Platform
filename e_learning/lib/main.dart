@@ -1,4 +1,5 @@
 
+import 'package:e_learning/admin/add%20courses/add%20materials/newMaterial.dart';
 import 'package:e_learning/admin/add%20courses/addCourses.dart';
 import 'package:e_learning/admin/add%20new%20admin/addAdmin.dart';
 import 'package:e_learning/admin/add%20new%20admin/admins.dart';
