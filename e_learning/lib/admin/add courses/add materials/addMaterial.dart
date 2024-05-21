@@ -16,13 +16,13 @@ class AddMaterial extends StatefulWidget {
     required this.username,
     required this.accessToken,
     required this.refreshToken,
-    required this.courseId,
+    required this.course_id,
   }) : super(key: key);
 
   final String username;
   final String accessToken;
   final String refreshToken;
-  final int courseId; 
+  final int course_id; 
 
   @override
   _AddMaterialState createState() => _AddMaterialState();
@@ -34,7 +34,7 @@ class _AddMaterialState extends State<AddMaterial> {
   @override
   void initState() {
     super.initState();
-    fetchMaterialById(widget.courseId); 
+    fetchMaterialById(widget.course_id); 
   }
 
   Future<void> fetchMaterialById(int courseId) async { 
@@ -55,9 +55,9 @@ class _AddMaterialState extends State<AddMaterial> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: blue,
+        backgroundColor: white,
     leading: IconButton(
-      icon: Icon(Icons.arrow_back, color: Colors.white),
+      icon: Icon(Icons.arrow_back, color: black),
       onPressed: () {
         Navigator.push(
                           context,
@@ -74,30 +74,15 @@ class _AddMaterialState extends State<AddMaterial> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    margin: EdgeInsets.all(10),
-                    width: MediaQuery.of(context).size.width,
-                    height: 60.0,
-                    padding: EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: background,
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.search, color: grey),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Search in here',
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                      ],
+                  Text(
+                    'MATERIALS',
+                    style: GoogleFonts.openSans(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: black,
                     ),
                   ),
+                  const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: TextButton(

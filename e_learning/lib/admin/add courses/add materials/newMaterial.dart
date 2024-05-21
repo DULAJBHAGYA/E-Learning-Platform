@@ -198,8 +198,7 @@ void _showSuccessDialog(int courseId, dynamic response) async {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => AddMaterial(username: '', accessToken: '', refreshToken: '', courseId: int.parse(courseId.toString()),)
-                ),
+                  builder: (context) => AddMaterial(username: '', accessToken: '', refreshToken: '', course_id: courseId),)
               );
             },
             child: Text('OK'),
