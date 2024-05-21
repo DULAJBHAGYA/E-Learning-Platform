@@ -98,7 +98,7 @@ class _NewCourseState extends State<NewCourse> {
     'title': _titleController.text.trim(),
     'description': _descriptionController.text.trim(),
     'what_will': _aboutCourseController.text.trim(),
-    'category': _selectedType!, // Include the selected category
+    'category': _selectedType!, 
     'image': _selectedImageBytes != null ? MultipartFile.fromBytes(_selectedImageBytes!, filename: 'image.jpg') : null,
   });
 }

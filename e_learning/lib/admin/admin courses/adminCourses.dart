@@ -36,17 +36,17 @@ class _AdminCoursesState extends State<AdminCourses> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    fetchAllCourses();
+    fetchCourses();
   }
 
-   Future<void> fetchAllCourses() async {
+   Future<void> fetchCourses() async {
     try {
-      final studentsData = await CourseService.instance.fetchAllCourses();
+      final courseData = await CourseService.instance.fetchAllCourses();
       setState(() {
-        _courses = studentsData ?? [];
+        _courses = courseData ?? [];
       });
     } catch (e) {
-      print('Error fetching students: $e');
+      print('Error fetching courses: $e');
     }
   }
 
@@ -95,22 +95,16 @@ class _AdminCoursesState extends State<AdminCourses> with SingleTickerProviderSt
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Column(
-                  children: [
-                     
-                     AdminCourseView(),
-
-                     SizedBox(height: 20),
-
-                     AdminCourseView(),
-
-                     SizedBox(height: 20),
-
-                     AdminCourseView(),
-
-                     SizedBox(height: 20),
-
-                     AdminCourseView(),
-                  ],
+                  children: _courses.map((course) {
+                    return AdminCourseView(
+                      what_will: course['what_will'] ?? {},
+                      description: course['description'] ?? 'No Description',
+                      course_id: course['course_id'] ?? 0,
+                      image: course['image'] ?? '',
+                      title: course['title'] ?? 'No Title',
+                      category: course['category'] ?? 'Uncategorized',
+                    );
+                  }).toList(),
                 ),
               ),
             ),
@@ -123,9 +117,22 @@ class _AdminCoursesState extends State<AdminCourses> with SingleTickerProviderSt
 
 
 class AdminCourseView extends StatelessWidget {
+  final int course_id;
+  final String description;
+  final String image;
+  final String title;
+  final String category;
+  final Map<String, dynamic> what_will;
+
   const AdminCourseView({
-    super.key,
-  });
+    required this.course_id,
+    required this.image,
+    required this.title,
+    required this.category,
+    required this.description,
+    required this.what_will,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +156,7 @@ class AdminCourseView extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
                     image: DecorationImage(
-                      image: AssetImage('/images/python.png'), 
+                      image: NetworkImage(image), 
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -204,7 +211,7 @@ class AdminCourseView extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
-                            'IT',
+                            category.toUpperCase(),
                             style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.grey), // Assuming 'lightgrey' is a Color variable
                           ),
                         ),
@@ -212,7 +219,7 @@ class AdminCourseView extends StatelessWidget {
                     ),
                     SizedBox(height: 5),
                     Text(
-                      'Python Programming',
+                      title,
                       style: GoogleFonts.nunito(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.black), // Assuming 'black' is a Color variable
                     ),
                     Row(

@@ -6,8 +6,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:unicons/unicons.dart';
 
 import '../../services/courseServices.dart';
+import '../admin home/adminDash.dart';
 
 class AddCourses extends StatefulWidget {
   const AddCourses({
@@ -27,6 +29,9 @@ class AddCourses extends StatefulWidget {
 
 class _AddCoursesState extends State<AddCourses> {
   List<dynamic> _addedcourses = [];
+
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
 
   @override
   void initState() {
@@ -57,6 +62,20 @@ class _AddCoursesState extends State<AddCourses> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
+      drawer: NavDrawer(),
+      appBar: AppBar(
+        backgroundColor: background,
+        elevation: 0,
+        leading: IconButton(
+          icon: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Icon(UniconsLine.bars, size: 30, color: black),
+          ),
+          onPressed: () {
+            _scaffoldKey.currentState?.openDrawer(); 
+          },
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Container(
