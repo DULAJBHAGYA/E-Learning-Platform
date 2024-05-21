@@ -156,7 +156,7 @@ class CourseService {
     }
   }
   
-Future<dynamic> getCourseById(int user_id) async {
+Future<dynamic> getCourseByUserId(int user_id) async {
   try {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? accessToken = prefs.getString('access_token');
@@ -167,7 +167,7 @@ Future<dynamic> getCourseById(int user_id) async {
 
     _dio.options.headers['Authorization'] = 'Bearer $accessToken';
 
-final response = await _dio.get('/courses/byuser?user_id=$user_id&page_id=1&page_size=100');
+final response = await _dio.get('/api/v3/list/course/byuser?user_id=$user_id');
 
     return response.data;
   } on DioError catch (e) {
