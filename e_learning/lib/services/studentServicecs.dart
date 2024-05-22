@@ -40,7 +40,7 @@ class StudentService {
 
       _dio.options.headers['Authorization'] = 'Bearer $accessToken';
 
-      final response = await _dio.get('/api/v3/list/students?page_id=1&page_size=100');
+      final response = await _dio.get('/api/v3/list/students');
 
       return response.data;
     } on DioError catch (e) {

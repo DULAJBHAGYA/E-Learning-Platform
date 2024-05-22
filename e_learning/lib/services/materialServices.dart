@@ -121,7 +121,7 @@ class MaterialService {
     }
   }
 
-  Future<dynamic> getMaterialById(int courseId) async {
+  Future<dynamic> getMaterialByCourseId(int course_id) async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? accessToken = prefs.getString('access_token');
@@ -132,11 +132,7 @@ class MaterialService {
 
       _dio.options.headers['Authorization'] = 'Bearer $accessToken';
 
-      final response = await _dio.get('/material/bycourse', queryParameters: {
-        'course_id': courseId,
-        'page_id': 1,
-        'page_size': 10,
-      });
+      final response = await _dio.get('/api/v3/list/material/bycourse?course_id=$course_id',);
 
       return response.data;
     } on DioError catch (e) {
@@ -150,5 +146,5 @@ class MaterialService {
     }
   }
 
-  getResources(int courseId) {}
+  getResources(int course_id) {}
 }

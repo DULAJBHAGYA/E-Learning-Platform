@@ -3,13 +3,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'baseurl.dart';
 
-class EnrollService {
+class SubscriptionService {
   late final Dio _dio;
 
-  static final EnrollService _instance = EnrollService._internal();
+  static final SubscriptionService _instance = SubscriptionService._internal();
 
 
-  EnrollService._internal() {
+  SubscriptionService._internal() {
     _dio = Dio(
       BaseOptions(
         baseUrl: baseUrl,
@@ -20,10 +20,10 @@ class EnrollService {
     );
   }
 
-  static EnrollService get instance => _instance;
+  static SubscriptionService get instance => _instance;
 
-  Future<dynamic> postEnrollment(
-      int user_id, int course_id) async {
+  Future<dynamic> postSubscription(
+      int user_id) async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? accessToken = prefs.getString('access_token');
@@ -35,10 +35,9 @@ class EnrollService {
       _dio.options.headers['Authorization'] = 'Bearer $accessToken';
 
       final response = await _dio.post(
-        '/api/v4/create/subscription?user_id=$user_id&course_id=$course_id',
+        '/api/v4/create/status?user_id=$user_id',
         data: {
           "user_id": user_id,
-          "course_id": course_id,
         },
       );
 
@@ -53,7 +52,7 @@ class EnrollService {
     }
   }
 
-  Future<dynamic> fetchAllEnrollments() async {
+  Future<dynamic> fetchAllSubscriptionRequests() async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? accessToken = prefs.getString('access_token');
@@ -64,7 +63,7 @@ class EnrollService {
 
       _dio.options.headers['Authorization'] = 'Bearer $accessToken';
 
-      final response = await _dio.get('/api/v3/list/subscriptions');
+      final response = await _dio.get('/api/v3/list/status');
 
       return response.data;
     } on DioError catch (e) {

@@ -1,5 +1,6 @@
 import 'package:e_learning/admin/add%20courses/add%20materials/addMaterial.dart';
 import 'package:e_learning/admin/add%20courses/add%20materials/newMaterial.dart';
+import 'package:e_learning/admin/add%20courses/add%20resources/newAssignment.dart';
 import 'package:e_learning/admin/add%20courses/newCourse.dart';
 import 'package:e_learning/color.dart';
 import 'package:e_learning/shared/searchBar.dart';
@@ -7,8 +8,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:unicons/unicons.dart';
 
 import '../../../services/courseServices.dart';
+import '../../../services/materialServices.dart';
+import '../add resources/addAssignment.dart';
 
 class AddMaterial extends StatefulWidget {
   const AddMaterial({
@@ -29,27 +33,21 @@ class AddMaterial extends StatefulWidget {
 }
 
 class _AddmaterialState extends State<AddMaterial> {
-  List<dynamic> _addedcourses = [];
+  List<dynamic> _addedmaterials = [];
+  
 
   @override
   void initState() {
     super.initState();
-    fetchCoursesById();
+    getMaterialByCourseId();
   }
 
-  Future<void> fetchCoursesById() async {
+  Future<void> getMaterialByCourseId() async {
     try {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      final int? userId = prefs.getInt('user_id');
-
-      if (userId == null) {
-        throw Exception('User ID not found in local storage');
-      }
-
-      final addedCourseData =
-          await CourseService.instance.getCourseByUserId(userId);
+      final addedMaterialData =
+          await MaterialService.instance.getMaterialByCourseId(widget.course_id);
       setState(() {
-        _addedcourses = addedCourseData ?? [];
+        _addedmaterials = addedMaterialData ?? [];
       });
     } catch (e) {
       print('Error fetching courses: $e');
@@ -60,6 +58,19 @@ class _AddmaterialState extends State<AddMaterial> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
+      appBar: AppBar(
+        backgroundColor: background,
+        elevation: 0,
+        leading: IconButton(
+          icon: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Icon(UniconsLine.arrow_left, size: 30, color: black),
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Container(
@@ -119,15 +130,13 @@ class _AddmaterialState extends State<AddMaterial> {
                 scrollDirection: Axis.vertical,
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Row(
-                  children: _addedcourses.map((addedcourse) {
-                    return AdminAddedCourseViewCard(
-                      what_will: addedcourse['what_will'] ?? {},
-                      description:
-                          addedcourse['description'] ?? 'No Description',
-                      course_id: addedcourse['course_id'] ?? 0,
-                      image: addedcourse['image'] ?? '',
-                      title: addedcourse['title'] ?? 'No Title',
-                      category: addedcourse['category'] ?? 'Uncategorized',
+                  children: _addedmaterials.map((addedmaterial) {
+                    return AdminAddedMaterialViewCard(
+                      course_id: addedmaterial['course_id'] ?? 0,
+                      material_id: addedmaterial['material_id'] ?? 0,
+                      order_number: addedmaterial['order_number'] ?? 0,
+                      material_file: addedmaterial['material_file'] ?? '',
+                      title: addedmaterial['title'] ?? '',
                     );
                   }).toList(),
                 ))
@@ -138,29 +147,28 @@ class _AddmaterialState extends State<AddMaterial> {
   }
 }
 
-class AdminAddedCourseViewCard extends StatelessWidget {
+class AdminAddedMaterialViewCard extends StatelessWidget {
   final int course_id;
-  final String description;
-  final String image;
+  final int material_id;
+  final String material_file;
   final String title;
-  final String category;
-  final Map<String, dynamic> what_will;
+  final int order_number;
+  
 
-  const AdminAddedCourseViewCard({
+  const AdminAddedMaterialViewCard({
     required this.course_id,
-    required this.image,
+    required this.order_number,
+    required this.material_id,
+    required this.material_file,
     required this.title,
-    required this.category,
-    required this.description,
-    required this.what_will,
+  
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 120,
-      width: MediaQuery.of(context).size.width,
+      height: 100,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: white,
@@ -170,11 +178,11 @@ class AdminAddedCourseViewCard extends StatelessWidget {
           child: Row(children: [
             //image
             Container(
-              height: 100,
-              width: 100,
+              height: 90,
+              width: 90,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage(image),
+                  image: NetworkImage(material_file),
                   fit: BoxFit.cover,
                 ),
                 borderRadius: BorderRadius.circular(20),
@@ -183,43 +191,43 @@ class AdminAddedCourseViewCard extends StatelessWidget {
 
             SizedBox(width: 20),
 
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: background,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  category.toUpperCase(),
-                  style: GoogleFonts.openSans(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: science),
-                ),
-              ),
-              SizedBox(height: 5),
-              Text(
-                course_id.toString() + ') ' + title,
-                overflow: TextOverflow.fade,
-                style: GoogleFonts.openSans(
-                    fontSize: 15, fontWeight: FontWeight.bold, color: black),
-              ),
+            
+              Column(
+                children: [
+                  Text(
+                     material_id.toString() + ') ' + title,
+                    overflow: TextOverflow.clip,
+                    style: GoogleFonts.openSans(
+                        fontSize: 15, fontWeight: FontWeight.bold, color: black),
+                  ),
+                
               SizedBox(height: 10),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddAssignment(
+                        course_id: course_id,
+                        material_id: material_id,
+                        username: '',
+                        accessToken: '',
+                        refreshToken: '',
+                      ),
+                    ),
+                  );
+                },
                 child: Row(
                   children: [
                     Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(2),
+                      padding: EdgeInsets.all(5),
                       decoration: BoxDecoration(
                         color: science,
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Text(
-                        'Add Materials',
+                        'Add Assignment',
                         style: GoogleFonts.openSans(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
@@ -229,8 +237,12 @@ class AdminAddedCourseViewCard extends StatelessWidget {
                   ],
                 ),
               )
-            ]),
-          ])),
-    );
+              ],
+              ),
+            ]
+            ),
+          
+          )
+          );
   }
 }

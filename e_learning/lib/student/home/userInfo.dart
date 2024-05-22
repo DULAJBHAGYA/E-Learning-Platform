@@ -31,8 +31,8 @@ class UserInfo extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Hello!', style: GoogleFonts.nunito(fontSize: 18, fontWeight: FontWeight.w600, color: black),),
-            Text('Dulaj Bhagya', style: GoogleFonts.nunito(fontSize: 20, fontWeight: FontWeight.w800, color: black),),
+            Text('Hello! 👋', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w400, color: black),),
+            Text('Dulaj Bhagya', style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.w600, color: black),),
           ],
         ),
     
@@ -45,7 +45,7 @@ class UserInfo extends StatelessWidget {
           child: SizedBox(
             width: 60,
             height: 60,
-            child: Icon(Iconsax.notification, size: 30, color: black,),
+            child: Icon(Iconsax.notification, size: 20, color: black,),
           ),
         ),
       ],

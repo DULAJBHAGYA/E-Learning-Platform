@@ -1,5 +1,6 @@
 
 import 'package:e_learning/admin/add%20courses/add%20materials/newMaterial.dart';
+import 'package:e_learning/admin/add%20courses/add%20resources/newAssignment.dart';
 import 'package:e_learning/admin/add%20courses/addCourses.dart';
 import 'package:e_learning/admin/add%20new%20admin/addAdmin.dart';
 import 'package:e_learning/admin/add%20new%20admin/admins.dart';
@@ -18,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'admin/admin home/adminDash.dart';
 import 'student/course display/courseDescription.dart';
 import 'student/home/stdHome.dart';
+import 'student/profile/stdProfile.dart';
 
 
 

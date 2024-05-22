@@ -85,10 +85,10 @@ class UserService {
 }
 
 //display user info by username method
-Future<dynamic> fetchUsersByName(String userName, String accessToken) async {
+Future<dynamic> fetchUsersById(int user_id, String accessToken) async {
   try {
     final response = await _dio.get(
-      '/getuser?user_name=$userName',
+      '/api/v2/get/user?user_id=$user_id',
       options: Options(
         headers: {
           'Authorization': 'Bearer $accessToken', 
@@ -97,7 +97,7 @@ Future<dynamic> fetchUsersByName(String userName, String accessToken) async {
     );
     return response.data;
   } catch (e) {
-    print('Error fetching user info for username: $userName - $e');
+    print('Error fetching user info for username: $user_id - $e');
     throw e;
   }
 }

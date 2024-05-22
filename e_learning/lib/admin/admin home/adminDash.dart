@@ -1,15 +1,18 @@
 import 'package:e_learning/admin/add%20courses/addCourses.dart';
 import 'package:e_learning/color.dart';
 import 'package:e_learning/login/login.dart';
+import 'package:e_learning/services/userServices.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unicons/unicons.dart';
 
 import '../add new admin/admins.dart';
 import '../admin courses/adminCourses.dart';
 import '../admin students/adminStudents.dart';
+import '../enrollments/enrolments.dart';
 import 'adminDashCourses.dart';
 import 'adminDashStudents.dart';
 import 'adminInfo.dart';
@@ -33,6 +36,37 @@ class AdminDash extends StatefulWidget {
 
 class _AdminDashState extends State<AdminDash> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  late String first_name = '';
+  late String last_name = '';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserById();
+  }
+
+   Future<void> fetchUserById() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final user_id = prefs.getInt('user_id');
+      final accessToken = prefs.getString('access_token');
+
+      if (user_id != null && accessToken != null) {
+        final response = await UserService.instance.fetchUsersById(user_id, accessToken);
+
+        setState(() {
+          first_name = response['User']['first_name'];
+          last_name = response['User']['last_name'];
+        });
+
+        print('Fetched User: $first_name $last_name');
+      } else {
+        print('User ID or Access Token not found in SharedPreferences');
+      }
+    } catch (e) {
+      print('Error fetching user info: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +83,7 @@ class _AdminDashState extends State<AdminDash> {
             child: Icon(UniconsLine.bars, size: 30, color: black),
           ),
           onPressed: () {
-            _scaffoldKey.currentState?.openDrawer();  // Opens the drawer using the GlobalKey
+            _scaffoldKey.currentState?.openDrawer();  
           },
         ),
         actions: [
@@ -64,7 +98,10 @@ class _AdminDashState extends State<AdminDash> {
         child: Container(
           child: Column(
             children: [
-              AdminInfo(),
+              AdminInfo(
+                first_name: first_name, 
+                last_name: last_name,
+              ),
               SizedBox(height: 20,),
               Expanded( // Added Expanded to allow ListView to take up remaining space
                 child: SingleChildScrollView(
@@ -182,7 +219,11 @@ class NavDrawer extends StatelessWidget {
               color: black,
             ),
             ),
-            onTap: () => {},
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Enrollments(username: '', accessToken: '', refreshToken: ''),)),
+            },
           ),
           ListTile(
             leading: Icon(Iconsax.people),
@@ -225,6 +266,62 @@ class NavDrawer extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => Login()),
               ),
             },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class AdminInfo extends StatelessWidget {
+  final String first_name;
+  final String last_name;
+
+  const AdminInfo({
+    required this.first_name,
+    required this.last_name,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'WELCOME BACK',
+                    style: GoogleFonts.openSans(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: grey,
+                    ),
+                  ),
+                  Text(
+                    '$first_name $last_name',
+                    style: GoogleFonts.openSans(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      color: black,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                width: 60,
+                height: 60,
+                child: CircleAvatar(
+                  radius: 60,
+                  backgroundImage: AssetImage('/images/admin.png'),
+                ),
+              ),
+            ],
           ),
         ],
       ),
