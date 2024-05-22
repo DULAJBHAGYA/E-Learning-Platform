@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../color.dart';
@@ -12,7 +13,7 @@ import '../admin home/adminDash.dart';
 
 class AdminCourses extends StatefulWidget {
   const AdminCourses({
-Key? key,
+    Key? key,
     required this.username,
     required this.accessToken,
     required this.refreshToken,
@@ -21,15 +22,14 @@ Key? key,
   final String username;
   final String accessToken;
   final String refreshToken;
-  
+
   @override
   _AdminCoursesState createState() => _AdminCoursesState();
-
 }
 
-
-class _AdminCoursesState extends State<AdminCourses> with SingleTickerProviderStateMixin {
-      List<dynamic> _courses = []; 
+class _AdminCoursesState extends State<AdminCourses>
+    with SingleTickerProviderStateMixin {
+  List<dynamic> _courses = [];
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -39,7 +39,7 @@ class _AdminCoursesState extends State<AdminCourses> with SingleTickerProviderSt
     fetchCourses();
   }
 
-   Future<void> fetchCourses() async {
+  Future<void> fetchCourses() async {
     try {
       final courseData = await CourseService.instance.fetchAllCourses();
       setState(() {
@@ -50,11 +50,10 @@ class _AdminCoursesState extends State<AdminCourses> with SingleTickerProviderSt
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,  // Assign the key to the Scaffold
+      key: _scaffoldKey, // Assign the key to the Scaffold
       backgroundColor: background,
       drawer: NavDrawer(),
       appBar: AppBar(
@@ -63,10 +62,10 @@ class _AdminCoursesState extends State<AdminCourses> with SingleTickerProviderSt
         leading: IconButton(
           icon: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Icon(UniconsLine.bars, size: 30, color: black),
+            child: Icon(Iconsax.menu_1, size: 30, color: black),
           ),
           onPressed: () {
-            _scaffoldKey.currentState?.openDrawer(); 
+            _scaffoldKey.currentState?.openDrawer();
           },
         ),
       ),
@@ -78,8 +77,8 @@ class _AdminCoursesState extends State<AdminCourses> with SingleTickerProviderSt
             Row(
               children: [
                 Text(
-                  'AllCourses',
-                  style: GoogleFonts.nunito(
+                  'ALL COURSES',
+                  style: GoogleFonts.poppins(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     color: black,
@@ -87,10 +86,9 @@ class _AdminCoursesState extends State<AdminCourses> with SingleTickerProviderSt
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 10),
             CustomSearchBar(),
             SizedBox(height: 20),
-
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
@@ -114,7 +112,6 @@ class _AdminCoursesState extends State<AdminCourses> with SingleTickerProviderSt
     );
   }
 }
-
 
 class AdminCourseView extends StatelessWidget {
   final int course_id;
@@ -154,9 +151,11 @@ class AdminCourseView extends StatelessWidget {
                   height: 100,
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20)),
                     image: DecorationImage(
-                      image: NetworkImage(image), 
+                      image: NetworkImage(image),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -166,7 +165,9 @@ class AdminCourseView extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: PopupMenuButton<String>(
-                      icon: Icon(UniconsLine.ellipsis_h, color: Colors.white, size: 30), // Assuming 'white' is a Color variable
+                      icon: Icon(UniconsLine.ellipsis_h,
+                          color: Colors.white,
+                          size: 30), // Assuming 'white' is a Color variable
                       onSelected: (value) {
                         switch (value) {
                           case 'Edit Course':
@@ -180,7 +181,8 @@ class AdminCourseView extends StatelessWidget {
                         }
                       },
                       itemBuilder: (BuildContext context) {
-                        return {'Edit Course', 'Delete Course'}.map((String choice) {
+                        return {'Edit Course', 'Delete Course'}
+                            .map((String choice) {
                           return PopupMenuItem<String>(
                             value: choice,
                             child: Text(choice),
@@ -196,7 +198,8 @@ class AdminCourseView extends StatelessWidget {
             Container(
               width: MediaQuery.of(context).size.width,
               child: Padding(
-                padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0, top: 10.0),
+                padding: const EdgeInsets.only(
+                    left: 20.0, right: 20.0, bottom: 10.0, top: 10.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -207,12 +210,17 @@ class AdminCourseView extends StatelessWidget {
                           alignment: Alignment.center,
                           padding: EdgeInsets.all(5),
                           decoration: BoxDecoration(
-                            color: Colors.blue.shade50, // Assuming 'background2' is a Color variable
+                            color: Colors.blue
+                                .shade50, // Assuming 'background2' is a Color variable
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
                             category.toUpperCase(),
-                            style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.grey), // Assuming 'lightgrey' is a Color variable
+                            style: GoogleFonts.nunito(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Colors
+                                    .grey), // Assuming 'lightgrey' is a Color variable
                           ),
                         ),
                       ],
@@ -220,7 +228,11 @@ class AdminCourseView extends StatelessWidget {
                     SizedBox(height: 5),
                     Text(
                       title,
-                      style: GoogleFonts.nunito(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.black), // Assuming 'black' is a Color variable
+                      style: GoogleFonts.nunito(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: Colors
+                              .black), // Assuming 'black' is a Color variable
                     ),
                     Row(
                       children: [
@@ -229,22 +241,36 @@ class AdminCourseView extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                Icon(EneftyIcons.video_play_bold, color: Colors.blue, size: 15), // Assuming 'darkblue' is a Color variable
+                                Icon(EneftyIcons.video_play_bold,
+                                    color: Colors.blue,
+                                    size:
+                                        15), // Assuming 'darkblue' is a Color variable
                                 SizedBox(width: 5),
                                 Text(
                                   '11 lessons',
-                                  style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.grey), // Assuming 'lightgrey' is a Color variable
+                                  style: GoogleFonts.openSans(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors
+                                          .grey), // Assuming 'lightgrey' is a Color variable
                                 ),
                               ],
                             ),
                             SizedBox(height: 10),
                             Row(
                               children: [
-                                Icon(EneftyIcons.clock_2_bold, color: Colors.blue, size: 15), // Assuming 'darkblue' is a Color variable
+                                Icon(EneftyIcons.clock_2_bold,
+                                    color: Colors.blue,
+                                    size:
+                                        15), // Assuming 'darkblue' is a Color variable
                                 SizedBox(width: 5),
                                 Text(
                                   '3.5 Hours',
-                                  style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.grey), // Assuming 'lightgrey' is a Color variable
+                                  style: GoogleFonts.openSans(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors
+                                          .grey), // Assuming 'lightgrey' is a Color variable
                                 ),
                               ],
                             ),
@@ -255,13 +281,21 @@ class AdminCourseView extends StatelessWidget {
                           alignment: Alignment.center,
                           padding: EdgeInsets.all(5),
                           decoration: BoxDecoration(
-                            color: Colors.white, // Assuming 'white' is a Color variable
+                            color: Colors
+                                .white, // Assuming 'white' is a Color variable
                             borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.blue, width: 2), // Assuming 'darkblue' is a Color variable
+                            border: Border.all(
+                                color: Colors.blue,
+                                width:
+                                    2), // Assuming 'darkblue' is a Color variable
                           ),
                           child: Text(
                             'View Details',
-                            style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.blue), // Assuming 'darkblue' is a Color variable
+                            style: GoogleFonts.nunito(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Colors
+                                    .blue), // Assuming 'darkblue' is a Color variable
                           ),
                         ),
                       ],

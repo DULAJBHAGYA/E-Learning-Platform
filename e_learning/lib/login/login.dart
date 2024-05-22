@@ -10,8 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../color.dart';
 import '../services/userServices.dart';
 
-
-
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -37,7 +35,6 @@ class _LoginState extends State<Login> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
@@ -45,33 +42,33 @@ class _LoginState extends State<Login> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.asset(
-                          '/logos/logo.png', 
-                          fit: BoxFit.fill,
-                          width: 100,
-                          height: 80,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.asset(
+                            '/logos/logo.png',
+                            fit: BoxFit.fill,
+                            width: 100,
+                            height: 80,
+                          ),
                         ),
                       ),
-                    ),
                       Text(
-                        'Welcome back,',
-                        style: GoogleFonts.openSans(
+                        'Welcome back,'.toUpperCase(),
+                        style: GoogleFonts.poppins(
                           fontWeight: FontWeight.bold,
                           fontSize: 30,
                           color: black,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 5),
                       Text(
                         'Sign in to continue',
-                        style: GoogleFonts.openSans(
+                        style: GoogleFonts.poppins(
                           fontSize: 20,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w500,
                           color: black,
                         ),
                       ),
@@ -91,20 +88,22 @@ class _LoginState extends State<Login> {
                               controller: _usernameController,
                               decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(width: 2, color: lightgrey),
+                                  borderSide:
+                                      BorderSide(width: 2, color: lightgrey),
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
                                 prefixIcon: ColorFiltered(
                                   colorFilter: ColorFilter.mode(
-                                    lightgrey, // Change the color here
+                                    background2, // Change the color here
                                     BlendMode.srcIn,
                                   ),
                                   child: Icon(Iconsax.direct_right),
                                 ),
                                 iconColor: lightgrey,
                                 labelText: 'User name',
-                                labelStyle: GoogleFonts.nunito(
-                                  fontWeight: FontWeight.bold,
+                                labelStyle: GoogleFonts.poppins(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
                                   color: lightgrey,
                                 ),
                               ),
@@ -122,19 +121,21 @@ class _LoginState extends State<Login> {
                             obscureText: _obscurePassword,
                             decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(width: 2, color: lightgrey),
+                                borderSide:
+                                    BorderSide(width: 2, color: lightgrey),
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               prefixIcon: ColorFiltered(
                                 colorFilter: ColorFilter.mode(
-                                  lightgrey, 
+                                  lightgrey,
                                   BlendMode.srcIn,
                                 ),
                                 child: Icon(Iconsax.password_check),
                               ),
                               labelText: 'Password',
-                              labelStyle: GoogleFonts.nunito(
-                                fontWeight: FontWeight.bold,
+                              labelStyle: GoogleFonts.poppins(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
                                 color: lightgrey,
                               ),
                               suffixIcon: InkWell(
@@ -166,16 +167,13 @@ class _LoginState extends State<Login> {
                           Checkbox(
                             value: true,
                             activeColor: darkblue,
-                            onChanged: (value) {
-                              
-
-                            },
+                            onChanged: (value) {},
                           ),
                           Text(
                             'Remember me',
-                            style: GoogleFonts.nunito(
+                            style: GoogleFonts.poppins(
                               fontSize: 15.0,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                           Spacer(),
@@ -183,10 +181,10 @@ class _LoginState extends State<Login> {
                             onTap: () {},
                             child: Text(
                               'Forgot Password?',
-                              style: TextStyle(
+                              style: GoogleFonts.poppins(
                                 color: darkblue,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           )
@@ -224,8 +222,8 @@ class _LoginState extends State<Login> {
                             ),
                             child: Text(
                               'SIGN IN',
-                              style: GoogleFonts.nunito(
-                                fontWeight: FontWeight.w900,
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w600,
                                 fontSize: 20,
                                 color: white,
                               ),
@@ -237,7 +235,7 @@ class _LoginState extends State<Login> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>  RegisterScreen()),
+                                    builder: (context) => RegisterScreen()),
                               );
                             },
                             style: ButtonStyle(
@@ -252,7 +250,7 @@ class _LoginState extends State<Login> {
                               side: MaterialStateProperty.all<BorderSide>(
                                 BorderSide(
                                   width: 1.0,
-                                  color: lightgrey,
+                                  color: background2,
                                 ),
                               ),
                               padding: MaterialStateProperty.all<EdgeInsets>(
@@ -263,8 +261,8 @@ class _LoginState extends State<Login> {
                             ),
                             child: Text(
                               'SIGN UP',
-                              style: GoogleFonts.nunito(
-                                fontWeight: FontWeight.w900,
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w600,
                                 fontSize: 20,
                                 color: black,
                               ),
@@ -298,8 +296,8 @@ class _LoginState extends State<Login> {
 
         final String accessToken = userData['access_token'];
 
-        await saveUserData(
-            userName, decodedToken['role'], decodedToken['user_id'], accessToken, userData['refresh_token']);
+        await saveUserData(userName, decodedToken['role'],
+            decodedToken['user_id'], accessToken, userData['refresh_token']);
 
         print('Username: $userName');
         print('Role: ${decodedToken['role']}');
@@ -381,19 +379,19 @@ class _LoginState extends State<Login> {
     return json.decode(decoded);
   }
 
-Future<void> saveUserData(String username, String role, int user_id, String accessToken, String refreshToken) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setString('username', username);
-  await prefs.setString('role', role);
-  await prefs.setInt('user_id', user_id);
-  
-  await saveToken(accessToken, refreshToken);
-}
+  Future<void> saveUserData(String username, String role, int user_id,
+      String accessToken, String refreshToken) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('username', username);
+    await prefs.setString('role', role);
+    await prefs.setInt('user_id', user_id);
 
-Future<void> saveToken(String accessToken, String refreshToken) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setString('access_token', accessToken);
-  await prefs.setString('refresh_token', refreshToken);
-}
+    await saveToken(accessToken, refreshToken);
+  }
 
+  Future<void> saveToken(String accessToken, String refreshToken) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('access_token', accessToken);
+    await prefs.setString('refresh_token', refreshToken);
+  }
 }
