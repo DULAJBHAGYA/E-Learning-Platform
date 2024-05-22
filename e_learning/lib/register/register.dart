@@ -1,3 +1,4 @@
+import 'package:e_learning/services/requestServices.dart';
 import 'package:e_learning/services/userServices.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -166,6 +167,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
       }
     }
   }
+
+  void postSubscription 
+  () async {
+      try {
+      int? user_id = await SharedPreferencesHelper.getUserId();
+      if (user_id == null) {
+      print('User ID not found in SharedPreferences');
+      return;
+      }
+
+      await SubscriptionService.instance.postSubscription(  user_id,); 
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(
+                                                content: Text('Subscription Request sent successfully!'),
+                                                duration: Duration(seconds: 2),
+                                              ),
+                                            );
+                                          } catch (e) {
+                                            print('Subscription Error: $e');
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(
+                                                content: Text('Failed to sent  subscription request. Please try again.'),
+                                                duration: Duration(seconds: 2),
+                                              ),
+                                            );
+                                          }
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -443,8 +473,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           OutlinedButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                // Form is validated, perform your action here
                                 _submitForm();
+                                postSubscription();
                               }
                             },
                             style: ButtonStyle(
@@ -515,6 +545,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       )),
     );
+  }
+}
+
+class SharedPreferencesHelper {
+  static Future<int?> getUserId() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      return prefs.getInt('user_id');
+    } catch (e) {
+      print('Error fetching user ID from SharedPreferences: $e');
+      return null;
+    }
   }
 }
 
