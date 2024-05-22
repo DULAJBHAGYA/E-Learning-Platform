@@ -14,38 +14,76 @@ class AdminStats extends StatefulWidget {
 
 class _AdminStatsState extends State<AdminStats> {
   int studentCount = 0;
+  int courseCount = 0;
+  int adminCount = 0;
 
   @override
   void initState() {
     super.initState();
     fetchStudentCount();
+    fetchCourseCount();
+    fetchAdminCount();
   }
 
   Future<void> fetchStudentCount() async {
-  try {
-    final response = await CountService.instance.getStudentCount();
-    
-    if (response != null) {
-      if (response.containsKey('student_count')) {
-        final studentCountValue = response['student_count'];
-        
-        if (studentCountValue is int) {
+    try {
+      final response = await CountService.instance.getStudentCount();
+
+      if (response != null) {
+        if (response is int) {
           setState(() {
-            studentCount = studentCountValue;
+            studentCount = response;
           });
         } else {
           throw Exception('Student count is not an integer');
         }
       } else {
-        throw Exception('Response does not contain student count');
+        throw Exception('Response is null');
       }
-    } else {
-      throw Exception('Response is null');
+    } catch (e) {
+      print('Error fetching student count: $e');
     }
-  } catch (e) {
-    print('Error fetching student count: $e');
   }
-}
+
+  Future<void> fetchCourseCount() async {
+    try {
+      final response = await CountService.instance.getCoursesCount();
+
+      if (response != null) {
+        if (response is int) {
+          setState(() {
+            courseCount = response;
+          });
+        } else {
+          throw Exception('Course count is not an integer');
+        }
+      } else {
+        throw Exception('Response is null');
+      }
+    } catch (e) {
+      print('Error fetching student count: $e');
+    }
+  }
+
+  Future<void> fetchAdminCount() async {
+    try {
+      final response = await CountService.instance.getAdminsCount();
+
+      if (response != null) {
+        if (response is int) {
+          setState(() {
+            adminCount = response;
+          });
+        } else {
+          throw Exception('Admins count is not an integer');
+        }
+      } else {
+        throw Exception('Response is null');
+      }
+    } catch (e) {
+      print('Error fetching student count: $e');
+    }
+  }
 
 
   @override
@@ -67,7 +105,6 @@ class _AdminStatsState extends State<AdminStats> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    // Display the student count dynamically
                     Text(
                       studentCount.toString(),
                       style: GoogleFonts.openSans(
@@ -105,7 +142,7 @@ class _AdminStatsState extends State<AdminStats> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '17',
+                            courseCount.toString(),
                             style: GoogleFonts.openSans(
                                 fontSize: 30,
                                 fontWeight: FontWeight.w900,
@@ -174,7 +211,7 @@ class _AdminStatsState extends State<AdminStats> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      '7',
+                      adminCount.toString(),
                       style: GoogleFonts.openSans(
                           fontSize: 30,
                           fontWeight: FontWeight.w900,

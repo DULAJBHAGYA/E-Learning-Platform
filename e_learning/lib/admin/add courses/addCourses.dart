@@ -204,7 +204,7 @@ class AdminAddedCourseViewCard extends StatelessWidget {
               
                 SizedBox(height: 5),
               
-                Text(course_id.toString() + ') ' + title, overflow: TextOverflow.fade, style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.bold, color: black),),
+                Text(course_id.toString() + ') ' + title, overflow: TextOverflow.clip, style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.bold, color: black),),
               
                 SizedBox(height: 10),
 

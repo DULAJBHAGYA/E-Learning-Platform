@@ -3,7 +3,7 @@ import 'package:e_learning/student/all%20courses/allCourses.dart';
 import 'package:e_learning/student/my%20courses/myCourses.dart';
 import 'package:e_learning/student/profile/stdProfile.dart';
 import 'package:flutter/material.dart';
-import 'package:enefty_icons/enefty_icons.dart';
+import 'package:iconsax/iconsax.dart';
 
 import '../student/home/stdHome.dart';
 
@@ -16,10 +16,10 @@ class BottomNavBar extends StatelessWidget {
       backgroundColor: white,
       height: 70,
       destinations: const [
-        NavigationDestination(icon: Icon(EneftyIcons.home_2_outline), label: 'Home'),
-        NavigationDestination(icon: Icon(EneftyIcons.a_3d_cube_outline), label: 'All Courses'), 
-        NavigationDestination(icon: Icon(EneftyIcons.book_outline), label: 'My Courses'),
-        NavigationDestination(icon: Icon(EneftyIcons.user_outline), label: 'Profile'),
+        NavigationDestination(icon: Icon(Iconsax.home), label: 'Home'),
+        NavigationDestination(icon: Icon(Iconsax.book), label: 'All Courses'), 
+        NavigationDestination(icon: Icon(Iconsax.book_1), label: 'My Courses'),
+        NavigationDestination(icon: Icon(Iconsax.user), label: 'Profile'),
       ],
       onDestinationSelected: (int index) {
         switch (index) {

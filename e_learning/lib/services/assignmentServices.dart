@@ -4,14 +4,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'baseurl.dart';
 
-class ResourceService {
+class AssignmentService {
   late final Dio _dio;
 
-  static final ResourceService _instance = ResourceService._internal();
+  static final AssignmentService _instance = AssignmentService._internal();
 
 
 
-  ResourceService._internal() {
+  AssignmentService._internal() {
     _dio = Dio(
       BaseOptions(
         baseUrl: baseUrl,
@@ -22,10 +22,10 @@ class ResourceService {
     );
   }
 
-  static ResourceService get instance => _instance;
+  static AssignmentService get instance => _instance;
 
 
-Future<dynamic> postResource(FormData formData, int materialId) async {
+Future<dynamic> postAssignment(FormData formData, int material_id, int course_id) async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? accessToken = prefs.getString('access_token');
@@ -37,7 +37,7 @@ Future<dynamic> postResource(FormData formData, int materialId) async {
       _dio.options.headers['Authorization'] = 'Bearer $accessToken';
 
       final response = await _dio.post(
-        '/resource/$materialId',
+        '/api/v3/create/assignment/$material_id/$course_id',
         data: formData,
       );
 

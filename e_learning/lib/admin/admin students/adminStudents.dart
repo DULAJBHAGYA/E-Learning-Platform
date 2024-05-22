@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../color.dart';
+import '../../services/countServices.dart';
 import '../admin home/adminDash.dart';
 import 'registerStudents.dart';
 import 'registerrequests.dart';
@@ -28,11 +29,57 @@ Key? key,
 class _AdminStudentsState extends State<AdminStudents> with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late TabController _tabController;
+  int studentCount = 0;
+  int subscriptionRequestCount = 0;
+
+
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    fetchStudentCount();
+    fetchSubscriptionRequestsCount();
+  }
+
+  Future<void> fetchStudentCount() async {
+    try {
+      final response = await CountService.instance.getStudentCount();
+
+      if (response != null) {
+        if (response is int) {
+          setState(() {
+            studentCount = response;
+          });
+        } else {
+          throw Exception('Student count is not an integer');
+        }
+      } else {
+        throw Exception('Response is null');
+      }
+    } catch (e) {
+      print('Error fetching student count: $e');
+    }
+  }
+
+  Future<void> fetchSubscriptionRequestsCount() async {
+    try {
+      final response = await CountService.instance.getSubscriptionRequestCount();
+
+      if (response != null) {
+        if (response is int) {
+          setState(() {
+            subscriptionRequestCount = response;
+          });
+        } else {
+          throw Exception('Student count is not an integer');
+        }
+      } else {
+        throw Exception('Response is null');
+      }
+    } catch (e) {
+      print('Error fetching student count: $e');
+    }
   }
 
 
@@ -95,7 +142,7 @@ class _AdminStudentsState extends State<AdminStudents> with SingleTickerProvider
                           ),
                           child: Center(
                             child: Text(
-                              '45',
+                              studentCount.toString(),
                               style: GoogleFonts.nunito(
                                 fontSize:12,
                                 color: white, 
@@ -131,7 +178,7 @@ class _AdminStudentsState extends State<AdminStudents> with SingleTickerProvider
                           ),
                           child: Center(
                             child: Text(
-                              '13', 
+                              subscriptionRequestCount.toString(), 
                               style: GoogleFonts.nunito(
                                 fontSize:12,
                                 color: white, 

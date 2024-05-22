@@ -1,3 +1,4 @@
+import 'package:e_learning/admin/add%20courses/add%20materials/addMaterial.dart';
 import 'package:e_learning/admin/add%20courses/addCourses.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,55 +6,57 @@ import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../color.dart';
-import '../../../services/resourceServices.dart';
-import 'newResource.dart';
+import '../../../services/assignmentServices.dart';
+import 'newAssignment.dart';
 
-class AddResources extends StatefulWidget {
-  const AddResources({
+class AddAssignment extends StatefulWidget {
+  const AddAssignment({
     Key? key,
     required this.username,
     required this.accessToken,
     required this.refreshToken,
-    required this.materialId, // Receive materialId
+    required this.material_id,
+    required this.course_id, // Receive materialId
   }) : super(key: key);
 
   final String username;
   final String accessToken;
   final String refreshToken;
-  final int materialId; // Declare materialId variable
+  final int material_id;
+  final int course_id; // Declare materialId variable
 
   @override
-  _AddResourcesState createState() => _AddResourcesState();
+  _AddAssignmentState createState() => _AddAssignmentState();
 }
 
-class _AddResourcesState extends State<AddResources> {
-  List<dynamic> _resources = [];
-  late int materialId; // Define materialId variable
+class _AddAssignmentState extends State<AddAssignment> {
+  List<dynamic> _assignments = [];
+  late int assignment_id; // Define materialId variable
 
   @override
 void initState() {
   super.initState();
-  fetchResourceById(widget.materialId);
+  fetchResourceById(widget.material_id);
 }
 
 
 Future<void> _fetchMaterialId() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  materialId = prefs.getInt('material_id') ?? 0;
-  print('Material ID: $materialId');
-  fetchResourceById(materialId); 
+  assignment_id = prefs.getInt('material_id') ?? 0;
+  print('Material ID: $assignment_id');
+  fetchResourceById(assignment_id); 
 }
 
 
-  Future<void> fetchResourceById(int materialId) async {
+  Future<void> fetchResourceById(int material_id) async {
     try {
-      final resourcesData =
-          await ResourceService.instance.getResourceById(materialId);
+      final assignmentsData =
+          await AssignmentService.instance.getResourceById(material_id);
       setState(() {
-        _resources = resourcesData ?? [];
+        _assignments = assignmentsData ?? [];
       });
     } catch (e) {
-      print('Error fetching materials: $e');
+      print('Error fetching assignments: $e');
     }
   }
 
@@ -67,7 +70,7 @@ Future<void> _fetchMaterialId() async {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AddCourses(username: '', accessToken: '', refreshToken: '',)),
+              MaterialPageRoute(builder: (context) => AddMaterial(username: '', accessToken: '', refreshToken: '', course_id: widget.course_id)),
             );
           },
         ),
@@ -110,7 +113,13 @@ Future<void> _fetchMaterialId() async {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => NewResources()),
+                          MaterialPageRoute(builder: (context) => NewAssignment(
+                            username: widget.username,
+                            accessToken: widget.accessToken,
+                            refreshToken: widget.refreshToken,
+                            material_id: widget.material_id,
+                            course_id: widget.course_id,
+                          )),
                         );
                       },
                       style: ButtonStyle(
@@ -125,7 +134,7 @@ Future<void> _fetchMaterialId() async {
                         ),
                       ),
                       child: Text(
-                        'ADD NEW RESOURCE',
+                        'ADD NEW ASSIGNMENT',
                         style: GoogleFonts.openSans(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -138,7 +147,7 @@ Future<void> _fetchMaterialId() async {
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(
-                        children: _resources.map((resource) {
+                        children: _assignments.map((resource) {
                           return MaterialsDisplayCard(
                             resourceId: resource['resource_id'],
                             title: resource['title'],
@@ -216,12 +225,7 @@ class MaterialsDisplayCard extends StatelessWidget {
               children: [
                 TextButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddResources(accessToken: '', refreshToken: '', username: '', materialId: int .parse(resourceId.toString()),),                                
-                      ),
-                    );
+                    
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: blue,
