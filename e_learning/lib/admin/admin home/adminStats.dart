@@ -85,7 +85,6 @@ class _AdminStatsState extends State<AdminStats> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -108,14 +107,14 @@ class _AdminStatsState extends State<AdminStats> {
                     Text(
                       studentCount.toString(),
                       style: GoogleFonts.openSans(
-                        fontSize: 30,
+                        fontSize: 40,
                         fontWeight: FontWeight.w900,
                         color: white,
                       ),
                     ),
                     Text(
                       'Registered Students',
-                      style: GoogleFonts.openSans(
+                      style: GoogleFonts.poppins(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                           color: white),
@@ -144,13 +143,13 @@ class _AdminStatsState extends State<AdminStats> {
                           Text(
                             courseCount.toString(),
                             style: GoogleFonts.openSans(
-                                fontSize: 30,
+                                fontSize: 40,
                                 fontWeight: FontWeight.w900,
                                 color: white),
                           ),
                           Text(
                             'Courses',
-                            style: GoogleFonts.openSans(
+                            style: GoogleFonts.poppins(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
                                 color: white),
@@ -182,13 +181,13 @@ class _AdminStatsState extends State<AdminStats> {
                     Text(
                       '176',
                       style: GoogleFonts.openSans(
-                          fontSize: 30,
+                          fontSize: 40,
                           fontWeight: FontWeight.w900,
                           color: white),
                     ),
                     Text(
                       'Enrolled Students',
-                      style: GoogleFonts.openSans(
+                      style: GoogleFonts.poppins(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                           color: white),
@@ -213,13 +212,13 @@ class _AdminStatsState extends State<AdminStats> {
                     Text(
                       adminCount.toString(),
                       style: GoogleFonts.openSans(
-                          fontSize: 30,
+                          fontSize: 40,
                           fontWeight: FontWeight.w900,
                           color: white),
                     ),
                     Text(
                       'Admins',
-                      style: GoogleFonts.openSans(
+                      style: GoogleFonts.poppins(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                           color: white),
