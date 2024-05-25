@@ -8,9 +8,10 @@ import '../../color.dart';
 import '../../login/login.dart';
 import '../../services/userServices.dart';
 import '../../shared/bottomNavBar.dart';
+import '../admin home/adminDash.dart';
 
-class StudentProfile extends StatefulWidget {
-  const StudentProfile({
+class AdminProfile extends StatefulWidget {
+  const AdminProfile({
     Key? key,
     required this.username,
     required this.accessToken,
@@ -22,15 +23,16 @@ class StudentProfile extends StatefulWidget {
   final String refreshToken;
 
   @override
-  _StudentProfileState createState() => _StudentProfileState();
+  _AdminProfileState createState() => _AdminProfileState();
 }
 
-class _StudentProfileState extends State<StudentProfile> {
+class _AdminProfileState extends State<AdminProfile> {
   late String first_name = '';
   late String last_name = '';
   late String email = '';
   late String user_name = '';
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     super.initState();
@@ -66,6 +68,22 @@ class _StudentProfileState extends State<StudentProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey, // Assign the key to the Scaffold
+      backgroundColor: background,
+      drawer: NavDrawer(),
+      appBar: AppBar(
+        backgroundColor: background,
+        elevation: 0,
+        leading: IconButton(
+          icon: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Icon(Iconsax.menu_1, size: 30, color: black),
+          ),
+          onPressed: () {
+            _scaffoldKey.currentState?.openDrawer();
+          },
+        ),
+      ),
       body: Padding(
           padding: const EdgeInsets.all(20),
           child: Container(
@@ -135,14 +153,19 @@ class _StudentProfileState extends State<StudentProfile> {
                                   color: black,
                                   fontWeight: FontWeight.w600)),
                           SizedBox(width: 20),
-                          Text(
-                            '$email',
-                            overflow: TextOverflow.clip,
-                            style: GoogleFonts.poppins(
+                          SizedBox(
+                            width:
+                                200, // Adjust the width according to your need
+                            child: Text(
+                              '$email',
+                              overflow: TextOverflow.clip,
+                              style: GoogleFonts.poppins(
                                 fontSize: 15,
                                 color: lightgrey,
-                                fontWeight: FontWeight.w600),
-                          ),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ],
@@ -409,7 +432,6 @@ class _StudentProfileState extends State<StudentProfile> {
               ),
             ]),
           )),
-      bottomNavigationBar: BottomNavBar(),
     );
   }
 }

@@ -20,6 +20,7 @@ class RegisterdStudentsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: white,
@@ -40,15 +41,17 @@ class RegisterdStudentsCard extends StatelessWidget {
               children: [
                 Text(
                   '$first_name $last_name',
-                  style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: black),
+                  style: GoogleFonts.poppins(
+                      fontSize: 15, fontWeight: FontWeight.w600, color: black),
                 ),
                 SizedBox(height: 5),
                 Text(
                   '$user_name',
-                  style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color:lightgrey),
+                  style: GoogleFonts.poppins(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: lightgrey),
                 ),
-                
-                
               ],
             ),
           ),

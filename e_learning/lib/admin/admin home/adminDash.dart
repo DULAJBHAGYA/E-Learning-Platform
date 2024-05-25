@@ -12,6 +12,7 @@ import 'package:unicons/unicons.dart';
 
 import '../add new admin/admins.dart';
 import '../admin courses/adminCourses.dart';
+import '../admin profile/adminProfile.dart';
 import '../admin students/adminStudents.dart';
 import '../enrollments/enrolments.dart';
 import 'adminDashCourses.dart';
@@ -277,13 +278,20 @@ class NavDrawer extends StatelessWidget {
             leading: Icon(Iconsax.user),
             title: Text(
               'Profile',
-              style: GoogleFonts.nunito(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: black,
-              ),
+              style: GoogleFonts.poppins(
+                  fontSize: 18, fontWeight: FontWeight.w600, color: black),
             ),
-            onTap: () => {},
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const AdminProfile(
+                          username: '',
+                          accessToken: '',
+                          refreshToken: '',
+                        )),
+              )
+            },
           ),
           ListTile(
             leading: Icon(Iconsax.logout),

@@ -12,14 +12,12 @@ class UserStats extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-    
-              children: [
-                
-                Container(
+          child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
                   height: 110,
                   width: 110,
                   decoration: BoxDecoration(
@@ -28,26 +26,31 @@ class UserStats extends StatelessWidget {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        
-                        Column(
+                    child: Stack(clipBehavior: Clip.none, children: [
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('176', style: GoogleFonts.openSans(fontSize: 30, fontWeight: FontWeight.w900, color: white),),
-                          Text('Courses', style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.bold, color: white),),
+                          Text(
+                            '176',
+                            style: GoogleFonts.openSans(
+                                fontSize: 30,
+                                fontWeight: FontWeight.w900,
+                                color: white),
+                          ),
+                          Text(
+                            'All \nCourses',
+                            style: GoogleFonts.poppins(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: white),
+                          ),
                         ],
                       ),
-                      ]
-                    ),    
-                  )
-                )  ,
-    
-                SizedBox(width: 10),
-    
-                Container(
+                    ]),
+                  )),
+              SizedBox(width: 10),
+              Container(
                   height: 110,
                   width: 110,
                   decoration: BoxDecoration(
@@ -60,16 +63,26 @@ class UserStats extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text('12', style: GoogleFonts.openSans(fontSize: 30, fontWeight: FontWeight.w900, color: white),),
-                        Text('Registered \nCourses', textAlign: TextAlign.left, style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.bold, color: white),),
+                        Text(
+                          '12',
+                          style: GoogleFonts.openSans(
+                              fontSize: 30,
+                              fontWeight: FontWeight.w900,
+                              color: white),
+                        ),
+                        Text(
+                          'Registered \nCourses',
+                          textAlign: TextAlign.left,
+                          style: GoogleFonts.poppins(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: white),
+                        ),
                       ],
-                    ),    
-                  )
-                )  ,
-    
-                SizedBox(width: 10),
-    
-                Container(
+                    ),
+                  )),
+              SizedBox(width: 10),
+              Container(
                   height: 110,
                   width: 110,
                   decoration: BoxDecoration(
@@ -82,21 +95,27 @@ class UserStats extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text('7', style: GoogleFonts.openSans(fontSize: 30, fontWeight: FontWeight.w900, color: white),),
-                        Text('Ongoing \nCourses', style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.bold, color: white),),
+                        Text(
+                          '7',
+                          style: GoogleFonts.openSans(
+                              fontSize: 30,
+                              fontWeight: FontWeight.w900,
+                              color: white),
+                        ),
+                        Text(
+                          'Ongoing \nCourses',
+                          style: GoogleFonts.poppins(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: white),
+                        ),
                       ],
-                    ),    
-                  )
-                )  
-    
-    
-              ],
-            ),
-          ],    
-    )
-    ),
-    
-    
+                    ),
+                  ))
+            ],
+          ),
+        ],
+      )),
     );
   }
 }

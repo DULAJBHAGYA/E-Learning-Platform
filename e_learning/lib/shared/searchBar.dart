@@ -17,21 +17,21 @@ class CustomSearchBar extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.9,
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: background2,
+        color: white,
         borderRadius: BorderRadius.circular(15),
       ),
       child: Row(
         children: [
           Icon(
-            FluentIcons.search_12_regular,
+            Iconsax.search_normal,
             size: 20,
-            color: grey,
+            color: lightgrey,
           ),
           SizedBox(width: 10),
           Text(
             'search courses here',
-            style: GoogleFonts.nunito(
-                fontSize: 16, fontWeight: FontWeight.w500, color: grey),
+            style: GoogleFonts.poppins(
+                fontSize: 15, fontWeight: FontWeight.w400, color: lightgrey),
           ),
         ],
       ),

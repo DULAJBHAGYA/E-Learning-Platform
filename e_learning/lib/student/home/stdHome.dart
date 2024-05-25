@@ -1,8 +1,6 @@
 import 'package:e_learning/student/home/horizontalList.dart';
-import 'package:enefty_icons/enefty_icons.dart';
+import 'package:e_learning/student/home/topCategories.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:unicons/unicons.dart';
 
 import '../../color.dart';
 import '../../shared/bottomNavBar.dart';
@@ -39,36 +37,28 @@ class _StudentHomeState extends State<StudentHome> {
               //user info
               UserInfo(),
 
-
-              SizedBox(height: 30),
+              SizedBox(height: 10),
 
               //count details
               UserStats(),
 
+              SizedBox(height: 10),
+
+              //topcategories
+              Topcategories(),
               SizedBox(height: 30),
 
-               //course filter
+              //course filter
               HorizontalListview(),
 
-              SizedBox(height: 30),
+              SizedBox(height: 10),
 
               CourseList(),
             ],
           ),
         ),
-      
       ),
-
-      bottomNavigationBar: BottomNavBar(),  
-    );                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+      bottomNavigationBar: BottomNavBar(),
+    );
   }
 }
-
-
-
-
-
-
-
-
-
