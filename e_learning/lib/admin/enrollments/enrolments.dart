@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../color.dart';
@@ -62,7 +63,7 @@ class _EnrollmentsState extends State<Enrollments>
         leading: IconButton(
           icon: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Icon(UniconsLine.bars, size: 30, color: black),
+            child: Icon(Iconsax.menu_1, size: 30, color: black),
           ),
           onPressed: () {
             _scaffoldKey.currentState?.openDrawer();
@@ -76,9 +77,26 @@ class _EnrollmentsState extends State<Enrollments>
           children: [
             Row(
               children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(0),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: SizedBox(
+                      height: 30,
+                      width: 30,
+                      child: Image.asset(
+                        '/logos/logo.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 10),
                 Text(
                   'Enrollments',
-                  style: GoogleFonts.nunito(
+                  style: GoogleFonts.poppins(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     color: black,
@@ -162,9 +180,7 @@ class EnrollmentCard extends StatelessWidget {
                 Text(
                   title,
                   style: GoogleFonts.nunito(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: black),
+                      fontSize: 15, fontWeight: FontWeight.bold, color: black),
                 ),
                 SizedBox(height: 10),
                 Row(

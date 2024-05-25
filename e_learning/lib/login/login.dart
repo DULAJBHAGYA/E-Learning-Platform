@@ -94,7 +94,7 @@ class _LoginState extends State<Login> {
                                 ),
                                 prefixIcon: ColorFiltered(
                                   colorFilter: ColorFilter.mode(
-                                    background2, // Change the color here
+                                    lightgrey, // Change the color here
                                     BlendMode.srcIn,
                                   ),
                                   child: Icon(Iconsax.direct_right),
@@ -173,7 +173,7 @@ class _LoginState extends State<Login> {
                             'Remember me',
                             style: GoogleFonts.poppins(
                               fontSize: 15.0,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                           Spacer(),

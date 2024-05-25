@@ -17,7 +17,7 @@ class BottomNavBar extends StatelessWidget {
       height: 70,
       destinations: const [
         NavigationDestination(icon: Icon(Iconsax.home), label: 'Home'),
-        NavigationDestination(icon: Icon(Iconsax.book), label: 'All Courses'), 
+        NavigationDestination(icon: Icon(Iconsax.book), label: 'All Courses'),
         NavigationDestination(icon: Icon(Iconsax.book_1), label: 'My Courses'),
         NavigationDestination(icon: Icon(Iconsax.user), label: 'Profile'),
       ],
@@ -25,19 +25,35 @@ class BottomNavBar extends StatelessWidget {
         switch (index) {
           case 0:
             // Navigate to Home screen
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const StudentHome( username: '', accessToken: '', refreshToken: '')));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const StudentHome(
+                        username: '', accessToken: '', refreshToken: '')));
             break;
           case 1:
             // Navigate to My Courses screen
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const StdAllCourses(username: '', accessToken: '', refreshToken: '')));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const StdAllCourses(
+                        username: '', accessToken: '', refreshToken: '')));
             break;
           case 2:
             // Navigate to All Courses screen
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const MyCourses()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const MyCourses()));
             break;
           case 3:
             // Navigate to Profile screen
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const StudentProfile()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const StudentProfile(
+                          username: '',
+                          accessToken: '',
+                          refreshToken: '',
+                        )));
             break;
         }
       },

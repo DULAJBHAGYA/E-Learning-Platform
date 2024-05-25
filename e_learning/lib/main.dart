@@ -1,4 +1,3 @@
-
 import 'package:e_learning/admin/add%20courses/add%20materials/newMaterial.dart';
 import 'package:e_learning/admin/add%20courses/add%20resources/newAssignment.dart';
 import 'package:e_learning/admin/add%20courses/addCourses.dart';
@@ -21,9 +20,6 @@ import 'student/course display/courseDescription.dart';
 import 'student/home/stdHome.dart';
 import 'student/profile/stdProfile.dart';
 
-
-
-
 void main() {
   runApp(MyApp());
 }
@@ -35,9 +31,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'U-Learn',
       initialRoute: '/',
-      routes: {
-        '/': (context) =>  Login(),
-      },
+      routes: {'/': (context) => Login()},
     );
   }
 }

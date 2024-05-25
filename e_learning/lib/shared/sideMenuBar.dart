@@ -1,3 +1,4 @@
+import 'package:e_learning/admin/admin%20profile/adminProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
@@ -19,8 +20,7 @@ class NavDrawer extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Colors.green,
                 image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: AssetImage('/images/p.jpg'))),
+                    fit: BoxFit.fill, image: AssetImage('/images/p.jpg'))),
           ),
           ListTile(
             leading: Icon(Icons.input),
@@ -29,10 +29,22 @@ class NavDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Iconsax.user),
-            title: Text('Profile',
-            style: GoogleFonts.nunito(fontSize: 18, fontWeight: FontWeight.w600, color: black),
+            title: Text(
+              'Profile',
+              style: GoogleFonts.poppins(
+                  fontSize: 18, fontWeight: FontWeight.w600, color: black),
             ),
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const AdminProfile(
+                          username: '',
+                          accessToken: '',
+                          refreshToken: '',
+                        )),
+              )
+            },
           ),
           ListTile(
             leading: Icon(Icons.settings),
@@ -40,13 +52,8 @@ class NavDrawer extends StatelessWidget {
             onTap: () => {Navigator.of(context).pop()},
           ),
           ListTile(
-            leading: Icon(Icons.border_color),
+            leading: Icon(Iconsax.message),
             title: Text('Feedback'),
-            onTap: () => {Navigator.of(context).pop()},
-          ),
-          ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text('Logout'),
             onTap: () => {Navigator.of(context).pop()},
           ),
         ],

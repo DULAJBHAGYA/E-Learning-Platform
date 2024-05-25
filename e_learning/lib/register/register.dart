@@ -168,34 +168,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  void postSubscription 
-  () async {
-      try {
+  void postSubscription() async {
+    try {
       int? user_id = await SharedPreferencesHelper.getUserId();
       if (user_id == null) {
-      print('User ID not found in SharedPreferences');
-      return;
+        print('User ID not found in SharedPreferences');
+        return;
       }
 
-      await SubscriptionService.instance.postSubscription(  user_id,); 
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              SnackBar(
-                                                content: Text('Subscription Request sent successfully!'),
-                                                duration: Duration(seconds: 2),
-                                              ),
-                                            );
-                                          } catch (e) {
-                                            print('Subscription Error: $e');
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              SnackBar(
-                                                content: Text('Failed to sent  subscription request. Please try again.'),
-                                                duration: Duration(seconds: 2),
-                                              ),
-                                            );
-                                          }
-
+      await SubscriptionService.instance.postSubscription(
+        user_id,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Subscription Request sent successfully!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } catch (e) {
+      print('Subscription Error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content:
+              Text('Failed to sent  subscription request. Please try again.'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -214,24 +214,42 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
+                      SizedBox(
+                        height: 20,
                       ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.asset(
-                          '/logos/logo.png', 
-                          fit: BoxFit.fill,
-                          width: 100,
-                          height: 80,
-                        ),
+                      Row(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: SizedBox(
+                                height: 60,
+                                width: 60,
+                                child: Image.asset(
+                                  '/logos/logo.png',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            'EduApp',
+                            style: GoogleFonts.poppins(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                              color: black,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-
+                      SizedBox(height: 30),
                       Text(
                         'Let\'s create your account',
-                        style: GoogleFonts.openSans(
+                        style: GoogleFonts.poppins(
                           fontWeight: FontWeight.bold,
                           fontSize: 30,
                           color: black,
@@ -264,8 +282,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                               iconColor: lightgrey,
                               labelText: 'First Name',
-                              labelStyle: GoogleFonts.nunito(
-                                fontWeight: FontWeight.bold,
+                              labelStyle: GoogleFonts.poppins(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
                                 color: lightgrey,
                               ),
                             ),
@@ -291,8 +310,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                               iconColor: lightgrey,
                               labelText: 'Last Name',
-                              labelStyle: GoogleFonts.nunito(
-                                fontWeight: FontWeight.bold,
+                              labelStyle: GoogleFonts.poppins(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
                                 color: lightgrey,
                               ),
                             ),
@@ -318,8 +338,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                               iconColor: lightgrey,
                               labelText: 'User Name',
-                              labelStyle: GoogleFonts.nunito(
-                                fontWeight: FontWeight.bold,
+                              labelStyle: GoogleFonts.poppins(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
                                 color: lightgrey,
                               ),
                             ),
@@ -344,8 +365,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 child: Icon(Iconsax.sms),
                               ),
                               labelText: 'Email',
-                              labelStyle: GoogleFonts.nunito(
-                                fontWeight: FontWeight.bold,
+                              labelStyle: GoogleFonts.poppins(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
                                 color: lightgrey,
                               ),
                             ),
@@ -371,8 +393,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 child: Icon(Iconsax.password_check),
                               ),
                               labelText: 'Password',
-                              labelStyle: GoogleFonts.nunito(
-                                fontWeight: FontWeight.bold,
+                              labelStyle: GoogleFonts.poppins(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
                                 color: lightgrey,
                               ),
                               suffixIcon: InkWell(
@@ -414,8 +437,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 child: Icon(Iconsax.password_check),
                               ),
                               labelText: 'Confirm Password',
-                              labelStyle: GoogleFonts.nunito(
-                                fontWeight: FontWeight.bold,
+                              labelStyle: GoogleFonts.poppins(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
                                 color: lightgrey,
                               ),
                               suffixIcon: InkWell(
@@ -453,9 +477,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           Text(
                             'Agree with terms and conditions',
-                            style: GoogleFonts.nunito(
+                            style: GoogleFonts.poppins(
                               fontSize: 15.0,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                           SizedBox(
@@ -483,7 +507,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               side: MaterialStateProperty.all<BorderSide>(
                                 BorderSide(
                                   width: 0.0,
-                                  color: lightgrey,
+                                  color: darkblue,
                                 ),
                               ),
                               padding: MaterialStateProperty.all<EdgeInsets>(
@@ -500,8 +524,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                             child: Text(
                               'CREATE ACCOUNT',
-                              style: GoogleFonts.nunito(
-                                fontWeight: FontWeight.w900,
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w600,
                                 fontSize: 20,
                                 color: white,
                               ),
@@ -513,9 +537,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               children: [
                                 Text(
                                   'Already have an account?',
-                                  style: GoogleFonts.nunito(
+                                  style: GoogleFonts.poppins(
                                     fontSize: 15.0,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                                 TextButton(
@@ -528,9 +552,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   },
                                   child: Text(
                                     'Login',
-                                    style: GoogleFonts.nunito(
+                                    style: GoogleFonts.poppins(
                                       fontSize: 15.0,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w500,
                                       color: darkblue,
                                     ),
                                   ),

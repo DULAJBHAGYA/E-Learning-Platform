@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../color.dart';
-import 'package:google_fonts/google_fonts.dart';
+
+import '../../services/requestServices.dart'; // Import your SubscriptionService
 
 class RegisterRequestsCard extends StatelessWidget {
   final String user_name;
@@ -17,10 +19,40 @@ class RegisterRequestsCard extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  Future<void> _acceptRequest(BuildContext context) async {
+    try {
+      await SubscriptionService.instance.editSubscriptionRequest(
+        user_id: user_id,
+        active: true,
+        pending: false,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Request accepted')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to accept request: $e')),
+      );
+    }
+  }
+
+  Future<void> _deleteRequest(BuildContext context) async {
+    try {
+      await SubscriptionService.instance.deleteSubscriptionRequest(user_id);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Request deleted')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to delete request: $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: white,
@@ -40,38 +72,52 @@ class RegisterRequestsCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '$user_id) $first_name $last_name',
-                  style: GoogleFonts.nunito(fontSize: 18, fontWeight: FontWeight.bold, color: black),
+                  '$first_name $last_name',
+                  style: GoogleFonts.poppins(
+                      fontSize: 15, fontWeight: FontWeight.w500, color: black),
                 ),
                 SizedBox(height: 5),
                 Text(
                   '$user_name',
-                  style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: lightgrey),
+                  style: GoogleFonts.poppins(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: lightgrey),
                 ),
                 SizedBox(height: 5),
                 Row(
                   children: [
                     Spacer(),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () => _acceptRequest(context),
                       style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.all(5), 
+                        padding: EdgeInsets.all(5),
                         backgroundColor: white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(color: darkblue, width: 2)),
-                        ),
-                      
-                      child: Text('Accept', style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: darkblue)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            side: BorderSide(color: darkblue, width: 2)),
+                      ),
+                      child: Text('ACCEPT',
+                          style: GoogleFonts.poppins(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: darkblue)),
                     ),
                     SizedBox(width: 10),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () => _deleteRequest(context),
                       style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.all(5), backgroundColor: white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(color: red, width: 2)),
+                        padding: EdgeInsets.all(5),
+                        backgroundColor: white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            side: BorderSide(color: red, width: 2)),
                       ),
-                      child: Text('Decline', style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.bold, color: red)),
+                      child: Text('DECLINE',
+                          style: GoogleFonts.poppins(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: red)),
                     ),
                   ],
                 ),
@@ -83,4 +129,3 @@ class RegisterRequestsCard extends StatelessWidget {
     );
   }
 }
-

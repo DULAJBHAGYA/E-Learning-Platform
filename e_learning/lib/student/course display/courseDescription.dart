@@ -10,7 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../color.dart';
 import '../../services/enrollServices.dart';
 
-
 class CourseDescription extends StatefulWidget {
   final int course_id;
   final String description;
@@ -86,7 +85,7 @@ class _CourseDescriptionState extends State<CourseDescription>
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: NetworkImage(widget.image),
+                            image: AssetImage('/images/frontend.jpg'),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -143,8 +142,8 @@ class _CourseDescriptionState extends State<CourseDescription>
                     children: [
                       Text(
                         widget.title,
-                        style: GoogleFonts.nunito(
-                          fontSize: 28,
+                        style: GoogleFonts.poppins(
+                          fontSize: 25,
                           fontWeight: FontWeight.bold,
                           color: black,
                         ),
@@ -155,13 +154,13 @@ class _CourseDescriptionState extends State<CourseDescription>
                           Container(
                             decoration: BoxDecoration(
                               color: background2,
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(5.0),
                               child: Text(
-                                widget.category,
-                                style: GoogleFonts.nunito(
+                                widget.category.toUpperCase(),
+                                style: GoogleFonts.poppins(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
                                   color: other,
@@ -171,55 +170,53 @@ class _CourseDescriptionState extends State<CourseDescription>
                           ),
                         ],
                       ),
-                      SizedBox(height: 5),
+                      SizedBox(height: 10),
                       Text(
                         widget.description,
                         textAlign: TextAlign.justify,
-                        style: GoogleFonts.nunito(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
+                        style: GoogleFonts.poppins(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
                           color: black,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 20),
                       Container(
                         width: MediaQuery.of(context).size.width,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Row(
                               children: [
-                                Icon(EneftyIcons.people_bold,
-                                    size: 20, color: lightgrey),
+                                Icon(Iconsax.people, size: 20, color: darkblue),
                                 SizedBox(width: 2),
                                 Text('120 Students',
-                                    style: GoogleFonts.nunito(
+                                    style: GoogleFonts.poppins(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w600,
                                         color: black)),
                               ],
                             ),
-                            SizedBox(width: 10),
+                            SizedBox(width: 15),
                             Row(
                               children: [
-                                Icon(EneftyIcons.clock_2_bold,
-                                    size: 20, color: lightgrey),
+                                Icon(Iconsax.clock, size: 20, color: darkblue),
                                 SizedBox(width: 2),
                                 Text('2.5 Hours',
-                                    style: GoogleFonts.nunito(
+                                    style: GoogleFonts.poppins(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w600,
                                         color: black)),
                               ],
                             ),
-                            SizedBox(width: 10),
+                            SizedBox(width: 15),
                             Row(
                               children: [
-                                Icon(EneftyIcons.document_bold,
-                                    size: 20, color: lightgrey),
+                                Icon(Iconsax.document,
+                                    size: 20, color: darkblue),
                                 SizedBox(width: 2),
                                 Text('Certificate',
-                                    style: GoogleFonts.nunito(
+                                    style: GoogleFonts.poppins(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w600,
                                         color: black)),
@@ -235,9 +232,9 @@ class _CourseDescriptionState extends State<CourseDescription>
                           Tab(
                             child: Text(
                               'About',
-                              style: GoogleFonts.nunito(
+                              style: GoogleFonts.poppins(
                                 fontSize: 15,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w400,
                                 color: _tabController.index == 0
                                     ? black
                                     : lightgrey,
@@ -247,9 +244,9 @@ class _CourseDescriptionState extends State<CourseDescription>
                           Tab(
                             child: Text(
                               'Lessons',
-                              style: GoogleFonts.nunito(
+                              style: GoogleFonts.poppins(
                                 fontSize: 15,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w400,
                                 color: _tabController.index == 1
                                     ? black
                                     : lightgrey,
@@ -291,57 +288,67 @@ class _CourseDescriptionState extends State<CourseDescription>
                                         SizedBox(height: 20),
                                         Align(
                                           alignment: Alignment.bottomRight,
-                                        child:TextButton(
-                                        style: TextButton.styleFrom(
-                                          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                                          backgroundColor: white,
-                                          shape: StadiumBorder(
-                                            side: BorderSide(color: darkblue, width: 2),
-                                          ),
-                                        ),
-                                        onPressed: () async {
-                                          try {
-                                            int? user_id = await SharedPreferencesHelper.getUserId();
-                                            if (user_id == null) {
-                                              print('User ID not found in SharedPreferences');
-                                              return;
-                                            }
-
-                                            await EnrollService.instance.postEnrollment(
-                                              user_id,
-                                              widget.course_id,
-                                            );
-                                            
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              SnackBar(
-                                                content: Text('Enrolled Request sent successfully!'),
-                                                duration: Duration(seconds: 2),
+                                          child: TextButton(
+                                            style: TextButton.styleFrom(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 10, horizontal: 20),
+                                              backgroundColor: white,
+                                              shape: StadiumBorder(
+                                                side: BorderSide(
+                                                    color: darkblue, width: 2),
                                               ),
-                                            );
-                                          } catch (e) {
-                                            print('Enrollment Error: $e');
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              SnackBar(
-                                                content: Text('Failed to sent  enroll request. Please try again.'),
-                                                duration: Duration(seconds: 2),
-                                              ),
-                                            );
-                                          }
-                                        },
-                                        child: Text(
-                                          'Enroll Now',
-                                          style: GoogleFonts.nunito(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w600,
-                                            color: darkblue,
-                                          ),
-                                        ),
-                                      ),
+                                            ),
+                                            onPressed: () async {
+                                              try {
+                                                int? user_id =
+                                                    await SharedPreferencesHelper
+                                                        .getUserId();
+                                                if (user_id == null) {
+                                                  print(
+                                                      'User ID not found in SharedPreferences');
+                                                  return;
+                                                }
 
+                                                await EnrollService.instance
+                                                    .postEnrollment(
+                                                  user_id,
+                                                  widget.course_id,
+                                                );
+
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                        'Enrolled Request sent successfully!'),
+                                                    duration:
+                                                        Duration(seconds: 2),
+                                                  ),
+                                                );
+                                              } catch (e) {
+                                                print('Enrollment Error: $e');
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                        'Failed to sent  enroll request. Please try again.'),
+                                                    duration:
+                                                        Duration(seconds: 2),
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                            child: Text(
+                                              'Enroll Now',
+                                              style: GoogleFonts.nunito(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w600,
+                                                color: darkblue,
+                                              ),
+                                            ),
+                                          ),
                                         )
                                       ],
                                     ),
-
                                   ),
                                   SingleChildScrollView(
                                     child:

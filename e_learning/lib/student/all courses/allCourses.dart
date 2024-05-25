@@ -4,8 +4,7 @@ import 'package:e_learning/student/course%20display/courseDescription.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:unicons/unicons.dart';
-
+import 'package:iconsax/iconsax.dart';
 import '../../color.dart';
 import '../../shared/bottomNavBAr.dart';
 
@@ -54,13 +53,34 @@ class _StdAllCoursesState extends State<StdAllCourses> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'All Courses',
-              style: GoogleFonts.nunito(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: black,
-              ),
+            Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(0),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: SizedBox(
+                      height: 30,
+                      width: 30,
+                      child: Image.asset(
+                        '/logos/logo.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 10),
+                Text(
+                  'All Courses',
+                  style: GoogleFonts.poppins(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: black,
+                  ),
+                ),
+              ],
             ),
             SizedBox(height: 10),
             CustomSearchBar(),
@@ -133,7 +153,7 @@ class CourseViewCard extends StatelessWidget {
                 ),
                 image: DecorationImage(
                   image: image.isNotEmpty
-                      ? NetworkImage(image)
+                      ? AssetImage('/images/frontend.jpg')
                       : AssetImage('/logos/logo.png') as ImageProvider,
                   fit: BoxFit.cover,
                 ),
@@ -161,8 +181,8 @@ class CourseViewCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
-                            category,
-                            style: GoogleFonts.nunito(
+                            category.toUpperCase(),
+                            style: GoogleFonts.poppins(
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
                               color: lightgrey,
@@ -175,7 +195,7 @@ class CourseViewCard extends StatelessWidget {
                   SizedBox(height: 5),
                   Text(
                     title,
-                    style: GoogleFonts.nunito(
+                    style: GoogleFonts.poppins(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: black,
@@ -186,12 +206,11 @@ class CourseViewCard extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(UniconsLine.clock_eight,
-                              size: 15, color: darkblue),
+                          Icon(Iconsax.clock, size: 15, color: darkblue),
                           SizedBox(width: 5),
                           Text(
                             '2.5 hrs',
-                            style: GoogleFonts.nunito(
+                            style: GoogleFonts.poppins(
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
                               color: lightgrey,
@@ -202,11 +221,11 @@ class CourseViewCard extends StatelessWidget {
                       SizedBox(width: 20),
                       Row(
                         children: [
-                          Icon(UniconsLine.file_alt, size: 15, color: darkblue),
+                          Icon(Iconsax.document, size: 15, color: darkblue),
                           SizedBox(width: 5),
                           Text(
                             'Certificate',
-                            style: GoogleFonts.nunito(
+                            style: GoogleFonts.poppins(
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
                               color: lightgrey,
@@ -247,9 +266,9 @@ class CourseViewCard extends StatelessWidget {
                             ),
                             child: Text(
                               'View Course',
-                              style: GoogleFonts.nunito(
+                              style: GoogleFonts.poppins(
                                 fontSize: 15,
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.bold,
                                 color: white,
                               ),
                             ),
@@ -283,7 +302,9 @@ class HorizontalListview extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                CategoryChip(label: 'ALL COURSES'),
+                CategoryChip(
+                  label: 'ALL COURSES',
+                ),
                 SizedBox(width: 10),
                 CategoryChip(label: 'IT'),
                 SizedBox(width: 10),
@@ -319,14 +340,14 @@ class CategoryChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: white,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: darkblue, width: 2),
+        border: Border.all(color: blue, width: 2),
       ),
       child: Text(
         label,
-        style: GoogleFonts.nunito(
+        style: GoogleFonts.poppins(
           fontSize: 12,
           fontWeight: FontWeight.w700,
-          color: darkblue,
+          color: blue,
         ),
       ),
     );
