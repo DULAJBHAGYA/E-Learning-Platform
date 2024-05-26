@@ -7,6 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../color.dart';
 import '../../../services/assignmentServices.dart';
+import '../../../shared/searchBar.dart';
+import '../add materials/newMaterial.dart';
 import 'newAssignment.dart';
 
 class AddAssignment extends StatefulWidget {
@@ -34,19 +36,17 @@ class _AddAssignmentState extends State<AddAssignment> {
   late int assignment_id; // Define materialId variable
 
   @override
-void initState() {
-  super.initState();
-  fetchResourceById(widget.material_id);
-}
+  void initState() {
+    super.initState();
+    fetchResourceById(widget.material_id);
+  }
 
-
-Future<void> _fetchMaterialId() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  assignment_id = prefs.getInt('material_id') ?? 0;
-  print('Material ID: $assignment_id');
-  fetchResourceById(assignment_id); 
-}
-
+  Future<void> _fetchMaterialId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    assignment_id = prefs.getInt('material_id') ?? 0;
+    print('Material ID: $assignment_id');
+    fetchResourceById(assignment_id);
+  }
 
   Future<void> fetchResourceById(int material_id) async {
     try {
@@ -63,101 +63,115 @@ Future<void> _fetchMaterialId() async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: background,
       appBar: AppBar(
-        backgroundColor: blue,
+        backgroundColor: background,
+        elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Icon(Iconsax.arrow_left_2, size: 30, color: black),
+          ),
           onPressed: () {
             Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => AddMaterial(username: '', accessToken: '', refreshToken: '', course_id: widget.course_id)),
-            );
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AddCourses(
+                          username: '',
+                          accessToken: '',
+                          refreshToken: '',
+                        )));
           },
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(0),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: SizedBox(
+                      height: 30,
+                      width: 30,
+                      child: Image.asset(
+                        '/logos/logo.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 10),
+                Text(
+                  'Materials',
+                  style: GoogleFonts.poppins(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: black,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            CustomSearchBar(),
+            SizedBox(height: 20),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Newmaterial(
+                      course_id: widget.course_id,
+                      username: widget.username,
+                      accessToken: widget.accessToken,
+                      refreshToken: widget.refreshToken,
+                    ),
+                  ),
+                );
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    margin: EdgeInsets.all(10),
-                    width: MediaQuery.of(context).size.width,
-                    height: 60.0,
-                    padding: EdgeInsets.all(20),
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: background,
+                      color: darkblue,
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.search, color: grey),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Search in here',
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => NewAssignment(
-                            username: widget.username,
-                            accessToken: widget.accessToken,
-                            refreshToken: widget.refreshToken,
-                            material_id: widget.material_id,
-                            course_id: widget.course_id,
-                          )),
-                        );
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(blue),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                        padding: MaterialStateProperty.all(
-                          EdgeInsets.all(15.0),
-                        ),
-                      ),
-                      child: Text(
-                        'ADD NEW ASSIGNMENT',
-                        style: GoogleFonts.openSans(
+                    child: Text(
+                      'ADD NEW MATERIAL',
+                      style: GoogleFonts.openSans(
                           fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: _assignments.map((resource) {
-                          return MaterialsDisplayCard(
-                            resourceId: resource['resource_id'],
-                            title: resource['title'],
-                            type: resource['type'],
-                          );
-                        }).toList(),
-                      ),
+                          fontWeight: FontWeight.w700,
+                          color: white),
                     ),
                   ),
                 ],
+              ),
+            ),
+            SizedBox(height: 20),
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  children: _assignments.map((addedassignment) {
+                    return AdminAddedMaterialViewCard(
+                      course_id: addedassignment['course_id'] ?? 0,
+                      material_id: addedassignment['material_id'] ?? 0,
+                      order_number: addedassignment['order_number'] ?? 0,
+                      material_file: addedassignment['material_file'] ?? '',
+                      title: addedassignment['title'] ?? '',
+                    );
+                  }).toList(),
+                ),
               ),
             ),
           ],
@@ -167,88 +181,78 @@ Future<void> _fetchMaterialId() async {
   }
 }
 
-class MaterialsDisplayCard extends StatelessWidget {
-  final int resourceId;
+class AdminAddedMaterialViewCard extends StatelessWidget {
+  final int course_id;
+  final int material_id;
+  final String material_file;
   final String title;
-  final String type;
+  final int order_number;
 
-  const MaterialsDisplayCard({
-    required this.resourceId,
+  const AdminAddedMaterialViewCard({
+    required this.course_id,
+    required this.order_number,
+    required this.material_id,
+    required this.material_file,
     required this.title,
-    required this.type,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 1,
-      color: grey,
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      height: 100,
+      width: MediaQuery.of(context).size.width * 0.9,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: white,
+      ),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
           children: [
-            ListTile(
-              contentPadding: EdgeInsets.all(16),
-              leading: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Text(
-                  resourceId.toString(),
-                  style: GoogleFonts.openSans(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                    color: Colors.blue,
-                  ),
-                ),
-              ),
-              title: Text(
-                title,
-                style: GoogleFonts.openSans(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '$type',
-                    style: GoogleFonts.openSans(fontSize: 15),
-                  ),
-                ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+            SizedBox(width: 20),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextButton(
-                  onPressed: () {
-                    
+                Text(
+                  '$material_id) $title',
+                  overflow: TextOverflow.clip,
+                  style: GoogleFonts.openSans(
+                      fontSize: 15, fontWeight: FontWeight.bold, color: black),
+                ),
+                SizedBox(height: 10),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddAssignment(
+                          course_id: course_id,
+                          material_id: material_id,
+                          username: '',
+                          accessToken: '',
+                          refreshToken: '',
+                        ),
+                      ),
+                    );
                   },
-                  style: TextButton.styleFrom(
-                    backgroundColor: blue,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      color: science,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Text(
+                      'Add Assignment',
+                      style: GoogleFonts.openSans(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: white),
+                    ),
                   ),
-                  child: Text('ADD ASSIGNMENT', style: GoogleFonts.openSans(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
                 ),
-                SizedBox(width: 5),
-                TextButton(
-                  onPressed: () {},
-                  style: TextButton.styleFrom(
-                    backgroundColor: red,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  ),
-                  child: Text('DELETE RESOURCE', style: GoogleFonts.openSans(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
-                ),
-                SizedBox(width: 5),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Iconsax.edit, color: blue),
-                )
               ],
             ),
           ],

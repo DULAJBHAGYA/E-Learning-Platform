@@ -5,6 +5,7 @@ import 'package:e_learning/shared/searchBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unicons/unicons.dart';
 
@@ -30,8 +31,7 @@ class AddCourses extends StatefulWidget {
 class _AddCoursesState extends State<AddCourses> {
   List<dynamic> _addedcourses = [];
 
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -42,13 +42,14 @@ class _AddCoursesState extends State<AddCourses> {
   Future<void> fetchCoursesById() async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
-      final int? userId = prefs.getInt('user_id'); 
+      final int? userId = prefs.getInt('user_id');
 
       if (userId == null) {
         throw Exception('User ID not found in local storage');
       }
 
-      final addedCourseData = await CourseService.instance.getCourseByUserId(userId);
+      final addedCourseData =
+          await CourseService.instance.getCourseByUserId(userId);
       setState(() {
         _addedcourses = addedCourseData ?? [];
       });
@@ -56,7 +57,6 @@ class _AddCoursesState extends State<AddCourses> {
       print('Error fetching courses: $e');
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -69,75 +69,103 @@ class _AddCoursesState extends State<AddCourses> {
         leading: IconButton(
           icon: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Icon(UniconsLine.bars, size: 30, color: black),
+            child: Icon(Iconsax.menu_1, size: 30, color: black),
           ),
           onPressed: () {
-            _scaffoldKey.currentState?.openDrawer(); 
+            _scaffoldKey.currentState?.openDrawer();
           },
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Row(
             children: [
-              Text('AddCourses', 
-              style: GoogleFonts.openSans(fontSize: 30, fontWeight: FontWeight.bold, color: black),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(0),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: SizedBox(
+                    height: 30,
+                    width: 30,
+                    child: Image.asset(
+                      '/logos/logo.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
               ),
-
-              SizedBox(height: 20,),
-
-              CustomSearchBar(),
-
-              SizedBox(height: 20,),
-
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => NewCourse(username: widget.username, accessToken: widget.accessToken, refreshToken: widget.refreshToken,)));
-                },
-                child: Row(
-                       mainAxisSize: MainAxisSize.min,
-                       children: [
-                         Container(
-                           alignment: Alignment.center,
-                           padding: EdgeInsets.all(5),
-                           decoration: BoxDecoration(
-                             color: darkblue,
-                             borderRadius: BorderRadius.circular(5),
-                           ),
-                           child: Text(
-                             'ADD NEW COURSE',
-                             style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w700, color: white),
-                           ),
-                         ),
-                       ],
-                     ),
+              SizedBox(width: 10),
+              Text(
+                'Add Courses',
+                style: GoogleFonts.poppins(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: black,
+                ),
               ),
-
-                   SizedBox(height: 20,),
-
-                   SingleChildScrollView(
-                     scrollDirection: Axis.vertical,
-                     physics: AlwaysScrollableScrollPhysics(),
-                     child: Row(
-                       children: _addedcourses.map((addedcourse) {
-                    return AdminAddedCourseViewCard(
-                      what_will: addedcourse['what_will'] ?? {},
-                      description: addedcourse['description'] ?? 'No Description',
-                      course_id: addedcourse['course_id'] ?? 0,
-                      image: addedcourse['image'] ?? '',
-                      title: addedcourse['title'] ?? 'No Title',
-                      category: addedcourse['category'] ?? 'Uncategorized',
-                    );
-                  }).toList(),
-                   )
-
-                   )
-
-            ]
+            ],
           ),
-        ),
+          SizedBox(
+            height: 20,
+          ),
+          CustomSearchBar(),
+          SizedBox(
+            height: 20,
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NewCourse(
+                            username: widget.username,
+                            accessToken: widget.accessToken,
+                            refreshToken: widget.refreshToken,
+                          )));
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: darkblue,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Text(
+                    'ADD NEW COURSE',
+                    style: GoogleFonts.openSans(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: white),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Row(
+                children: _addedcourses.map((addedcourse) {
+                  return AdminAddedCourseViewCard(
+                    what_will: addedcourse['what_will'] ?? {},
+                    description: addedcourse['description'] ?? 'No Description',
+                    course_id: addedcourse['course_id'] ?? 0,
+                    image: addedcourse['image'] ?? '',
+                    title: addedcourse['title'] ?? 'No Title',
+                    category: addedcourse['category'] ?? 'Uncategorized',
+                  );
+                }).toList(),
+              ))
+        ]),
       ),
     );
   }
@@ -164,20 +192,18 @@ class AdminAddedCourseViewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 120,
-      width: MediaQuery.of(context).size.width,
+      height: 130,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: white,
       ),
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(
-          children: [
+          padding: const EdgeInsets.all(10.0),
+          child: Row(children: [
             //image
             Container(
-              height: 100,
-              width: 100,
+              height: 120,
+              width: 120,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: NetworkImage(image),
@@ -186,55 +212,71 @@ class AdminAddedCourseViewCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
-              
-            SizedBox(width: 20),
-              
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: background,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(category.toUpperCase(), style: GoogleFonts.openSans(fontSize: 12, fontWeight: FontWeight.w600, color: science),),
-                ),
-              
-                SizedBox(height: 5),
-              
-                Text(course_id.toString() + ') ' + title, overflow: TextOverflow.clip, style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.bold, color: black),),
-              
-                SizedBox(height: 10),
 
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AddMaterial(username: '', accessToken: '', refreshToken: '', course_id: course_id,)));
-                  },
-                  child: Row(
-                    children: [
-                         Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            color: science,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Text('Add Materials', style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w600, color: white),),
-                        ),
-                      
-                    ],
-                  ),
-                )
-              
-                
-          
-          ]
-        ),
-          ]
-      )
-    ),
+            SizedBox(width: 20),
+
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: background,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  category.toUpperCase(),
+                  style: GoogleFonts.openSans(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: science),
+                ),
+              ),
+              SizedBox(height: 5),
+              SizedBox(
+                  width: 200,
+                  child: Text(
+                    course_id.toString() + ') ' + title,
+                    overflow: TextOverflow.clip,
+                    style: GoogleFonts.openSans(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: black),
+                  )),
+              SizedBox(height: 10),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AddMaterial(
+                                username: '',
+                                accessToken: '',
+                                refreshToken: '',
+                                course_id: course_id,
+                              )));
+                },
+                child: Row(
+                  children: [
+                    Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        color: science,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Text(
+                        'Add Materials',
+                        style: GoogleFonts.openSans(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: white),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ]),
+          ])),
     );
   }
 }

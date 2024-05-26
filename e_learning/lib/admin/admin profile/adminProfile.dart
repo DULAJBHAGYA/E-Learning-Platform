@@ -1,3 +1,4 @@
+import 'package:e_learning/change%20password/adminChangePassword.dart';
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -154,8 +155,7 @@ class _AdminProfileState extends State<AdminProfile> {
                                   fontWeight: FontWeight.w600)),
                           SizedBox(width: 20),
                           SizedBox(
-                            width:
-                                200, // Adjust the width according to your need
+                            width: 200,
                             child: Text(
                               '$email',
                               overflow: TextOverflow.clip,
@@ -210,66 +210,69 @@ class _AdminProfileState extends State<AdminProfile> {
               SizedBox(
                 height: 10,
               ),
-              Container(
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: background,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: background2,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  padding: EdgeInsets.all(
-                                      5), // Adjust padding to your needs
-                                  child: Icon(
-                                    Iconsax.user,
-                                    color: black,
-                                    size: 20,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              'Manage Profile',
-                              style: GoogleFonts.poppins(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700,
-                                  color: black),
-                            ),
-                            Spacer(),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: white,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Align(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Icon(
-                                    Iconsax.arrow_right_3,
-                                    size: 20,
-                                    color: black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+              GestureDetector(
+                onTap: () {},
+                child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: background,
                     ),
-                  )),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: background2,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    padding: EdgeInsets.all(
+                                        5), // Adjust padding to your needs
+                                    child: Icon(
+                                      Iconsax.user,
+                                      color: black,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                'Manage Profile',
+                                style: GoogleFonts.poppins(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                    color: black),
+                              ),
+                              Spacer(),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: white,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Align(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Icon(
+                                      Iconsax.arrow_right_3,
+                                      size: 20,
+                                      color: black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )),
+              ),
               SizedBox(
                 height: 30,
               ),

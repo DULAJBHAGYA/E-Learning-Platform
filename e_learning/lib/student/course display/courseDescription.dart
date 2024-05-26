@@ -85,7 +85,7 @@ class _CourseDescriptionState extends State<CourseDescription>
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage('/images/frontend.jpg'),
+                            image: NetworkImage(widget.image),
                             fit: BoxFit.cover,
                           ),
                         ),

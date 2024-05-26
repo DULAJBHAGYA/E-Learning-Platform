@@ -16,6 +16,7 @@ class _AdminStatsState extends State<AdminStats> {
   int studentCount = 0;
   int courseCount = 0;
   int adminCount = 0;
+  int subscriptionCount = 0;
 
   @override
   void initState() {
@@ -23,6 +24,7 @@ class _AdminStatsState extends State<AdminStats> {
     fetchStudentCount();
     fetchCourseCount();
     fetchAdminCount();
+    fetchSubscriptionCount();
   }
 
   Future<void> fetchStudentCount() async {
@@ -62,6 +64,26 @@ class _AdminStatsState extends State<AdminStats> {
       }
     } catch (e) {
       print('Error fetching student count: $e');
+    }
+  }
+
+  Future<void> fetchSubscriptionCount() async {
+    try {
+      final response = await CountService.instance.getSubscriptionCount();
+
+      if (response != null) {
+        if (response is int) {
+          setState(() {
+            subscriptionCount = response;
+          });
+        } else {
+          throw Exception('Subscription count is not an integer');
+        }
+      } else {
+        throw Exception('Response is null');
+      }
+    } catch (e) {
+      print('Error fetching subscription count: $e');
     }
   }
 
@@ -179,7 +201,7 @@ class _AdminStatsState extends State<AdminStats> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      '176',
+                      subscriptionCount.toString(),
                       style: GoogleFonts.openSans(
                           fontSize: 40,
                           fontWeight: FontWeight.w900,

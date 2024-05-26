@@ -5,6 +5,7 @@ import 'package:e_learning/admin/add%20new%20admin/addAdmin.dart';
 import 'package:e_learning/admin/add%20new%20admin/admins.dart';
 import 'package:e_learning/admin/admin%20courses/adminCourses.dart';
 import 'package:e_learning/admin/admin%20students/adminStudents.dart';
+import 'package:e_learning/change%20password/adminChangePassword.dart';
 import 'package:e_learning/email%20verified/emailVerified.dart';
 import 'package:e_learning/login/login.dart';
 import 'package:e_learning/on%20board%20screens/onBoardingScreens.dart';
@@ -35,3 +36,9 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+// AdminChangePassword(
+//               username: '',
+//               accessToken: '',
+//               refreshToken: '',
+//             )
