@@ -1,12 +1,14 @@
 import 'package:e_learning/admin/add%20courses/add%20materials/addMaterial.dart';
 import 'package:e_learning/admin/add%20courses/add%20materials/newMaterial.dart';
 import 'package:e_learning/admin/add%20courses/add%20resources/newAssignment.dart';
+import 'package:e_learning/admin/add%20courses/addCourses.dart';
 import 'package:e_learning/admin/add%20courses/newCourse.dart';
 import 'package:e_learning/color.dart';
 import 'package:e_learning/shared/searchBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unicons/unicons.dart';
 
@@ -34,7 +36,6 @@ class AddMaterial extends StatefulWidget {
 
 class _AddmaterialState extends State<AddMaterial> {
   List<dynamic> _addedmaterials = [];
-  
 
   @override
   void initState() {
@@ -44,8 +45,8 @@ class _AddmaterialState extends State<AddMaterial> {
 
   Future<void> getMaterialByCourseId() async {
     try {
-      final addedMaterialData =
-          await MaterialService.instance.getMaterialByCourseId(widget.course_id);
+      final addedMaterialData = await MaterialService.instance
+          .getMaterialByCourseId(widget.course_id);
       setState(() {
         _addedmaterials = addedMaterialData ?? [];
       });
@@ -64,30 +65,57 @@ class _AddmaterialState extends State<AddMaterial> {
         leading: IconButton(
           icon: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Icon(UniconsLine.arrow_left, size: 30, color: black),
+            child: Icon(Iconsax.arrow_left_2, size: 30, color: black),
           ),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AddCourses(
+                          username: '',
+                          accessToken: '',
+                          refreshToken: '',
+                        )));
           },
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Container(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(
-              'Add Materials',
-              style: GoogleFonts.openSans(
-                  fontSize: 30, fontWeight: FontWeight.bold, color: black),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(0),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: SizedBox(
+                      height: 30,
+                      width: 30,
+                      child: Image.asset(
+                        '/logos/logo.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 10),
+                Text(
+                  'Materials',
+                  style: GoogleFonts.poppins(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: black,
+                  ),
+                ),
+              ],
             ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
             CustomSearchBar(),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -123,13 +151,12 @@ class _AddmaterialState extends State<AddMaterial> {
                 ],
               ),
             ),
-            SizedBox(
-              height: 20,
-            ),
-            SingleChildScrollView(
+            SizedBox(height: 20),
+            Expanded(
+              child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 physics: AlwaysScrollableScrollPhysics(),
-                child: Row(
+                child: Column(
                   children: _addedmaterials.map((addedmaterial) {
                     return AdminAddedMaterialViewCard(
                       course_id: addedmaterial['course_id'] ?? 0,
@@ -139,8 +166,10 @@ class _AddmaterialState extends State<AddMaterial> {
                       title: addedmaterial['title'] ?? '',
                     );
                   }).toList(),
-                ))
-          ]),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -153,7 +182,6 @@ class AdminAddedMaterialViewCard extends StatelessWidget {
   final String material_file;
   final String title;
   final int order_number;
-  
 
   const AdminAddedMaterialViewCard({
     required this.course_id,
@@ -161,88 +189,70 @@ class AdminAddedMaterialViewCard extends StatelessWidget {
     required this.material_id,
     required this.material_file,
     required this.title,
-  
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       height: 100,
+      width: MediaQuery.of(context).size.width * 0.9,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: white,
       ),
       child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(children: [
-            //image
-            Container(
-              height: 90,
-              width: 90,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(material_file),
-                  fit: BoxFit.cover,
-                ),
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          children: [
             SizedBox(width: 20),
-
-            
-              Column(
-                children: [
-                  Text(
-                     material_id.toString() + ') ' + title,
-                    overflow: TextOverflow.clip,
-                    style: GoogleFonts.openSans(
-                        fontSize: 15, fontWeight: FontWeight.bold, color: black),
-                  ),
-                
-              SizedBox(height: 10),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddAssignment(
-                        course_id: course_id,
-                        material_id: material_id,
-                        username: '',
-                        accessToken: '',
-                        refreshToken: '',
-                      ),
-                    ),
-                  );
-                },
-                child: Row(
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        color: science,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Text(
-                        'Add Assignment',
-                        style: GoogleFonts.openSans(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: white),
-                      ),
-                    ),
-                  ],
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '$material_id) $title',
+                  overflow: TextOverflow.clip,
+                  style: GoogleFonts.openSans(
+                      fontSize: 15, fontWeight: FontWeight.bold, color: black),
                 ),
-              )
+                SizedBox(height: 10),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddAssignment(
+                          course_id: course_id,
+                          material_id: material_id,
+                          username: '',
+                          accessToken: '',
+                          refreshToken: '',
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      color: science,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Text(
+                      'Add Assignment',
+                      style: GoogleFonts.openSans(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: white),
+                    ),
+                  ),
+                ),
               ],
-              ),
-            ]
             ),
-          
-          )
-          );
+          ],
+        ),
+      ),
+    );
   }
 }

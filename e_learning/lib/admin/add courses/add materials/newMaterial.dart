@@ -42,7 +42,8 @@ class _NewmaterialState extends State<Newmaterial> {
   @override
   void initState() {
     super.initState();
-    _courseidController.text = widget.course_id.toString(); // Pre-fill course ID
+    _courseidController.text =
+        widget.course_id.toString(); // Pre-fill course ID
   }
 
   Future<void> _pickFile() async {
@@ -159,13 +160,36 @@ class _NewmaterialState extends State<Newmaterial> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Add Course Material',
-                  style: GoogleFonts.openSans(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(0),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: SizedBox(
+                          height: 30,
+                          width: 30,
+                          child: Image.asset(
+                            '/logos/logo.png',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      'Add New Material',
+                      style: GoogleFonts.poppins(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: black,
+                      ),
+                    ),
+                  ],
                 ),
+                SizedBox(height: 20),
                 TextFormField(
                   controller: _courseidController,
                   keyboardType: TextInputType.number,
@@ -242,7 +266,8 @@ class _NewmaterialState extends State<Newmaterial> {
                             borderRadius: BorderRadius.circular(20.0),
                           ),
                         ),
-                        padding: MaterialStateProperty.all(EdgeInsets.all(15.0)),
+                        padding:
+                            MaterialStateProperty.all(EdgeInsets.all(15.0)),
                       ),
                       child: Text(
                         'CANCEL',
@@ -259,13 +284,17 @@ class _NewmaterialState extends State<Newmaterial> {
                         if (_formKey.currentState!.validate()) {
                           try {
                             final FormData formData = _buildFormData();
-                            final response = await MaterialService.instance.postMaterial(formData, widget.course_id);
+                            final response = await MaterialService.instance
+                                .postMaterial(formData, widget.course_id);
 
-                            if (response.containsKey('material_id') && response['material_id'] != null) {
-                              final courseId = int.parse(response['material_id'].toString());
-                              _showSuccessDialog(courseId);
+                            if (response.containsKey('material_id') &&
+                                response['material_id'] != null) {
+                              final materialId =
+                                  int.parse(response['material_id'].toString());
+                              _showSuccessDialog(materialId);
                             } else {
-                              _showErrorDialog("Material ID not found in the response");
+                              _showErrorDialog(
+                                  "Material ID not found in the response");
                             }
                           } catch (e) {
                             print('Error: $e');
@@ -280,7 +309,8 @@ class _NewmaterialState extends State<Newmaterial> {
                             borderRadius: BorderRadius.circular(20.0),
                           ),
                         ),
-                        padding: MaterialStateProperty.all(EdgeInsets.all(15.0)),
+                        padding:
+                            MaterialStateProperty.all(EdgeInsets.all(15.0)),
                       ),
                       child: Text(
                         'SAVE',

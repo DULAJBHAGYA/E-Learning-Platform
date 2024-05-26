@@ -153,7 +153,7 @@ class CourseViewCard extends StatelessWidget {
                 ),
                 image: DecorationImage(
                   image: image.isNotEmpty
-                      ? AssetImage('/images/frontend.jpg')
+                      ? NetworkImage(image)
                       : AssetImage('/logos/logo.png') as ImageProvider,
                   fit: BoxFit.cover,
                 ),

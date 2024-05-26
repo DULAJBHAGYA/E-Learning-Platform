@@ -2,11 +2,109 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../color.dart';
+import '../../services/countServices.dart';
 
-class UserStats extends StatelessWidget {
-  const UserStats({
-    super.key,
-  });
+class UserStats extends StatefulWidget {
+  const UserStats({Key? key}) : super(key: key);
+
+  @override
+  _UserStatsState createState() => _UserStatsState();
+}
+
+class _UserStatsState extends State<UserStats> {
+  int studentCount = 0;
+  int courseCount = 0;
+  int adminCount = 0;
+  int subscriptionCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchStudentCount();
+    fetchCourseCount();
+    fetchAdminCount();
+    fetchSubscriptionCount();
+  }
+
+  Future<void> fetchStudentCount() async {
+    try {
+      final response = await CountService.instance.getStudentCount();
+
+      if (response != null) {
+        if (response is int) {
+          setState(() {
+            studentCount = response;
+          });
+        } else {
+          throw Exception('Student count is not an integer');
+        }
+      } else {
+        throw Exception('Response is null');
+      }
+    } catch (e) {
+      print('Error fetching student count: $e');
+    }
+  }
+
+  Future<void> fetchCourseCount() async {
+    try {
+      final response = await CountService.instance.getCoursesCount();
+
+      if (response != null) {
+        if (response is int) {
+          setState(() {
+            courseCount = response;
+          });
+        } else {
+          throw Exception('Course count is not an integer');
+        }
+      } else {
+        throw Exception('Response is null');
+      }
+    } catch (e) {
+      print('Error fetching student count: $e');
+    }
+  }
+
+  Future<void> fetchSubscriptionCount() async {
+    try {
+      final response = await CountService.instance.getSubscriptionCount();
+
+      if (response != null) {
+        if (response is int) {
+          setState(() {
+            subscriptionCount = response;
+          });
+        } else {
+          throw Exception('Subscription count is not an integer');
+        }
+      } else {
+        throw Exception('Response is null');
+      }
+    } catch (e) {
+      print('Error fetching subscription count: $e');
+    }
+  }
+
+  Future<void> fetchAdminCount() async {
+    try {
+      final response = await CountService.instance.getAdminsCount();
+
+      if (response != null) {
+        if (response is int) {
+          setState(() {
+            adminCount = response;
+          });
+        } else {
+          throw Exception('Admins count is not an integer');
+        }
+      } else {
+        throw Exception('Response is null');
+      }
+    } catch (e) {
+      print('Error fetching student count: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +130,7 @@ class UserStats extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '176',
+                            courseCount.toString(),
                             style: GoogleFonts.openSans(
                                 fontSize: 30,
                                 fontWeight: FontWeight.w900,

@@ -1,3 +1,4 @@
+import 'package:e_learning/change%20password/studentChangePassword.dart';
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -320,7 +321,29 @@ class _StudentProfileState extends State<StudentProfile> {
               SizedBox(
                 height: 20,
               ),
-              Container(
+              GestureDetector(
+                onTap: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  final user_id = prefs.getInt('user_id');
+
+                  if (user_id != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Studentchangepassword(
+                          username: widget.username,
+                          accessToken: widget.accessToken,
+                          refreshToken: widget.refreshToken,
+                          user_id: user_id,
+                        ),
+                      ),
+                    );
+                  } else {
+                    // Handle the case where user_id is null
+                    print('User ID not found in SharedPreferences');
+                  }
+                },
+                child: Container(
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
@@ -353,9 +376,10 @@ class _StudentProfileState extends State<StudentProfile> {
                             Text(
                               'Change Password',
                               style: GoogleFonts.poppins(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700,
-                                  color: black),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                color: black,
+                              ),
                             ),
                             Spacer(),
                             Container(
@@ -378,7 +402,9 @@ class _StudentProfileState extends State<StudentProfile> {
                         ),
                       ],
                     ),
-                  )),
+                  ),
+                ),
+              ),
               SizedBox(
                 height: 30,
               ),

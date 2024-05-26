@@ -149,6 +149,24 @@ class EnrollmentCard extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  Future<void> _acceptEnrollRequest(BuildContext context) async {
+    try {
+      await EnrollService.instance.editEnrollment(
+        user_id: user_id,
+        active: true,
+        pending: false,
+        course_id: course_id,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Enrollment request accepted')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to accept request: $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -187,7 +205,9 @@ class EnrollmentCard extends StatelessWidget {
                   children: [
                     Spacer(),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _acceptEnrollRequest(context);
+                      },
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.all(5),
                         backgroundColor: white,
