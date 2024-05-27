@@ -126,4 +126,21 @@ class EnrollService {
       rethrow;
     }
   }
+
+  Future<dynamic> fetchEnrollmentbyUserIdnCourseId(int user_id,int course_id, String accessToken) async {
+    try {
+      final response = await _dio.get(
+        '/api/v4/get/subscription?user_id=$user_id&course_id=$course_id',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+          },
+        ),
+      );
+      return response.data;
+    } catch (e) {
+      print('Error fetching user info for username: $user_id - $e');
+      throw e;
+    }
+  }
 }

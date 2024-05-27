@@ -61,6 +61,7 @@ class _AddCoursesState extends State<AddCourses> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: background,
       drawer: NavDrawer(),
       appBar: AppBar(
@@ -150,21 +151,24 @@ class _AddCoursesState extends State<AddCourses> {
           SizedBox(
             height: 20,
           ),
-          SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              physics: AlwaysScrollableScrollPhysics(),
-              child: Row(
-                children: _addedcourses.map((addedcourse) {
-                  return AdminAddedCourseViewCard(
-                    what_will: addedcourse['what_will'] ?? {},
-                    description: addedcourse['description'] ?? 'No Description',
-                    course_id: addedcourse['course_id'] ?? 0,
-                    image: addedcourse['image'] ?? '',
-                    title: addedcourse['title'] ?? 'No Title',
-                    category: addedcourse['category'] ?? 'Uncategorized',
-                  );
-                }).toList(),
-              ))
+          Expanded(
+            child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  children: _addedcourses.map((addedcourse) {
+                    return AdminAddedCourseViewCard(
+                      what_will: addedcourse['what_will'] ?? {},
+                      description:
+                          addedcourse['description'] ?? 'No Description',
+                      course_id: addedcourse['course_id'] ?? 0,
+                      image: addedcourse['image'] ?? '',
+                      title: addedcourse['title'] ?? 'No Title',
+                      catagory: addedcourse['catagory'] ?? 'Uncategorized',
+                    );
+                  }).toList(),
+                )),
+          )
         ]),
       ),
     );
@@ -176,14 +180,14 @@ class AdminAddedCourseViewCard extends StatelessWidget {
   final String description;
   final String image;
   final String title;
-  final String category;
+  final String catagory;
   final Map<String, dynamic> what_will;
 
   const AdminAddedCourseViewCard({
     required this.course_id,
     required this.image,
     required this.title,
-    required this.category,
+    required this.catagory,
     required this.description,
     required this.what_will,
     Key? key,
@@ -192,6 +196,7 @@ class AdminAddedCourseViewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       height: 130,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -215,67 +220,74 @@ class AdminAddedCourseViewCard extends StatelessWidget {
 
             SizedBox(width: 20),
 
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: background,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  category.toUpperCase(),
-                  style: GoogleFonts.openSans(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: science),
-                ),
-              ),
-              SizedBox(height: 5),
-              SizedBox(
-                  width: 200,
-                  child: Text(
-                    course_id.toString() + ') ' + title,
-                    overflow: TextOverflow.clip,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: background,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          catagory.toUpperCase(),
+                          style: GoogleFonts.openSans(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: science),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    '${course_id.toString()}) $title',
+                    overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.openSans(
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
                         color: black),
-                  )),
-              SizedBox(height: 10),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AddMaterial(
-                                username: '',
-                                accessToken: '',
-                                refreshToken: '',
-                                course_id: course_id,
-                              )));
-                },
-                child: Row(
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.all(2),
-                      decoration: BoxDecoration(
-                        color: science,
-                        borderRadius: BorderRadius.circular(5),
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AddMaterial(
+                                        username: '',
+                                        accessToken: '',
+                                        refreshToken: '',
+                                        course_id: course_id,
+                                      )));
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: science,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Text(
+                            'Add Materials',
+                            style: GoogleFonts.openSans(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                color: white),
+                          ),
+                        ),
                       ),
-                      child: Text(
-                        'Add Materials',
-                        style: GoogleFonts.openSans(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: white),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ]),
+                    ],
+                  )
+                ],
+              ),
+            ),
           ])),
     );
   }

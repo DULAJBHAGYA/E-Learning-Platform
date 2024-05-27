@@ -9,30 +9,28 @@ class AssignmentService {
 
   static final AssignmentService _instance = AssignmentService._internal();
 
-
-
   AssignmentService._internal() {
     _dio = Dio(
       BaseOptions(
         baseUrl: baseUrl,
         connectTimeout: Duration(milliseconds: 6000000),
         receiveTimeout: Duration(milliseconds: 6000000),
-        followRedirects: true, 
+        followRedirects: true,
       ),
     );
   }
 
   static AssignmentService get instance => _instance;
 
-
-Future<dynamic> postAssignment(FormData formData, int material_id, int course_id) async {
+  Future<dynamic> postAssignment(
+      FormData formData, int material_id, int course_id) async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? accessToken = prefs.getString('access_token');
 
       if (accessToken == null || accessToken.isEmpty) {
         throw Exception('Access token not found');
-      } 
+      }
 
       _dio.options.headers['Authorization'] = 'Bearer $accessToken';
 
@@ -70,10 +68,6 @@ Future<dynamic> postAssignment(FormData formData, int material_id, int course_id
     }
   }
 
-
-
-
-
   Future<dynamic> fetchCourseDetails() async {
     try {
       final response = await _dio.get('/courses');
@@ -104,7 +98,8 @@ Future<dynamic> postAssignment(FormData formData, int material_id, int course_id
     }
   }
 
-  Future<dynamic> updateCourseById(int course_id, String title, String description, String type) async {
+  Future<dynamic> updateCourseById(
+      int course_id, String title, String description, String type) async {
     try {
       final response = await _dio.put(
         '/course/$course_id',
@@ -126,31 +121,29 @@ Future<dynamic> postAssignment(FormData formData, int material_id, int course_id
     }
   }
 
- Future<dynamic> getResourceById(int materialId) async {
-  try {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? accessToken = prefs.getString('access_token');
+  Future<dynamic> getAssignmentByMaterialId(int material_id) async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? accessToken = prefs.getString('access_token');
 
-    Map<String, dynamic> headers = {};
-    if (accessToken != null) {
-      headers['Authorization'] = 'Bearer $accessToken';
+      Map<String, dynamic> headers = {};
+      if (accessToken != null) {
+        headers['Authorization'] = 'Bearer $accessToken';
+      }
+
+      final response = await _dio.get(
+        '/api/v3/list/assignment/bymaterial?material_id=$material_id',
+        options: Options(headers: headers),
+      );
+
+      return response.data;
+    } on DioError catch (e) {
+      print("Dio Error: $e");
+      print("Response Data: ${e.response?.data}");
+      throw Exception(e.response?.data['detail'] ?? e.toString());
+    } catch (e) {
+      print("Unexpected Error: $e");
+      rethrow;
     }
-
-    final response = await _dio.get(
-      '/resources/bymaterial?material_id=$materialId&page_id=1&page_size=10',
-      options: Options(headers: headers),
-    );
-
-    return response.data;
-  } on DioError catch (e) {
-    print("Dio Error: $e");
-    print("Response Data: ${e.response?.data}");
-    throw Exception(e.response?.data['detail'] ?? e.toString());
-  } catch (e) {
-    print("Unexpected Error: $e");
-    rethrow;
   }
-}
-
-
 }

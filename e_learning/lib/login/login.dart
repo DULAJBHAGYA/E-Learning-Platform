@@ -337,17 +337,17 @@ class _LoginState extends State<Login> {
             return AlertDialog(
               title: Text(
                 'Login failed',
-                style: GoogleFonts.nunito(
+                style: GoogleFonts.poppins(
                   fontWeight: FontWeight.bold,
-                  fontSize: 20,
+                  fontSize: 18,
                   color: black,
                 ),
               ),
               content: Text(
                 'Invalid user name or password. ',
-                style: GoogleFonts.nunito(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                style: GoogleFonts.poppins(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
                   color: black,
                 ),
               ),

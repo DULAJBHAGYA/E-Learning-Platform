@@ -176,7 +176,7 @@ class _StudentchangepasswordState extends State<Studentchangepassword> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const AdminProfile(
+                    builder: (context) => const StudentProfile(
                           username: '',
                           accessToken: '',
                           refreshToken: '',
@@ -274,7 +274,50 @@ class _StudentchangepasswordState extends State<Studentchangepassword> {
                         ),
                         child: Icon(Iconsax.password_check),
                       ),
-                      labelText: 'Password',
+                      labelText: 'Current Password',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                        color: lightgrey,
+                      ),
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          setState(() {
+                            _obscurePassword = !_obscurePassword;
+                          });
+                        },
+                        child: ColorFiltered(
+                          colorFilter: ColorFilter.mode(
+                            lightgrey,
+                            BlendMode.srcIn,
+                          ),
+                          child: Icon(_obscurePassword
+                              ? Iconsax.eye_slash
+                              : Iconsax.eye),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    controller: passwordController,
+                    obscureText: _obscurePassword,
+                    validator: _validatePassword,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 2, color: lightgrey),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      prefixIcon: ColorFiltered(
+                        colorFilter: ColorFilter.mode(
+                          lightgrey,
+                          BlendMode.srcIn,
+                        ),
+                        child: Icon(Iconsax.password_check),
+                      ),
+                      labelText: 'New Password',
                       labelStyle: GoogleFonts.poppins(
                         fontSize: 15,
                         fontWeight: FontWeight.w400,

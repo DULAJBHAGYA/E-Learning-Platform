@@ -50,7 +50,8 @@ class MaterialService {
 
         return redirectedResponse.data;
       } else {
-        throw Exception('Failed to post course. Status code: ${response.statusCode}');
+        throw Exception(
+            'Failed to post course. Status code: ${response.statusCode}');
       }
     } on DioError catch (e) {
       if (e.response != null && e.response!.statusCode == 404) {
@@ -65,8 +66,6 @@ class MaterialService {
       rethrow;
     }
   }
-
-
 
   Future<dynamic> fetchCourseDetails() async {
     try {
@@ -121,7 +120,8 @@ class MaterialService {
     }
   }
 
-  Future<dynamic> getMaterialByCourseId(int course_id) async {
+  Future<dynamic> getMaterialByCourseId(int course_id,
+    ) async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? accessToken = prefs.getString('access_token');
@@ -132,7 +132,9 @@ class MaterialService {
 
       _dio.options.headers['Authorization'] = 'Bearer $accessToken';
 
-      final response = await _dio.get('/api/v3/list/material/bycourse?course_id=$course_id',);
+      final response = await _dio.get(
+        '/api/v3/list/material/bycourse?course_id=$course_id',
+      );
 
       return response.data;
     } on DioError catch (e) {

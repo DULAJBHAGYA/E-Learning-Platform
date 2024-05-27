@@ -11,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 import '../../../color.dart';
+import 'addAssignment.dart';
 
 class NewAssignment extends StatefulWidget {
   const NewAssignment({
@@ -47,9 +48,8 @@ class _NewAssignmentState extends State<NewAssignment> {
   @override
   void initState() {
     super.initState();
-    _courseidController.text = widget.course_id.toString(); 
+    _courseidController.text = widget.course_id.toString();
     _materialidController.text = widget.material_id.toString();
-    
   }
 
   Future<void> _pickFile() async {
@@ -123,7 +123,18 @@ class _NewAssignmentState extends State<NewAssignment> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddAssignment(
+                      username: widget.username,
+                      accessToken: widget.accessToken,
+                      refreshToken: widget.refreshToken,
+                      course_id: widget.course_id,
+                      material_id: widget.material_id,
+                    ),
+                  ),
+                );
               },
               child: Text('OK'),
             ),
@@ -165,13 +176,36 @@ class _NewAssignmentState extends State<NewAssignment> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Add Assignment',
-                  style: GoogleFonts.openSans(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(0),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: SizedBox(
+                          height: 30,
+                          width: 30,
+                          child: Image.asset(
+                            '/logos/logo.png',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      'Add New Material',
+                      style: GoogleFonts.poppins(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: black,
+                      ),
+                    ),
+                  ],
                 ),
+                SizedBox(height: 20),
                 TextFormField(
                   controller: _courseidController,
                   keyboardType: TextInputType.number,
@@ -253,7 +287,8 @@ class _NewAssignmentState extends State<NewAssignment> {
                             borderRadius: BorderRadius.circular(20.0),
                           ),
                         ),
-                        padding: MaterialStateProperty.all(EdgeInsets.all(15.0)),
+                        padding:
+                            MaterialStateProperty.all(EdgeInsets.all(15.0)),
                       ),
                       child: Text(
                         'CANCEL',
@@ -270,13 +305,18 @@ class _NewAssignmentState extends State<NewAssignment> {
                         if (_formKey.currentState!.validate()) {
                           try {
                             final FormData formData = _buildFormData();
-                            final response = await AssignmentService.instance.postAssignment(formData, widget.course_id, widget.material_id);
+                            final response = await AssignmentService.instance
+                                .postAssignment(formData, widget.course_id,
+                                    widget.material_id);
 
-                            if (response.containsKey('assignment_id') && response['assignment_id'] != null) {
-                              final courseId = int.parse(response['assignment_id'].toString());
+                            if (response.containsKey('assignment_id') &&
+                                response['assignment_id'] != null) {
+                              final courseId = int.parse(
+                                  response['assignment_id'].toString());
                               _showSuccessDialog(courseId);
                             } else {
-                              _showErrorDialog("Assignment ID not found in the response");
+                              _showErrorDialog(
+                                  "Assignment ID not found in the response");
                             }
                           } catch (e) {
                             print('Error: $e');
@@ -291,7 +331,8 @@ class _NewAssignmentState extends State<NewAssignment> {
                             borderRadius: BorderRadius.circular(20.0),
                           ),
                         ),
-                        padding: MaterialStateProperty.all(EdgeInsets.all(15.0)),
+                        padding:
+                            MaterialStateProperty.all(EdgeInsets.all(15.0)),
                       ),
                       child: Text(
                         'SAVE',

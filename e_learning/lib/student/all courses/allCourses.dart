@@ -98,7 +98,7 @@ class _StdAllCoursesState extends State<StdAllCourses> {
                       course_id: course['course_id'] ?? 0,
                       image: course['image'] ?? '',
                       title: course['title'] ?? 'No Title',
-                      category: course['category'] ?? 'Uncategorized',
+                      catagory: course['catagory'] ?? 'Uncategorized',
                     );
                   }).toList(),
                 ),
@@ -117,14 +117,14 @@ class CourseViewCard extends StatelessWidget {
   final String description;
   final String image;
   final String title;
-  final String category;
+  final String catagory;
   final Map<String, dynamic> what_will;
 
   const CourseViewCard({
     required this.course_id,
     required this.image,
     required this.title,
-    required this.category,
+    required this.catagory,
     required this.description,
     required this.what_will,
     Key? key,
@@ -132,7 +132,7 @@ class CourseViewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Container(margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -181,7 +181,7 @@ class CourseViewCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
-                            category.toUpperCase(),
+                            catagory.toUpperCase(),
                             style: GoogleFonts.poppins(
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
@@ -250,7 +250,7 @@ class CourseViewCard extends StatelessWidget {
                                   course_id: course_id,
                                   image: image,
                                   title: title,
-                                  category: category,
+                                  catagory: catagory,
                                   description: description,
                                   what_will: what_will,
                                 ),

@@ -15,6 +15,7 @@ import '../admin courses/adminCourses.dart';
 import '../admin profile/adminProfile.dart';
 import '../admin students/adminStudents.dart';
 import '../enrollments/enrolments.dart';
+import '../submissions/submissions.dart';
 import 'adminDashCourses.dart';
 import 'adminDashStudents.dart';
 import 'adminInfo.dart';
@@ -40,6 +41,7 @@ class _AdminDashState extends State<AdminDash> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late String first_name = '';
   late String last_name = '';
+  late String picture = '';
 
   @override
   void initState() {
@@ -58,8 +60,9 @@ class _AdminDashState extends State<AdminDash> {
             await UserService.instance.fetchUsersById(user_id, accessToken);
 
         setState(() {
-          first_name = response['User']['first_name'];
-          last_name = response['User']['last_name'];
+          first_name = response['GetUserIDRow']['first_name'];
+          last_name = response['GetUserIDRow']['last_name'];
+          picture = response['GetUserIDRow']['picture'];
         });
 
         print('Fetched User: $first_name $last_name');
@@ -109,7 +112,6 @@ class _AdminDashState extends State<AdminDash> {
                 height: 20,
               ),
               Expanded(
-                // Added Expanded to allow ListView to take up remaining space
                 child: SingleChildScrollView(
                   physics: AlwaysScrollableScrollPhysics(),
                   scrollDirection: Axis.vertical,
@@ -136,17 +138,88 @@ class _AdminDashState extends State<AdminDash> {
   }
 }
 
-class NavDrawer extends StatelessWidget {
+class NavDrawer extends StatefulWidget {
+  @override
+  _NavDrawerState createState() => _NavDrawerState();
+}
+
+class _NavDrawerState extends State<NavDrawer> {
+  int _hoverIndex = -1;
+  int _selectedIndex = -1;
+
+  void _onEnter(int index) {
+    setState(() {
+      _hoverIndex = index;
+    });
+  }
+
+  void _onExit() {
+    setState(() {
+      _hoverIndex = -1;
+    });
+  }
+
+  void _onTap(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  Widget _buildListTile({
+    required int index,
+    required IconData icon,
+    required String title,
+    required Widget destination,
+  }) {
+    bool isHovered = _hoverIndex == index;
+    bool isSelected = _selectedIndex == index;
+
+    return MouseRegion(
+      onEnter: (_) => _onEnter(index),
+      onExit: (_) => _onExit(),
+      child: GestureDetector(
+        onTap: () {
+          _onTap(index);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => destination),
+          );
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: isHovered || isSelected ? darkblue : white,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: ListTile(
+            leading: Icon(
+              icon,
+              size: 20,
+              color: isHovered || isSelected ? white : black,
+            ),
+            title: Text(
+              title,
+              style: GoogleFonts.poppins(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: isHovered || isSelected ? white : black,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: white,
       child: ListView(
         padding: EdgeInsets.all(20),
         children: <Widget>[
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-            ),
+                borderRadius: BorderRadius.circular(10), color: white),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.asset(
@@ -156,159 +229,75 @@ class NavDrawer extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            height: 20,
+          SizedBox(height: 20),
+          _buildListTile(
+            index: 0,
+            icon: Iconsax.home,
+            title: 'Dashboard',
+            destination:
+                AdminDash(username: '', accessToken: '', refreshToken: ''),
           ),
-          ListTile(
-            leading: Icon(Iconsax.home),
-            title: Text(
-              'Dashboard',
-              style: GoogleFonts.nunito(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: black,
-              ),
-            ),
-            onTap: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AdminDash(
-                        username: '', accessToken: '', refreshToken: '')),
-              ),
-            },
+          SizedBox(height: 10),
+          _buildListTile(
+            index: 1,
+            icon: Iconsax.book,
+            title: 'Courses',
+            destination:
+                AdminCourses(username: '', accessToken: '', refreshToken: ''),
           ),
-          ListTile(
-            leading: Icon(Iconsax.book),
-            title: Text(
-              'Courses',
-              style: GoogleFonts.nunito(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: black,
-              ),
-            ),
-            onTap: () => {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AdminCourses(
-                        username: '', accessToken: '', refreshToken: ''),
-                  )),
-            },
+          SizedBox(height: 10),
+          _buildListTile(
+            index: 2,
+            icon: Iconsax.book_saved,
+            title: 'Add Courses',
+            destination:
+                AddCourses(username: '', accessToken: '', refreshToken: ''),
           ),
-          ListTile(
-            leading: Icon(Iconsax.book_saved),
-            title: Text(
-              'Add Courses',
-              style: GoogleFonts.nunito(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: black,
-              ),
-            ),
-            onTap: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddCourses(
-                      username: '', accessToken: '', refreshToken: ''),
-                ),
-              ),
-            },
+          SizedBox(height: 10),
+          _buildListTile(
+            index: 3,
+            icon: Iconsax.people,
+            title: 'Students',
+            destination:
+                AdminStudents(username: '', accessToken: '', refreshToken: ''),
           ),
-          ListTile(
-            leading: Icon(Iconsax.people),
-            title: Text(
-              'Students',
-              style: GoogleFonts.nunito(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: black,
-              ),
-            ),
-            onTap: () => {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AdminStudents(
-                        username: '', accessToken: '', refreshToken: ''),
-                  )),
-            },
+          SizedBox(height: 10),
+          _buildListTile(
+            index: 4,
+            icon: Iconsax.add,
+            title: 'Enrollments',
+            destination:
+                Enrollments(username: '', accessToken: '', refreshToken: ''),
           ),
-          ListTile(
-            leading: Icon(Iconsax.add),
-            title: Text(
-              'Enrollments',
-              style: GoogleFonts.nunito(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: black,
-              ),
-            ),
-            onTap: () => {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Enrollments(
-                        username: '', accessToken: '', refreshToken: ''),
-                  )),
-            },
+          SizedBox(height: 10),
+          _buildListTile(
+              index: 5,
+              icon: Iconsax.document,
+              title: 'Submissions',
+              destination:
+                  Submissions(username: '', accessToken: '', refreshToken: '')),
+          SizedBox(height: 10),
+          _buildListTile(
+            index: 6,
+            icon: Iconsax.people,
+            title: 'Admins',
+            destination:
+                Admins(username: '', accessToken: '', refreshToken: ''),
           ),
-          ListTile(
-            leading: Icon(Iconsax.people),
-            title: Text(
-              'Admins',
-              style: GoogleFonts.nunito(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: black,
-              ),
-            ),
-            onTap: () => {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        Admins(username: '', accessToken: '', refreshToken: ''),
-                  )),
-            },
+          SizedBox(height: 10),
+          _buildListTile(
+            index: 7,
+            icon: Iconsax.user,
+            title: 'Profile',
+            destination:
+                AdminProfile(username: '', accessToken: '', refreshToken: ''),
           ),
-          ListTile(
-            leading: Icon(Iconsax.user),
-            title: Text(
-              'Profile',
-              style: GoogleFonts.poppins(
-                  fontSize: 18, fontWeight: FontWeight.w600, color: black),
-            ),
-            onTap: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const AdminProfile(
-                          username: '',
-                          accessToken: '',
-                          refreshToken: '',
-                        )),
-              )
-            },
-          ),
-          ListTile(
-            leading: Icon(Iconsax.logout),
-            title: Text(
-              'Logout',
-              style: GoogleFonts.nunito(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: black,
-              ),
-            ),
-            onTap: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Login()),
-              ),
-            },
+          SizedBox(height: 10),
+          _buildListTile(
+            index: 8,
+            icon: Iconsax.logout,
+            title: 'Logout',
+            destination: Login(),
           ),
         ],
       ),
