@@ -45,7 +45,10 @@ class _StudentHomeState extends State<StudentHome> {
               SizedBox(height: 10),
 
               //topcategories
-              Topcategories(),
+              Topcategories(
+                  username: widget.username,
+                  accessToken: widget.accessToken,
+                  refreshToken: widget.refreshToken),
               SizedBox(height: 30),
 
               //course filter
@@ -53,7 +56,10 @@ class _StudentHomeState extends State<StudentHome> {
 
               SizedBox(height: 10),
 
-              CourseList(),
+              CourseList(
+                  username: widget.username,
+                  accessToken: widget.accessToken,
+                  refreshToken: widget.refreshToken),
             ],
           ),
         ),

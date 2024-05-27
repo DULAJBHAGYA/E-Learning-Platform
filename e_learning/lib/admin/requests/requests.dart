@@ -11,8 +11,8 @@ import '../../color.dart';
 import '../../student/course display/courseDescription.dart';
 import '../admin home/adminDash.dart';
 
-class AdminCourses extends StatefulWidget {
-  const AdminCourses({
+class Requests extends StatefulWidget {
+  const Requests({
     Key? key,
     required this.username,
     required this.accessToken,
@@ -24,26 +24,26 @@ class AdminCourses extends StatefulWidget {
   final String refreshToken;
 
   @override
-  _AdminCoursesState createState() => _AdminCoursesState();
+  _RequestsState createState() => _RequestsState();
 }
 
-class _AdminCoursesState extends State<AdminCourses>
+class _RequestsState extends State<Requests>
     with SingleTickerProviderStateMixin {
-  List<dynamic> _courses = [];
+  List<dynamic> _submissions = [];
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    fetchCourses();
+    fetchAsiignmentsByAdminId();
   }
 
-  Future<void> fetchCourses() async {
+  Future<void> fetchAsiignmentsByAdminId() async {
     try {
       final courseData = await CourseService.instance.fetchAllCourses();
       setState(() {
-        _courses = courseData ?? [];
+        _submissions = courseData ?? [];
       });
     } catch (e) {
       print('Error fetching courses: $e');
@@ -53,7 +53,7 @@ class _AdminCoursesState extends State<AdminCourses>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey, // Assign the key to the Scaffold
+      key: _scaffoldKey,
       backgroundColor: background,
       drawer: NavDrawer(),
       appBar: AppBar(
@@ -62,10 +62,17 @@ class _AdminCoursesState extends State<AdminCourses>
         leading: IconButton(
           icon: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Icon(Iconsax.menu_1, size: 30, color: black),
+            child: Icon(Iconsax.arrow_left_2, size: 30, color: black),
           ),
           onPressed: () {
-            _scaffoldKey.currentState?.openDrawer();
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AdminDash(
+                          username: '',
+                          accessToken: '',
+                          refreshToken: '',
+                        )));
           },
         ),
       ),
@@ -94,7 +101,7 @@ class _AdminCoursesState extends State<AdminCourses>
                 ),
                 SizedBox(width: 10),
                 Text(
-                  'All Courses',
+                  'Requests',
                   style: GoogleFonts.poppins(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -103,21 +110,20 @@ class _AdminCoursesState extends State<AdminCourses>
                 ),
               ],
             ),
-            SizedBox(height: 10),
-            CustomSearchBar(),
             SizedBox(height: 20),
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Column(
-                  children: _courses.map((course) {
+                  children: _submissions.map((submission) {
                     return AdminCourseView(
-                      what_will: course['what_will'] ?? {},
-                      description: course['description'] ?? 'No Description',
-                      course_id: course['course_id'] ?? 0,
-                      image: course['image'] ?? '',
-                      title: course['title'] ?? 'No Title',
-                      catagory: course['catagory'] ?? 'Uncategorized',
+                      what_will: submission['what_will'] ?? {},
+                      description:
+                          submission['description'] ?? 'No Description',
+                      course_id: submission['course_id'] ?? 0,
+                      image: submission['image'] ?? '',
+                      title: submission['title'] ?? 'No Title',
+                      catagory: submission['catagory'] ?? 'Uncategorized',
                     );
                   }).toList(),
                 ),
@@ -151,7 +157,7 @@ class AdminCourseView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      margin: EdgeInsets.all(10),
       width: MediaQuery.of(context).size.width,
       height: 250,
       decoration: BoxDecoration(

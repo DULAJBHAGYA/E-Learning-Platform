@@ -200,12 +200,13 @@ class AdminAddedCourseViewCard extends StatelessWidget {
       height: 130,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: white,
+        color: Colors.white,
       ),
       child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(children: [
-            //image
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          children: [
+            // Image
             Container(
               height: 120,
               width: 120,
@@ -217,9 +218,7 @@ class AdminAddedCourseViewCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
-
             SizedBox(width: 20),
-
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,11 +234,75 @@ class AdminAddedCourseViewCard extends StatelessWidget {
                         ),
                         child: Text(
                           catagory.toUpperCase(),
-                          style: GoogleFonts.openSans(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: science),
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: lightgrey,
+                          ),
                         ),
+                      ),
+                      Spacer(),
+                      PopupMenuButton<String>(
+                        icon: Icon(Icons.more_vert),
+                        onSelected: (value) async {
+                          switch (value) {
+                            case 'Edit Course':
+                              // Handle Edit Course action
+                              print('Edit Course');
+                              break;
+                            case 'Delete Course':
+                              // Handle Delete Course action
+                              bool confirmed = await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text('Confirm Deletion'),
+                                    content: Text(
+                                        'Are you sure you want to delete this course?'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(false),
+                                        child: Text('No'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(true),
+                                        child: Text('Yes'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                              if (confirmed) {
+                                try {
+                                  await CourseService.instance
+                                      .deleteCourseById(course_id);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            'Course deleted successfully')),
+                                  );
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            'Failed to delete course: $e')),
+                                  );
+                                }
+                              }
+                              break;
+                          }
+                        },
+                        itemBuilder: (BuildContext context) {
+                          return {'Edit Course', 'Delete Course'}
+                              .map((String choice) {
+                            return PopupMenuItem<String>(
+                              value: choice,
+                              child: Text(choice),
+                            );
+                          }).toList();
+                        },
                       ),
                     ],
                   ),
@@ -247,48 +310,54 @@ class AdminAddedCourseViewCard extends StatelessWidget {
                   Text(
                     '${course_id.toString()}) $title',
                     overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.openSans(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: black),
+                    style: GoogleFonts.poppins(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      color: black,
+                    ),
                   ),
                   SizedBox(height: 10),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => AddMaterial(
-                                        username: '',
-                                        accessToken: '',
-                                        refreshToken: '',
-                                        course_id: course_id,
-                                      )));
-                        },
-                        child: Container(
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddMaterial(
+                            username: '',
+                            accessToken: '',
+                            refreshToken: '',
+                            course_id: course_id,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Container(
                           alignment: Alignment.center,
-                          padding: EdgeInsets.all(2),
+                          padding: EdgeInsets.all(3),
                           decoration: BoxDecoration(
-                            color: science,
+                            color: darkblue,
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: Text(
                             'Add Materials',
-                            style: GoogleFonts.openSans(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                                color: white),
+                            style: GoogleFonts.poppins(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: white,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  )
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
-          ])),
+          ],
+        ),
+      ),
     );
   }
 }

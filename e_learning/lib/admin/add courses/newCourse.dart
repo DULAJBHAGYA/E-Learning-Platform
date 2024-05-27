@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
-import 'dart:io'; 
+import 'dart:io';
 import '../../color.dart';
 
 class NewCourse extends StatefulWidget {
@@ -34,8 +34,9 @@ class _NewCourseState extends State<NewCourse> {
   TextEditingController _descriptionController = TextEditingController();
   TextEditingController _useridController = TextEditingController();
   TextEditingController _aboutCourseController = TextEditingController();
+  TextEditingController _categoryController = TextEditingController();
 
- int? user_id;
+  int? user_id;
   File? _selectedImage;
   Uint8List? _selectedImageBytes;
   List<String> _typeOptions = ['Science', 'Math', 'IT', 'Language', 'Other'];
@@ -90,22 +91,22 @@ class _NewCourseState extends State<NewCourse> {
     }
   }
 
-
-
   FormData _buildFormData() {
-  return FormData.fromMap({
-    'user_id': _useridController.text.trim(),
-    'title': _titleController.text.trim(),
-    'description': _descriptionController.text.trim(),
-    'what_will': _aboutCourseController.text.trim(),
-    'category': _selectedType!, 
-    'image': _selectedImageBytes != null ? MultipartFile.fromBytes(_selectedImageBytes!, filename: 'image.jpg') : null,
-  });
-}
+    return FormData.fromMap({
+      'user_id': _useridController.text.trim(),
+      'title': _titleController.text.trim(),
+      'description': _descriptionController.text.trim(),
+      'what_will': _aboutCourseController.text.trim(),
+      'catagory': _categoryController.text.trim(),
+      'image': _selectedImageBytes != null
+          ? MultipartFile.fromBytes(_selectedImageBytes!, filename: 'image.jpg')
+          : null,
+    });
+  }
 
   void _showSuccessDialog(int courseId) {
     SharedPreferences.getInstance().then((prefs) {
-      prefs.setInt('course_id', courseId); 
+      prefs.setInt('course_id', courseId);
     });
 
     showDialog(
@@ -223,26 +224,9 @@ class _NewCourseState extends State<NewCourse> {
                   decoration: InputDecoration(labelText: 'Title'),
                 ),
                 SizedBox(height: 20),
-                DropdownButtonFormField<String>(
-                  value: _selectedType,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedType = newValue;
-                    });
-                  },
-                  items: _typeOptions.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
+                TextFormField(
+                  controller: _categoryController,
                   decoration: InputDecoration(labelText: 'Category'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Category is required';
-                    }
-                    return null;
-                  },
                 ),
                 SizedBox(height: 20),
                 TextFormField(
@@ -271,7 +255,8 @@ class _NewCourseState extends State<NewCourse> {
                             borderRadius: BorderRadius.circular(20.0),
                           ),
                         ),
-                        padding: MaterialStateProperty.all(EdgeInsets.all(15.0),
+                        padding: MaterialStateProperty.all(
+                          EdgeInsets.all(15.0),
                         ),
                       ),
                       child: Text(
@@ -290,13 +275,17 @@ class _NewCourseState extends State<NewCourse> {
                           try {
                             final FormData formData = _buildFormData();
 
-                            final response = await CourseService.instance.postCourse(formData, user_id!);
+                            final response = await CourseService.instance
+                                .postCourse(formData, user_id!);
 
-                            if (response.containsKey('course_id') && response['course_id'] != null) {
-                              final courseId = int.parse(response['course_id'].toString());
+                            if (response.containsKey('course_id') &&
+                                response['course_id'] != null) {
+                              final courseId =
+                                  int.parse(response['course_id'].toString());
                               _showSuccessDialog(courseId);
                             } else {
-                              _showErrorDialog("Course ID not found in the response");
+                              _showErrorDialog(
+                                  "Course ID not found in the response");
                             }
                           } catch (e) {
                             print('Error: $e');
@@ -334,4 +323,3 @@ class _NewCourseState extends State<NewCourse> {
     );
   }
 }
-

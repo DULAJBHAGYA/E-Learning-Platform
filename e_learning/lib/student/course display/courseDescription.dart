@@ -104,7 +104,6 @@ class _CourseDescriptionState extends State<CourseDescription>
         child: Padding(
           padding: const EdgeInsets.all(0),
           child: Container(
-            // Corrected this line
             child: Column(
               children: [
                 Stack(
@@ -386,7 +385,7 @@ class _CourseDescriptionState extends State<CourseDescription>
         },
         child: Text(
           'Enroll Now',
-          style: GoogleFonts.nunito(
+          style: GoogleFonts.poppins(
             fontSize: 15,
             fontWeight: FontWeight.w600,
             color: darkblue,
@@ -399,16 +398,16 @@ class _CourseDescriptionState extends State<CourseDescription>
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           backgroundColor: white,
           shape: StadiumBorder(
-            side: BorderSide(color: darkblue, width: 2),
+            side: BorderSide(color: pendingColor, width: 2),
           ),
         ),
         onPressed: null,
         child: Text(
           'Pending',
-          style: GoogleFonts.nunito(
+          style: GoogleFonts.poppins(
             fontSize: 15,
-            fontWeight: FontWeight.w600,
-            color: darkblue,
+            fontWeight: FontWeight.bold,
+            color: pendingColor,
           ),
         ),
       );
@@ -431,9 +430,9 @@ class _CourseDescriptionState extends State<CourseDescription>
         },
         child: Text(
           'Get Started',
-          style: GoogleFonts.nunito(
+          style: GoogleFonts.poppins(
             fontSize: 15,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.bold,
             color: darkblue,
           ),
         ),

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import '../../color.dart';
+import '../../services/categoryServices.dart';
 import '../../shared/bottomNavBAr.dart';
 
 class StdAllCourses extends StatefulWidget {
@@ -85,7 +86,11 @@ class _StdAllCoursesState extends State<StdAllCourses> {
             SizedBox(height: 10),
             CustomSearchBar(),
             SizedBox(height: 20),
-            HorizontalListview(),
+            HorizontalListview(
+              username: '',
+              accessToken: '',
+              refreshToken: '',
+            ),
             SizedBox(height: 20),
             Expanded(
               child: SingleChildScrollView(
@@ -132,7 +137,8 @@ class CourseViewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -287,10 +293,44 @@ class CourseViewCard extends StatelessWidget {
   }
 }
 
-class HorizontalListview extends StatelessWidget {
+class HorizontalListview extends StatefulWidget {
   const HorizontalListview({
-    super.key,
-  });
+    Key? key,
+    required this.username,
+    required this.accessToken,
+    required this.refreshToken,
+  }) : super(key: key);
+
+  final String username;
+  final String accessToken;
+  final String refreshToken;
+
+  @override
+  _HorizontalListviewState createState() => _HorizontalListviewState();
+}
+
+class _HorizontalListviewState extends State<HorizontalListview> {
+  List<String> _categories = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCategories();
+  }
+
+  Future<void> fetchCategories() async {
+    try {
+      final categoryData = await CategoryServices.instance.fetchAllCategories();
+      setState(() {
+        _categories = ['ALL COURSES', ...List<String>.from(categoryData ?? [])];
+      });
+    } catch (e) {
+      print('Error fetching categories: $e');
+      setState(() {
+        _categories = ['ALL COURSES'];
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -301,23 +341,14 @@ class HorizontalListview extends StatelessWidget {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: [
-                CategoryChip(
-                  label: 'ALL COURSES',
-                ),
-                SizedBox(width: 10),
-                CategoryChip(label: 'IT'),
-                SizedBox(width: 10),
-                CategoryChip(label: 'SCIENCE'),
-                SizedBox(width: 10),
-                CategoryChip(label: 'MATH'),
-                SizedBox(width: 10),
-                CategoryChip(label: 'LANGUAGE'),
-                SizedBox(width: 10),
-                CategoryChip(label: 'OTHER'),
-              ],
+              children: _categories.map((catagory) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: CategoryChip(label: catagory),
+                );
+              }).toList(),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -343,7 +374,7 @@ class CategoryChip extends StatelessWidget {
         border: Border.all(color: blue, width: 2),
       ),
       child: Text(
-        label,
+        label.toUpperCase(),
         style: GoogleFonts.poppins(
           fontSize: 12,
           fontWeight: FontWeight.w700,

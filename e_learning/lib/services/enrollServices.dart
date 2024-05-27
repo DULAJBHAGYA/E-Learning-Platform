@@ -127,7 +127,8 @@ class EnrollService {
     }
   }
 
-  Future<dynamic> fetchEnrollmentbyUserIdnCourseId(int user_id,int course_id, String accessToken) async {
+  Future<dynamic> fetchEnrollmentbyUserIdnCourseId(
+      int user_id, int course_id, String accessToken) async {
     try {
       final response = await _dio.get(
         '/api/v4/get/subscription?user_id=$user_id&course_id=$course_id',
