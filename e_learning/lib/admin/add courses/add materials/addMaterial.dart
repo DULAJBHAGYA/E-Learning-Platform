@@ -213,7 +213,7 @@ class AdminAddedMaterialViewCard extends StatelessWidget {
                 Text(
                   '$material_id) $title',
                   overflow: TextOverflow.clip,
-                  style: GoogleFonts.openSans(
+                  style: GoogleFonts.poppins(
                       fontSize: 15, fontWeight: FontWeight.bold, color: black),
                 ),
                 SizedBox(height: 10),
@@ -234,16 +234,16 @@ class AdminAddedMaterialViewCard extends StatelessWidget {
                   },
                   child: Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.all(2),
+                    padding: EdgeInsets.all(3),
                     decoration: BoxDecoration(
-                      color: science,
+                      color: darkblue,
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Text(
                       'Add Assignment',
-                      style: GoogleFonts.openSans(
+                      style: GoogleFonts.poppins(
                           fontSize: 15,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.bold,
                           color: white),
                     ),
                   ),

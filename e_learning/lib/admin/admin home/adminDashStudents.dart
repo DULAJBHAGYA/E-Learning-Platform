@@ -2,11 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../color.dart';
+import '../../services/studentServicecs.dart';
+import '../admin students/adminStudents.dart';
 
-class AdminDashStudents extends StatelessWidget {
+class AdminDashStudents extends StatefulWidget {
   const AdminDashStudents({
-    super.key,
-  });
+    Key? key,
+    required this.username,
+    required this.accessToken,
+    required this.refreshToken,
+  }) : super(key: key);
+
+  final String username;
+  final String accessToken;
+  final String refreshToken;
+
+  @override
+  _AdminDashStudentsState createState() => _AdminDashStudentsState();
+}
+
+class _AdminDashStudentsState extends State<AdminDashStudents> {
+  List<dynamic> _students = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchStudents();
+  }
+
+  Future<void> fetchStudents() async {
+    try {
+      final studentData = await StudentService.instance.fetchAllStudents();
+      setState(() {
+        _students = studentData ?? [];
+      });
+    } catch (e) {
+      print('Error fetching students: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,27 +62,40 @@ class AdminDashStudents extends StatelessWidget {
                         color: black),
                   ),
                   Spacer(),
-                  Text(
-                    'View all',
-                    style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: darkblue),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AdminStudents(
+                                    username: widget.username,
+                                    accessToken: widget.accessToken,
+                                    refreshToken: widget.refreshToken,
+                                  )));
+                    },
+                    child: Text(
+                      'View all',
+                      style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          color: darkblue),
+                    ),
                   ),
                 ],
               ),
               SizedBox(
                 height: 10,
               ),
-              AdminDashStudentsDisplayCard(),
-              SizedBox(
-                height: 5,
-              ),
-              AdminDashStudentsDisplayCard(),
-              SizedBox(
-                height: 5,
-              ),
-              AdminDashStudentsDisplayCard(),
+              Column(
+                children: _students.take(3).map((student) {
+                  return AdminDashStudentsDisplayCard(
+                    user_name: student['user_name'] ?? 'N/A',
+                    email: student['email'] ?? 'N/A',
+                    first_name: student['first_name'] ?? 'N/A',
+                    last_name: student['last_name'] ?? 'N/A',
+                  );
+                }).toList(),
+              )
             ],
           ),
         ));
@@ -57,9 +103,18 @@ class AdminDashStudents extends StatelessWidget {
 }
 
 class AdminDashStudentsDisplayCard extends StatelessWidget {
+  final String email;
+  final String first_name;
+  final String last_name;
+  final String user_name;
+
   const AdminDashStudentsDisplayCard({
-    super.key,
-  });
+    required this.user_name,
+    required this.email,
+    required this.first_name,
+    required this.last_name,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +144,7 @@ class AdminDashStudentsDisplayCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Dulaj Bhagya',
+                          '$first_name $last_name',
                           style: GoogleFonts.poppins(
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
@@ -99,7 +154,7 @@ class AdminDashStudentsDisplayCard extends StatelessWidget {
                           height: 5,
                         ),
                         Text(
-                          'dbhagya',
+                          '$user_name',
                           style: GoogleFonts.poppins(
                               fontSize: 12,
                               fontWeight: FontWeight.w400,
@@ -109,7 +164,7 @@ class AdminDashStudentsDisplayCard extends StatelessWidget {
                           height: 5,
                         ),
                         Text(
-                          'dulajupananda@gmail.com',
+                          '$email',
                           style: GoogleFonts.poppins(
                               fontSize: 12,
                               fontWeight: FontWeight.w400,

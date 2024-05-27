@@ -117,7 +117,8 @@ class CourseService {
 
   Future<dynamic> deleteCourseById(int course_id) async {
     try {
-      final response = await _dio.delete('/course/$course_id');
+      final response =
+          await _dio.delete('/api/v3/del/course?course_id=$course_id');
 
       return response.data;
     } on DioError catch (e) {

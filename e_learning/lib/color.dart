@@ -18,6 +18,8 @@ const Color language = Color(0xFFff637a); //language
 const Color other = Color(0xFFfc9708); //other
 const Color it = Color(0xFF819af9); //information technology
 
+const Color pendingColor = Color(0xFFDBD10C);
+
 
 
 //heading 28

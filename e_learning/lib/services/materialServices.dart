@@ -32,6 +32,7 @@ class MaterialService {
       }
 
       _dio.options.headers['Authorization'] = 'Bearer $accessToken';
+      _dio.options.headers['Content-Type'] = 'multipart/form-data';
 
       final response = await _dio.post(
         '/api/v3/create/material/$course_id',
@@ -120,8 +121,9 @@ class MaterialService {
     }
   }
 
-  Future<dynamic> getMaterialByCourseId(int course_id,
-    ) async {
+  Future<dynamic> getMaterialByCourseId(
+    int course_id,
+  ) async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? accessToken = prefs.getString('access_token');

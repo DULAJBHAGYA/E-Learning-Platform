@@ -49,10 +49,10 @@ class _StudentProfileState extends State<StudentProfile> {
             await UserService.instance.fetchUsersById(user_id, accessToken);
 
         setState(() {
-          first_name = response['User']['first_name'];
-          last_name = response['User']['last_name'];
-          user_name = response['User']['user_name'];
-          email = response['User']['email'];
+          first_name = response['GetUserIDRow']['first_name'];
+          last_name = response['GetUserIDRow']['last_name'];
+          user_name = response['GetUserIDRow']['user_name'];
+          email = response['GetUserIDRow']['email'];
         });
 
         print('Fetched User: $first_name $last_name');

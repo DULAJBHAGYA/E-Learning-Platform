@@ -1,4 +1,5 @@
 import 'package:e_learning/admin/add%20courses/addCourses.dart';
+import 'package:e_learning/admin/requests/requests.dart';
 import 'package:e_learning/color.dart';
 import 'package:e_learning/login/login.dart';
 import 'package:e_learning/services/userServices.dart';
@@ -85,7 +86,7 @@ class _AdminDashState extends State<AdminDash> {
         elevation: 0,
         leading: IconButton(
           icon: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.only(bottom: 10.0),
             child: Icon(Iconsax.menu_1, size: 30, color: black),
           ),
           onPressed: () {
@@ -94,8 +95,65 @@ class _AdminDashState extends State<AdminDash> {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Icon(FluentIcons.alert_20_regular, size: 30, color: black),
+            padding: const EdgeInsets.all(10.0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Requests(
+                              username: '',
+                              accessToken: '',
+                              refreshToken: '',
+                            )));
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: white,
+                ),
+                child: SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: Icon(
+                          Iconsax.notification_status4,
+                          size: 30,
+                          color: black,
+                        ),
+                      ),
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: Container(
+                          padding: EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: darkblue,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          constraints: BoxConstraints(
+                            minWidth: 16,
+                            minHeight: 16,
+                          ),
+                          child: Center(
+                            child: Text(
+                              '10',
+                              style: GoogleFonts.poppins(
+                                color: white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -107,6 +165,7 @@ class _AdminDashState extends State<AdminDash> {
               AdminInfo(
                 first_name: first_name,
                 last_name: last_name,
+                picture: picture,
               ),
               SizedBox(
                 height: 20,
@@ -121,11 +180,13 @@ class _AdminDashState extends State<AdminDash> {
                       SizedBox(
                         height: 20,
                       ),
-                      AdminDashStudents(),
+                      AdminDashStudents(
+                          username: '', refreshToken: '', accessToken: ''),
                       SizedBox(
                         height: 20,
                       ),
-                      AdminDashCourses()
+                      AdminDashCourses(
+                          username: '', refreshToken: '', accessToken: ''),
                     ],
                   ),
                 ),
@@ -308,10 +369,12 @@ class _NavDrawerState extends State<NavDrawer> {
 class AdminInfo extends StatelessWidget {
   final String first_name;
   final String last_name;
+  final String picture;
 
   const AdminInfo({
     required this.first_name,
     required this.last_name,
+    required this.picture,
     Key? key,
   }) : super(key: key);
 
@@ -350,7 +413,7 @@ class AdminInfo extends StatelessWidget {
                 height: 60,
                 child: CircleAvatar(
                   radius: 60,
-                  backgroundImage: AssetImage('/images/admin.png'),
+                  backgroundImage: NetworkImage(picture),
                 ),
               ),
             ],
