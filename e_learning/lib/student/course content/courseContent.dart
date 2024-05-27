@@ -3,12 +3,65 @@ import 'package:flutter/material.dart';
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../../color.dart';
+import '../../services/courseServices.dart';
+import '../../services/materialServices.dart';
 
-class CourseContent extends StatelessWidget {
-  const CourseContent({Key? key});
+class CourseContent extends StatefulWidget {
+  const CourseContent({
+    Key? key,
+    required this.course_id,
+  }) : super(key: key);
+
+  final int course_id;
+
+  @override
+  _CourseContentState createState() => _CourseContentState();
+}
+
+class _CourseContentState extends State<CourseContent> {
+  List<dynamic> _contents = [];
+  late int course_id;
+  late String title;
+  late String image;
+  late String catagory;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchMaterials();
+    fetchCourseDetails();
+  }
+
+  Future<void> fetchMaterials() async {
+    try {
+      final courseContentData = await MaterialService.instance
+          .getMaterialByCourseId(widget.course_id);
+      setState(() {
+        _contents = courseContentData ?? [];
+      });
+    } catch (e) {
+      print('Error fetching courses: $e');
+    }
+  }
+
+  Future<void> fetchCourseDetails() async {
+    try {
+      final response =
+          await CourseService.instance.fetchCourseById(widget.course_id);
+
+      setState(() {
+        title = response['title'];
+        image = response['image'];
+        catagory = response['catagory'];
+      });
+    } catch (e) {
+      print('Error fetching course details: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +71,7 @@ class CourseContent extends StatelessWidget {
         padding: const EdgeInsets.all(0.0),
         child: Column(
           children: [
-            CourseContentHeader(),
+            CourseContentHeader(title: title, image: image, catagory: catagory),
             SizedBox(height: 10),
             Expanded(
               child: SingleChildScrollView(
@@ -26,38 +79,21 @@ class CourseContent extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
-                    children: [
-                      LessonDisplayWidget(),
-                      SizedBox(height: 5),
-                      QuizDisplayWidget(),
-                      SizedBox(height: 5),
-                      LessonDisplayWidget(),
-                      SizedBox(height: 5),
-                      LessonDisplayWidget(),
-                      SizedBox(height: 5),
-                      LessonDisplayWidget(),
-                      SizedBox(height: 5),
-                      QuizDisplayWidget(),
-                      SizedBox(height: 5),
-                      LessonDisplayWidget(),
-                      SizedBox(height: 5),
-                      LessonDisplayWidget(),
-                      SizedBox(height: 5),
-                      LessonDisplayWidget(),
-                      SizedBox(height: 5),
-                      QuizDisplayWidget(),
-                    ],
+                    children: _contents.map((content) {
+                      return LessonDisplayWidget(
+                        title: content['title'],
+                      );
+                    }).toList(),
                   ),
                 ),
               ),
-            ),
+            )
           ],
         ),
       ),
     );
   }
 }
-
 
 class QuizDisplayWidget extends StatelessWidget {
   const QuizDisplayWidget({
@@ -67,8 +103,55 @@ class QuizDisplayWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+        width: MediaQuery.of(context).size.width,
+        height: 80,
+        decoration: BoxDecoration(
+          color: white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(
+                  child: Text(
+                'Quiz 1',
+                style: GoogleFonts.poppins(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: black,
+                ),
+              )),
+              Spacer(),
+              Spacer(),
+              Spacer(),
+              Spacer(),
+              Align(
+                  alignment: Alignment.centerRight,
+                  child: Icon(EneftyIcons.message_question_bold,
+                      color: it, size: 40)),
+            ],
+          ),
+        ));
+  }
+}
+
+class LessonDisplayWidget extends StatelessWidget {
+  final String title;
+
+  const LessonDisplayWidget({
+    required this.title,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 10),
       width: MediaQuery.of(context).size.width,
-      height: 80,
+      height: 60,
       decoration: BoxDecoration(
         color: white,
         borderRadius: BorderRadius.circular(20),
@@ -81,82 +164,32 @@ class QuizDisplayWidget extends StatelessWidget {
           children: [
             Flexible(
               child: Text(
-                'Quiz 1',
+                title,
                 style: GoogleFonts.poppins(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: black,
                 ),
-    )
-    
-              ),
-    
-              Spacer(),
-              Spacer(),
-              Spacer(),
-              Spacer(),
-    
-              Align(
-                alignment: Alignment.centerRight,
-                child: Icon(EneftyIcons.message_question_bold, color: it, size: 40)),
-    
-                      ],
-                    ),
-                  )
-                );
-  }
-}
-
-class LessonDisplayWidget extends StatelessWidget {
-  const LessonDisplayWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-    width: MediaQuery.of(context).size.width,
-    height: 100,
-    decoration: BoxDecoration(
-      color: white,
-      borderRadius: BorderRadius.circular(20),
-    ),
-    child: Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Flexible(
-            child: Text(
-              'Introduction to Data Science',
-              style: GoogleFonts.nunito(
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-                color: black,
               ),
             ),
-          ),
-    
-          Spacer(),
-    
-          
-        Icon(EneftyIcons.play_circle_bold, color: it, size: 30),
-    
-              
-            ],
-          ),
-        
-      
-    ),
-   );
+          ],
+        ),
+      ),
+    );
   }
 }
 
 class CourseContentHeader extends StatelessWidget {
+  final String title;
+  final String image;
+  final String catagory;
+
   const CourseContentHeader({
-    super.key,
-  });
+    required this.title,
+    required this.image,
+    required this.catagory,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -164,27 +197,26 @@ class CourseContentHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Stack(
-            children: [ 
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 300,
-                decoration: BoxDecoration(
-                  color: it,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20),
-                  ),
-                ),
-                child: Image.asset(
-                  'images/python.png',
-                  fit: BoxFit.cover,
+          Stack(children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 300,
+              decoration: BoxDecoration(
+                color: it,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
                 ),
               ),
-
-              GestureDetector(
+              child: Image.network(
+                image,
+                fit: BoxFit.cover,
+              ),
+            ),
+            GestureDetector(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const MyCourses()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const MyCourses()));
               },
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
@@ -202,24 +234,25 @@ class CourseContentHeader extends StatelessWidget {
                 ),
               ),
             ),
-            ]
-          ),
+          ]),
           SizedBox(
             height: 5,
           ),
           Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start, 
-              children: [
+            child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
               Column(
                 children: [
-                  Text(
-                    'Pyhton Programming',
-                    style: GoogleFonts.nunito(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: black),
+                  SizedBox(
+                    width: 150,
+                    child: Text(
+                      title,
+                      overflow: TextOverflow.fade,
+                      style: GoogleFonts.poppins(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: black),
+                    ),
                   ),
                   SizedBox(
                     height: 10,
@@ -231,11 +264,11 @@ class CourseContentHeader extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      'IT',
+                      catagory.toUpperCase(),
                       style: GoogleFonts.poppins(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
-                          color: it),
+                          color: lightgrey),
                     ),
                   ),
                   SizedBox(

@@ -32,6 +32,7 @@ class _AdminProfileState extends State<AdminProfile> {
   late String last_name = '';
   late String email = '';
   late String user_name = '';
+  late String picture = '';
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
@@ -51,10 +52,11 @@ class _AdminProfileState extends State<AdminProfile> {
             await UserService.instance.fetchUsersById(user_id, accessToken);
 
         setState(() {
-          first_name = response['User']['first_name'];
-          last_name = response['User']['last_name'];
-          user_name = response['User']['user_name'];
-          email = response['User']['email'];
+          first_name = response['GetUserIDRow']['first_name'];
+          last_name = response['GetUserIDRow']['last_name'];
+          user_name = response['GetUserIDRow']['user_name'];
+          email = response['GetUserIDRow']['email'];
+          picture = response['GetUserIDRow']['picture'];
         });
 
         print('Fetched User: $first_name $last_name');
@@ -69,7 +71,7 @@ class _AdminProfileState extends State<AdminProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey, // Assign the key to the Scaffold
+      key: _scaffoldKey,
       backgroundColor: background,
       drawer: NavDrawer(),
       appBar: AppBar(
@@ -141,7 +143,7 @@ class _AdminProfileState extends State<AdminProfile> {
                         height: 100,
                         child: CircleAvatar(
                           radius: 120,
-                          backgroundImage: AssetImage('/images/user1.jpg'),
+                          backgroundImage: NetworkImage(picture),
                         ),
                       ),
                       SizedBox(width: 20),

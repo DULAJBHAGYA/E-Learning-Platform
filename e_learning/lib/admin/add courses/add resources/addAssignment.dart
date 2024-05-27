@@ -18,14 +18,14 @@ class AddAssignment extends StatefulWidget {
     required this.accessToken,
     required this.refreshToken,
     required this.material_id,
-    required this.course_id, // Receive materialId
+    required this.course_id,
   }) : super(key: key);
 
   final String username;
   final String accessToken;
   final String refreshToken;
   final int material_id;
-  final int course_id; // Declare materialId variable
+  final int course_id;
 
   @override
   _AddAssignmentState createState() => _AddAssignmentState();
@@ -33,7 +33,7 @@ class AddAssignment extends StatefulWidget {
 
 class _AddAssignmentState extends State<AddAssignment> {
   List<dynamic> _assignments = [];
-  late int assignment_id; // Define materialId variable
+  late int assignment_id;
 
   @override
   void initState() {
@@ -43,15 +43,15 @@ class _AddAssignmentState extends State<AddAssignment> {
 
   Future<void> _fetchMaterialId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    assignment_id = prefs.getInt('material_id') ?? 0;
+    assignment_id = prefs.getInt('assignment_id') ?? 0;
     print('Material ID: $assignment_id');
     fetchResourceById(assignment_id);
   }
 
   Future<void> fetchResourceById(int material_id) async {
     try {
-      final assignmentsData =
-          await AssignmentService.instance.getResourceById(material_id);
+      final assignmentsData = await AssignmentService.instance
+          .getAssignmentByMaterialId(material_id);
       setState(() {
         _assignments = assignmentsData ?? [];
       });
@@ -76,7 +76,8 @@ class _AddAssignmentState extends State<AddAssignment> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => AddCourses(
+                    builder: (context) => AddMaterial(
+                          course_id: widget.course_id,
                           username: '',
                           accessToken: '',
                           refreshToken: '',
@@ -109,7 +110,7 @@ class _AddAssignmentState extends State<AddAssignment> {
                 ),
                 SizedBox(width: 10),
                 Text(
-                  'Materials',
+                  'Assignments',
                   style: GoogleFonts.poppins(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -126,7 +127,8 @@ class _AddAssignmentState extends State<AddAssignment> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Newmaterial(
+                    builder: (context) => NewAssignment(
+                      material_id: widget.material_id,
                       course_id: widget.course_id,
                       username: widget.username,
                       accessToken: widget.accessToken,
@@ -146,7 +148,7 @@ class _AddAssignmentState extends State<AddAssignment> {
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Text(
-                      'ADD NEW MATERIAL',
+                      'ADD NEW ASSIGNMENT',
                       style: GoogleFonts.openSans(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
@@ -163,11 +165,10 @@ class _AddAssignmentState extends State<AddAssignment> {
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: _assignments.map((addedassignment) {
-                    return AdminAddedMaterialViewCard(
+                    return AdminAddedAssingmentViewCard(
                       course_id: addedassignment['course_id'] ?? 0,
                       material_id: addedassignment['material_id'] ?? 0,
-                      order_number: addedassignment['order_number'] ?? 0,
-                      material_file: addedassignment['material_file'] ?? '',
+                      assignment_file: addedassignment['assignment_file'] ?? '',
                       title: addedassignment['title'] ?? '',
                     );
                   }).toList(),
@@ -181,18 +182,16 @@ class _AddAssignmentState extends State<AddAssignment> {
   }
 }
 
-class AdminAddedMaterialViewCard extends StatelessWidget {
+class AdminAddedAssingmentViewCard extends StatelessWidget {
   final int course_id;
   final int material_id;
-  final String material_file;
+  final String assignment_file;
   final String title;
-  final int order_number;
 
-  const AdminAddedMaterialViewCard({
+  const AdminAddedAssingmentViewCard({
     required this.course_id,
-    required this.order_number,
     required this.material_id,
-    required this.material_file,
+    required this.assignment_file,
     required this.title,
     Key? key,
   }) : super(key: key);
@@ -222,37 +221,6 @@ class AdminAddedMaterialViewCard extends StatelessWidget {
                       fontSize: 15, fontWeight: FontWeight.bold, color: black),
                 ),
                 SizedBox(height: 10),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddAssignment(
-                          course_id: course_id,
-                          material_id: material_id,
-                          username: '',
-                          accessToken: '',
-                          refreshToken: '',
-                        ),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(2),
-                    decoration: BoxDecoration(
-                      color: science,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Text(
-                      'Add Assignment',
-                      style: GoogleFonts.openSans(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: white),
-                    ),
-                  ),
-                ),
               ],
             ),
           ],

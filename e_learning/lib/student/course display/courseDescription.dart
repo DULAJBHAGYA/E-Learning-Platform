@@ -9,13 +9,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../color.dart';
 import '../../services/enrollServices.dart';
+import '../../services/requestServices.dart';
+import '../course content/courseContent.dart';
 
 class CourseDescription extends StatefulWidget {
   final int course_id;
   final String description;
   final String image;
   final String title;
-  final String category;
+  final String catagory;
   final Map<String, dynamic> what_will;
 
   const CourseDescription({
@@ -24,7 +26,7 @@ class CourseDescription extends StatefulWidget {
     required this.description,
     required this.image,
     required this.title,
-    required this.category,
+    required this.catagory,
     required this.what_will,
   }) : super(key: key);
 
@@ -37,12 +39,16 @@ class _CourseDescriptionState extends State<CourseDescription>
   late TabController _tabController;
   Map<String, dynamic>? courseDetails;
   bool isLoading = true;
+  bool active = false;
+  bool pending = false;
+  int progress = 0;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     fetchCourseDetails();
+    fetchUserById();
   }
 
   @override
@@ -53,8 +59,8 @@ class _CourseDescriptionState extends State<CourseDescription>
 
   Future<void> fetchCourseDetails() async {
     try {
-      final details = await CourseService.instance
-          .fetchCourseById(widget.course_id as String);
+      final details =
+          await CourseService.instance.fetchCourseById(widget.course_id);
       setState(() {
         courseDetails = details;
         isLoading = false;
@@ -67,6 +73,30 @@ class _CourseDescriptionState extends State<CourseDescription>
     }
   }
 
+  Future<void> fetchUserById() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final user_id = prefs.getInt('user_id');
+      final accessToken = prefs.getString('access_token');
+
+      if (user_id != null && accessToken != null) {
+        final response = await EnrollService.instance
+            .fetchEnrollmentbyUserIdnCourseId(
+                user_id, widget.course_id, accessToken);
+
+        setState(() {
+          active = response['active'];
+          pending = response['pending'];
+          progress = response['progress'];
+        });
+      } else {
+        print('User ID or Access Token not found in SharedPreferences');
+      }
+    } catch (e) {
+      print('Error fetching user info: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,6 +104,7 @@ class _CourseDescriptionState extends State<CourseDescription>
         child: Padding(
           padding: const EdgeInsets.all(0),
           child: Container(
+            // Corrected this line
             child: Column(
               children: [
                 Stack(
@@ -159,11 +190,11 @@ class _CourseDescriptionState extends State<CourseDescription>
                             child: Padding(
                               padding: const EdgeInsets.all(5.0),
                               child: Text(
-                                widget.category.toUpperCase(),
+                                widget.catagory.toUpperCase(),
                                 style: GoogleFonts.poppins(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
-                                  color: other,
+                                  color: lightblue,
                                 ),
                               ),
                             ),
@@ -284,69 +315,14 @@ class _CourseDescriptionState extends State<CourseDescription>
                                           what_will: {
                                             'what_will': widget.what_will
                                           },
+                                          active: active,
+                                          pending: pending,
                                         ),
                                         SizedBox(height: 20),
                                         Align(
                                           alignment: Alignment.bottomRight,
-                                          child: TextButton(
-                                            style: TextButton.styleFrom(
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 10, horizontal: 20),
-                                              backgroundColor: white,
-                                              shape: StadiumBorder(
-                                                side: BorderSide(
-                                                    color: darkblue, width: 2),
-                                              ),
-                                            ),
-                                            onPressed: () async {
-                                              try {
-                                                int? user_id =
-                                                    await SharedPreferencesHelper
-                                                        .getUserId();
-                                                if (user_id == null) {
-                                                  print(
-                                                      'User ID not found in SharedPreferences');
-                                                  return;
-                                                }
-
-                                                await EnrollService.instance
-                                                    .postEnrollment(
-                                                  user_id,
-                                                  widget.course_id,
-                                                );
-
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                  SnackBar(
-                                                    content: Text(
-                                                        'Enrolled Request sent successfully!'),
-                                                    duration:
-                                                        Duration(seconds: 2),
-                                                  ),
-                                                );
-                                              } catch (e) {
-                                                print('Enrollment Error: $e');
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                  SnackBar(
-                                                    content: Text(
-                                                        'Failed to sent  enroll request. Please try again.'),
-                                                    duration:
-                                                        Duration(seconds: 2),
-                                                  ),
-                                                );
-                                              }
-                                            },
-                                            child: Text(
-                                              'Enroll Now',
-                                              style: GoogleFonts.nunito(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w600,
-                                                color: darkblue,
-                                              ),
-                                            ),
-                                          ),
-                                        )
+                                          child: getActionButton(),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -366,6 +342,105 @@ class _CourseDescriptionState extends State<CourseDescription>
         ),
       ),
     );
+  }
+
+  Widget getActionButton() {
+    if (!active && !pending) {
+      return TextButton(
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          backgroundColor: white,
+          shape: StadiumBorder(
+            side: BorderSide(color: darkblue, width: 2),
+          ),
+        ),
+        onPressed: () async {
+          try {
+            int? user_id = await SharedPreferencesHelper.getUserId();
+            if (user_id == null) {
+              print('User ID not found in SharedPreferences');
+              return;
+            }
+
+            await EnrollService.instance.postEnrollment(
+              user_id,
+              widget.course_id,
+            );
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Enroll request sent successfully!'),
+                duration: Duration(seconds: 2),
+              ),
+            );
+          } catch (e) {
+            print('Enrollment Error: $e');
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content:
+                    Text('Failed to send enroll request. Please try again.'),
+                duration: Duration(seconds: 2),
+              ),
+            );
+          }
+        },
+        child: Text(
+          'Enroll Now',
+          style: GoogleFonts.nunito(
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+            color: darkblue,
+          ),
+        ),
+      );
+    } else if (!active && pending) {
+      return TextButton(
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          backgroundColor: white,
+          shape: StadiumBorder(
+            side: BorderSide(color: darkblue, width: 2),
+          ),
+        ),
+        onPressed: null,
+        child: Text(
+          'Pending',
+          style: GoogleFonts.nunito(
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+            color: darkblue,
+          ),
+        ),
+      );
+    } else if (active && !pending) {
+      return TextButton(
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          backgroundColor: white,
+          shape: StadiumBorder(
+            side: BorderSide(color: darkblue, width: 2),
+          ),
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CourseContent(course_id: widget.course_id),
+            ),
+          );
+        },
+        child: Text(
+          'Get Started',
+          style: GoogleFonts.nunito(
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+            color: darkblue,
+          ),
+        ),
+      );
+    } else {
+      return SizedBox.shrink();
+    }
   }
 }
 
@@ -460,9 +535,13 @@ class Lessons extends StatelessWidget {
 
 class AboutCourse extends StatelessWidget {
   final Map<String, dynamic>? what_will;
+  final bool active;
+  final bool pending;
 
   const AboutCourse({
     required this.what_will,
+    required this.active,
+    required this.pending,
     Key? key,
   }) : super(key: key);
 
@@ -475,6 +554,7 @@ class AboutCourse extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
+              // Corrected this line
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
