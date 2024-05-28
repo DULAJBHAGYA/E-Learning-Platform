@@ -242,7 +242,7 @@ class AdminAddedMaterialViewCard extends StatelessWidget {
                     child: Text(
                       'Add Assignment',
                       style: GoogleFonts.poppins(
-                          fontSize: 15,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
                           color: white),
                     ),
