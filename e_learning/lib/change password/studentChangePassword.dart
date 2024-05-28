@@ -1,25 +1,20 @@
-import 'package:e_learning/admin/admin%20profile/adminProfile.dart';
-import 'package:e_learning/services/passwordService.dart';
-import 'package:e_learning/student/profile/stdProfile.dart';
-import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../color.dart';
-import '../../login/login.dart';
-import '../../services/userServices.dart';
-import '../../shared/bottomNavBar.dart';
+import '../../services/passwordService.dart';
+import '../student/profile/stdProfile.dart';
 
 class Studentchangepassword extends StatefulWidget {
-  const Studentchangepassword(
-      {Key? key,
-      required this.username,
-      required this.accessToken,
-      required this.refreshToken,
-      required this.user_id})
-      : super(key: key);
+  const Studentchangepassword({
+    Key? key,
+    required this.username,
+    required this.accessToken,
+    required this.refreshToken,
+    required this.user_id,
+  }) : super(key: key);
 
   final String username;
   final String accessToken;
@@ -31,33 +26,21 @@ class Studentchangepassword extends StatefulWidget {
 }
 
 class _StudentchangepasswordState extends State<Studentchangepassword> {
-  late String email = '';
-  late String hashed_password = '';
-
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
 
-  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController currentpasswordController = TextEditingController();
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
-    emailController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
+    currentpasswordController.dispose();
     super.dispose();
-  }
-
-  String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter an email';
-    } else if (!value.contains('@')) {
-      return 'Please enter a valid email';
-    }
-    return null;
   }
 
   String? _validatePassword(String? value) {
@@ -86,8 +69,9 @@ class _StudentchangepasswordState extends State<Studentchangepassword> {
       try {
         final response = await Passwordservice.instance.editPassword(
           user_id: widget.user_id,
-          email: emailController.text,
+          current_password: currentpasswordController.text,
           hashed_password: passwordController.text,
+          confirm_password: confirmPasswordController.text,
         );
 
         if (response != null && response['statusCode'] == 200) {
@@ -104,9 +88,9 @@ class _StudentchangepasswordState extends State<Studentchangepassword> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => StudentProfile(
-                                  username: '',
-                                  accessToken: '',
-                                  refreshToken: '',
+                                  username: widget.username,
+                                  accessToken: widget.accessToken,
+                                  refreshToken: widget.refreshToken,
                                 )),
                       );
                     },
@@ -176,10 +160,10 @@ class _StudentchangepasswordState extends State<Studentchangepassword> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const StudentProfile(
-                          username: '',
-                          accessToken: '',
-                          refreshToken: '',
+                    builder: (context) => StudentProfile(
+                          username: widget.username,
+                          accessToken: widget.accessToken,
+                          refreshToken: widget.refreshToken,
                         )));
           },
         ),
@@ -230,198 +214,176 @@ class _StudentchangepasswordState extends State<Studentchangepassword> {
               SizedBox(
                 height: 40,
               ),
-              Column(
-                children: [
-                  TextFormField(
-                    controller: emailController,
-                    validator: _validateEmail,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(width: 2, color: lightgrey),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      prefixIcon: ColorFiltered(
-                        colorFilter: ColorFilter.mode(
-                          lightgrey,
-                          BlendMode.srcIn,
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: currentpasswordController,
+                      obscureText: _obscurePassword,
+                      validator: _validatePassword,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 2, color: lightgrey),
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
-                        child: Icon(Iconsax.sms),
-                      ),
-                      labelText: 'Email',
-                      labelStyle: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: lightgrey,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    controller: passwordController,
-                    obscureText: _obscurePassword,
-                    validator: _validatePassword,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(width: 2, color: lightgrey),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      prefixIcon: ColorFiltered(
-                        colorFilter: ColorFilter.mode(
-                          lightgrey,
-                          BlendMode.srcIn,
-                        ),
-                        child: Icon(Iconsax.password_check),
-                      ),
-                      labelText: 'Current Password',
-                      labelStyle: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: lightgrey,
-                      ),
-                      suffixIcon: InkWell(
-                        onTap: () {
-                          setState(() {
-                            _obscurePassword = !_obscurePassword;
-                          });
-                        },
-                        child: ColorFiltered(
+                        prefixIcon: ColorFiltered(
                           colorFilter: ColorFilter.mode(
                             lightgrey,
                             BlendMode.srcIn,
                           ),
-                          child: Icon(_obscurePassword
-                              ? Iconsax.eye_slash
-                              : Iconsax.eye),
+                          child: Icon(Iconsax.password_check),
+                        ),
+                        labelText: 'Current Password',
+                        labelStyle: GoogleFonts.poppins(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: lightgrey,
+                        ),
+                        suffixIcon: InkWell(
+                          onTap: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
+                          child: ColorFiltered(
+                            colorFilter: ColorFilter.mode(
+                              lightgrey,
+                              BlendMode.srcIn,
+                            ),
+                            child: Icon(_obscurePassword
+                                ? Iconsax.eye_slash
+                                : Iconsax.eye),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    controller: passwordController,
-                    obscureText: _obscurePassword,
-                    validator: _validatePassword,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(width: 2, color: lightgrey),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      prefixIcon: ColorFiltered(
-                        colorFilter: ColorFilter.mode(
-                          lightgrey,
-                          BlendMode.srcIn,
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      controller: passwordController,
+                      obscureText: _obscurePassword,
+                      validator: _validatePassword,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 2, color: lightgrey),
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
-                        child: Icon(Iconsax.password_check),
-                      ),
-                      labelText: 'New Password',
-                      labelStyle: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: lightgrey,
-                      ),
-                      suffixIcon: InkWell(
-                        onTap: () {
-                          setState(() {
-                            _obscurePassword = !_obscurePassword;
-                          });
-                        },
-                        child: ColorFiltered(
+                        prefixIcon: ColorFiltered(
                           colorFilter: ColorFilter.mode(
                             lightgrey,
                             BlendMode.srcIn,
                           ),
-                          child: Icon(_obscurePassword
-                              ? Iconsax.eye_slash
-                              : Iconsax.eye),
+                          child: Icon(Iconsax.password_check),
+                        ),
+                        labelText: 'New Password',
+                        labelStyle: GoogleFonts.poppins(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: lightgrey,
+                        ),
+                        suffixIcon: InkWell(
+                          onTap: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
+                          child: ColorFiltered(
+                            colorFilter: ColorFilter.mode(
+                              lightgrey,
+                              BlendMode.srcIn,
+                            ),
+                            child: Icon(_obscurePassword
+                                ? Iconsax.eye_slash
+                                : Iconsax.eye),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    controller: confirmPasswordController,
-                    obscureText: _obscureConfirmPassword,
-                    validator: _validateConfirmPassword,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(width: 2, color: lightgrey),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      prefixIcon: ColorFiltered(
-                        colorFilter: ColorFilter.mode(
-                          lightgrey,
-                          BlendMode.srcIn,
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      controller: confirmPasswordController,
+                      obscureText: _obscureConfirmPassword,
+                      validator: _validateConfirmPassword,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 2, color: lightgrey),
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
-                        child: Icon(Iconsax.password_check),
-                      ),
-                      labelText: 'Confirm Password',
-                      labelStyle: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: lightgrey,
-                      ),
-                      suffixIcon: InkWell(
-                        onTap: () {
-                          setState(() {
-                            _obscureConfirmPassword = !_obscureConfirmPassword;
-                          });
-                        },
-                        child: ColorFiltered(
+                        prefixIcon: ColorFiltered(
                           colorFilter: ColorFilter.mode(
                             lightgrey,
                             BlendMode.srcIn,
                           ),
-                          child: Icon(_obscureConfirmPassword
-                              ? Iconsax.eye_slash
-                              : Iconsax.eye),
+                          child: Icon(Iconsax.password_check),
+                        ),
+                        labelText: 'Confirm Password',
+                        labelStyle: GoogleFonts.poppins(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: lightgrey,
+                        ),
+                        suffixIcon: InkWell(
+                          onTap: () {
+                            setState(() {
+                              _obscureConfirmPassword =
+                                  !_obscureConfirmPassword;
+                            });
+                          },
+                          child: ColorFiltered(
+                            colorFilter: ColorFilter.mode(
+                              lightgrey,
+                              BlendMode.srcIn,
+                            ),
+                            child: Icon(_obscureConfirmPassword
+                                ? Iconsax.eye_slash
+                                : Iconsax.eye),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: OutlinedButton(
-                      onPressed: _submitForm,
-                      style: ButtonStyle(
-                        elevation: MaterialStateProperty.all<double>(100.0),
-                        side: MaterialStateProperty.all<BorderSide>(
-                          BorderSide(
-                            width: 0.0,
-                            color: darkblue,
+                    SizedBox(
+                      height: 40,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: OutlinedButton(
+                        onPressed: _submitForm,
+                        style: ButtonStyle(
+                          elevation: MaterialStateProperty.all<double>(100.0),
+                          side: MaterialStateProperty.all<BorderSide>(
+                            BorderSide(
+                              width: 0.0,
+                              color: darkblue,
+                            ),
                           ),
-                        ),
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.all(25.0),
-                        ),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+                          padding: MaterialStateProperty.all<EdgeInsets>(
+                            EdgeInsets.all(25.0),
                           ),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(darkblue),
                         ),
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(darkblue),
-                      ),
-                      child: Text(
-                        'CHANGE PASSWORD',
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20,
-                          color: white,
+                        child: Text(
+                          'CHANGE PASSWORD',
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20,
+                            color: white,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               )
             ]),
           )),

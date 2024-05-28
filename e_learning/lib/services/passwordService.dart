@@ -21,10 +21,12 @@ class Passwordservice {
 
   static Passwordservice get instance => _instance;
 
-  Future<dynamic> editPassword(
-      {required String hashed_password,
-      required String email,
-      required int user_id}) async {
+  Future<dynamic> editPassword({
+    required String current_password,
+    required String hashed_password,
+    required String confirm_password,
+    required int user_id,
+  }) async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? accessToken = prefs.getString('access_token');
@@ -39,8 +41,9 @@ class Passwordservice {
         '/api/v2/edit/password',
         data: {
           'user_id': user_id,
+          'current_password': current_password,
           'hashed_password': hashed_password,
-          'email': email,
+          'confirm_password': confirm_password,
         },
       );
 

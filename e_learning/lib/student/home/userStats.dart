@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../color.dart';
 import '../../services/countServices.dart';
@@ -12,38 +13,16 @@ class UserStats extends StatefulWidget {
 }
 
 class _UserStatsState extends State<UserStats> {
-  int studentCount = 0;
   int courseCount = 0;
-  int adminCount = 0;
-  int subscriptionCount = 0;
+  int ongoingCourseCount = 0;
+  int completedCourseCount = 0;
 
   @override
   void initState() {
     super.initState();
-    fetchStudentCount();
     fetchCourseCount();
-    fetchAdminCount();
-    fetchSubscriptionCount();
-  }
-
-  Future<void> fetchStudentCount() async {
-    try {
-      final response = await CountService.instance.getStudentCount();
-
-      if (response != null) {
-        if (response is int) {
-          setState(() {
-            studentCount = response;
-          });
-        } else {
-          throw Exception('Student count is not an integer');
-        }
-      } else {
-        throw Exception('Response is null');
-      }
-    } catch (e) {
-      print('Error fetching student count: $e');
-    }
+    fetchOngoingCourseCount();
+    fetchCompletedCourseCount();
   }
 
   Future<void> fetchCourseCount() async {
@@ -66,43 +45,59 @@ class _UserStatsState extends State<UserStats> {
     }
   }
 
-  Future<void> fetchSubscriptionCount() async {
+  Future<void> fetchOngoingCourseCount() async {
     try {
-      final response = await CountService.instance.getSubscriptionCount();
+      final prefs = await SharedPreferences.getInstance();
+      final userId = prefs.getInt('user_id');
 
-      if (response != null) {
-        if (response is int) {
-          setState(() {
-            subscriptionCount = response;
-          });
+      if (userId != null) {
+        final response =
+            await CountService.instance.getOngoingCourseCountByUserId(userId);
+
+        if (response != null) {
+          if (response is int) {
+            setState(() {
+              ongoingCourseCount = response;
+            });
+          } else {
+            throw Exception('Course count is not an integer');
+          }
         } else {
-          throw Exception('Subscription count is not an integer');
+          throw Exception('Response is null');
         }
       } else {
-        throw Exception('Response is null');
+        throw Exception('User ID is null');
       }
     } catch (e) {
-      print('Error fetching subscription count: $e');
+      print('Error fetching ongoing course count: $e');
     }
   }
 
-  Future<void> fetchAdminCount() async {
+  Future<void> fetchCompletedCourseCount() async {
     try {
-      final response = await CountService.instance.getAdminsCount();
+      final prefs = await SharedPreferences.getInstance();
+      final userId = prefs.getInt('user_id');
 
-      if (response != null) {
-        if (response is int) {
-          setState(() {
-            adminCount = response;
-          });
+      if (userId != null) {
+        final response =
+            await CountService.instance.getCompletedCourseCountByUserId(userId);
+
+        if (response != null) {
+          if (response is int) {
+            setState(() {
+              completedCourseCount = response;
+            });
+          } else {
+            throw Exception('Course count is not an integer');
+          }
         } else {
-          throw Exception('Admins count is not an integer');
+          throw Exception('Response is null');
         }
       } else {
-        throw Exception('Response is null');
+        throw Exception('User ID is null');
       }
     } catch (e) {
-      print('Error fetching student count: $e');
+      print('Error fetching ongoing course count: $e');
     }
   }
 
@@ -162,14 +157,14 @@ class _UserStatsState extends State<UserStats> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          '12',
+                          completedCourseCount.toString(),
                           style: GoogleFonts.openSans(
                               fontSize: 30,
                               fontWeight: FontWeight.w900,
                               color: white),
                         ),
                         Text(
-                          'Registered \nCourses',
+                          'Completed \nCourses',
                           textAlign: TextAlign.left,
                           style: GoogleFonts.poppins(
                               fontSize: 15,
@@ -194,7 +189,7 @@ class _UserStatsState extends State<UserStats> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          '7',
+                          ongoingCourseCount.toString(),
                           style: GoogleFonts.openSans(
                               fontSize: 30,
                               fontWeight: FontWeight.w900,
