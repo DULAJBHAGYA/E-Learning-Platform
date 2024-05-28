@@ -104,6 +104,7 @@ class OnGoingCourseCard extends StatelessWidget {
         );
       },
       child: Container(
+        margin: EdgeInsets.only(bottom: 10),
         height: 120,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(

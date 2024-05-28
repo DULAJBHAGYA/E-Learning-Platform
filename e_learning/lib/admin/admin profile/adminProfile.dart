@@ -1,10 +1,11 @@
-import 'package:e_learning/change%20password/adminChangePassword.dart';
+import 'package:e_learning/change%20password/studentChangePassword.dart';
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../change password/adminChangePassword.dart';
 import '../../color.dart';
 import '../../login/login.dart';
 import '../../services/userServices.dart';
@@ -32,9 +33,9 @@ class _AdminProfileState extends State<AdminProfile> {
   late String last_name = '';
   late String email = '';
   late String user_name = '';
-  late String picture = '';
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     super.initState();
@@ -56,7 +57,6 @@ class _AdminProfileState extends State<AdminProfile> {
           last_name = response['GetUserIDRow']['last_name'];
           user_name = response['GetUserIDRow']['user_name'];
           email = response['GetUserIDRow']['email'];
-          picture = response['GetUserIDRow']['picture'];
         });
 
         print('Fetched User: $first_name $last_name');
@@ -71,7 +71,7 @@ class _AdminProfileState extends State<AdminProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
+      key: _scaffoldKey, // Assign the key to the Scaffold
       backgroundColor: background,
       drawer: NavDrawer(),
       appBar: AppBar(
@@ -143,7 +143,7 @@ class _AdminProfileState extends State<AdminProfile> {
                         height: 100,
                         child: CircleAvatar(
                           radius: 120,
-                          backgroundImage: NetworkImage(picture),
+                          backgroundImage: AssetImage('/images/user1.jpg'),
                         ),
                       ),
                       SizedBox(width: 20),
@@ -212,69 +212,66 @@ class _AdminProfileState extends State<AdminProfile> {
               SizedBox(
                 height: 10,
               ),
-              GestureDetector(
-                onTap: () {},
-                child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: background,
+              Container(
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: background,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: background2,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  padding: EdgeInsets.all(
+                                      5), // Adjust padding to your needs
+                                  child: Icon(
+                                    Iconsax.user,
+                                    color: black,
+                                    size: 20,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              'Manage Profile',
+                              style: GoogleFonts.poppins(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                  color: black),
+                            ),
+                            Spacer(),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Align(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Icon(
+                                    Iconsax.arrow_right_3,
+                                    size: 20,
+                                    color: black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: background2,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    padding: EdgeInsets.all(
-                                        5), // Adjust padding to your needs
-                                    child: Icon(
-                                      Iconsax.user,
-                                      color: black,
-                                      size: 20,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                'Manage Profile',
-                                style: GoogleFonts.poppins(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w700,
-                                    color: black),
-                              ),
-                              Spacer(),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: white,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Align(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Icon(
-                                      Iconsax.arrow_right_3,
-                                      size: 20,
-                                      color: black,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    )),
-              ),
+                  )),
               SizedBox(
                 height: 30,
               ),
@@ -348,7 +345,29 @@ class _AdminProfileState extends State<AdminProfile> {
               SizedBox(
                 height: 20,
               ),
-              Container(
+              GestureDetector(
+                onTap: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  final user_id = prefs.getInt('user_id');
+
+                  if (user_id != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AdminChangePassword(
+                          username: widget.username,
+                          accessToken: widget.accessToken,
+                          refreshToken: widget.refreshToken,
+                          user_id: user_id,
+                        ),
+                      ),
+                    );
+                  } else {
+                    // Handle the case where user_id is null
+                    print('User ID not found in SharedPreferences');
+                  }
+                },
+                child: Container(
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
@@ -381,9 +400,10 @@ class _AdminProfileState extends State<AdminProfile> {
                             Text(
                               'Change Password',
                               style: GoogleFonts.poppins(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700,
-                                  color: black),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                color: black,
+                              ),
                             ),
                             Spacer(),
                             Container(
@@ -406,7 +426,9 @@ class _AdminProfileState extends State<AdminProfile> {
                         ),
                       ],
                     ),
-                  )),
+                  ),
+                ),
+              ),
               SizedBox(
                 height: 30,
               ),

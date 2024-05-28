@@ -140,4 +140,104 @@ class CountService {
       rethrow;
     }
   }
+
+  Future<dynamic> getMaterialCountByCourseId(int course_id) async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? accessToken = prefs.getString('access_token');
+
+      if (accessToken == null || accessToken.isEmpty) {
+        throw Exception('Access token not found');
+      }
+
+      _dio.options.headers['Authorization'] = 'Bearer $accessToken';
+
+      final response =
+          await _dio.get('/api/v3/get/count/bycourse?course_id=$course_id');
+
+      return response.data;
+    } on DioError catch (e) {
+      print("Dio Error: $e");
+      print("Response Data: ${e.response?.data}");
+      throw Exception(e.response?.data['detail'] ?? e.toString());
+    } catch (e) {
+      print("Unexpected Error: $e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> getStudentCountByCourseId(int course_id) async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? accessToken = prefs.getString('access_token');
+
+      if (accessToken == null || accessToken.isEmpty) {
+        throw Exception('Access token not found');
+      }
+
+      _dio.options.headers['Authorization'] = 'Bearer $accessToken';
+
+      final response = await _dio
+          .get('/api/v3/count/course/subscription?course_id=$course_id');
+
+      return response.data;
+    } on DioError catch (e) {
+      print("Dio Error: $e");
+      print("Response Data: ${e.response?.data}");
+      throw Exception(e.response?.data['detail'] ?? e.toString());
+    } catch (e) {
+      print("Unexpected Error: $e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> getOngoingCourseCountByUserId(int user_id) async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? accessToken = prefs.getString('access_token');
+
+      if (accessToken == null || accessToken.isEmpty) {
+        throw Exception('Access token not found');
+      }
+
+      _dio.options.headers['Authorization'] = 'Bearer $accessToken';
+
+      final response = await _dio
+          .get('/api/v3/count/progress/user/inprogress?user_id=$user_id');
+
+      return response.data;
+    } on DioError catch (e) {
+      print("Dio Error: $e");
+      print("Response Data: ${e.response?.data}");
+      throw Exception(e.response?.data['detail'] ?? e.toString());
+    } catch (e) {
+      print("Unexpected Error: $e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> getCompletedCourseCountByUserId(int user_id) async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? accessToken = prefs.getString('access_token');
+
+      if (accessToken == null || accessToken.isEmpty) {
+        throw Exception('Access token not found');
+      }
+
+      _dio.options.headers['Authorization'] = 'Bearer $accessToken';
+
+      final response = await _dio
+          .get('/api/v3/count/progress/user/completed?user_id=$user_id');
+
+      return response.data;
+    } on DioError catch (e) {
+      print("Dio Error: $e");
+      print("Response Data: ${e.response?.data}");
+      throw Exception(e.response?.data['detail'] ?? e.toString());
+    } catch (e) {
+      print("Unexpected Error: $e");
+      rethrow;
+    }
+  }
 }

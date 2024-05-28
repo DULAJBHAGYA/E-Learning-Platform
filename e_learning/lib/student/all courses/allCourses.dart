@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import '../../color.dart';
 import '../../services/categoryServices.dart';
+import '../../services/countServices.dart';
 import '../../shared/bottomNavBAr.dart';
 
 class StdAllCourses extends StatefulWidget {
@@ -117,7 +118,7 @@ class _StdAllCoursesState extends State<StdAllCourses> {
   }
 }
 
-class CourseViewCard extends StatelessWidget {
+class CourseViewCard extends StatefulWidget {
   final int course_id;
   final String description;
   final String image;
@@ -134,6 +135,40 @@ class CourseViewCard extends StatelessWidget {
     required this.what_will,
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<CourseViewCard> createState() => _CourseViewCardState();
+}
+
+class _CourseViewCardState extends State<CourseViewCard> {
+  int materialCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchMaterialCountByCourseId();
+  }
+
+  Future<void> fetchMaterialCountByCourseId() async {
+    try {
+      final response = await CountService.instance
+          .getMaterialCountByCourseId(widget.course_id);
+
+      if (response != null) {
+        if (response is int) {
+          setState(() {
+            materialCount = response;
+          });
+        } else {
+          throw Exception('Student count is not an integer');
+        }
+      } else {
+        throw Exception('Response is null');
+      }
+    } catch (e) {
+      print('Error fetching student count: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,8 +193,8 @@ class CourseViewCard extends StatelessWidget {
                   topRight: Radius.circular(20),
                 ),
                 image: DecorationImage(
-                  image: image.isNotEmpty
-                      ? NetworkImage(image)
+                  image: widget.image.isNotEmpty
+                      ? NetworkImage(widget.image)
                       : AssetImage('/logos/logo.png') as ImageProvider,
                   fit: BoxFit.cover,
                 ),
@@ -187,7 +222,7 @@ class CourseViewCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
-                            catagory.toUpperCase(),
+                            widget.catagory.toUpperCase(),
                             style: GoogleFonts.poppins(
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
@@ -200,7 +235,7 @@ class CourseViewCard extends StatelessWidget {
                   ),
                   SizedBox(height: 5),
                   Text(
-                    title,
+                    widget.title,
                     style: GoogleFonts.poppins(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -212,10 +247,10 @@ class CourseViewCard extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(Iconsax.clock, size: 15, color: darkblue),
+                          Icon(Iconsax.video_play, size: 15, color: darkblue),
                           SizedBox(width: 5),
                           Text(
-                            '2.5 hrs',
+                            '${materialCount.toString()} lessons',
                             style: GoogleFonts.poppins(
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
@@ -253,12 +288,12 @@ class CourseViewCard extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => CourseDescription(
-                                  course_id: course_id,
-                                  image: image,
-                                  title: title,
-                                  catagory: catagory,
-                                  description: description,
-                                  what_will: what_will,
+                                  course_id: widget.course_id,
+                                  image: widget.image,
+                                  title: widget.title,
+                                  catagory: widget.catagory,
+                                  description: widget.description,
+                                  what_will: widget.what_will,
                                 ),
                               ),
                             );

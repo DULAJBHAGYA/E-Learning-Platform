@@ -4,8 +4,10 @@ import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:e_learning/shared/bottomNavBar.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../color.dart';
+import '../../services/countServices.dart';
 import 'completedCourses.dart';
 import 'onGoingCourses.dart';
 
@@ -20,10 +22,72 @@ class _MyCoursesState extends State<MyCourses>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  int courseCount = 0;
+  int ongoingCourseCount = 0;
+  int completedCourseCount = 0;
+
+  Future<void> fetchOngoingCourseCount() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final userId = prefs.getInt('user_id');
+
+      if (userId != null) {
+        final response =
+            await CountService.instance.getOngoingCourseCountByUserId(userId);
+
+        if (response != null) {
+          if (response is int) {
+            setState(() {
+              ongoingCourseCount = response;
+            });
+          } else {
+            throw Exception('Course count is not an integer');
+          }
+        } else {
+          throw Exception('Response is null');
+        }
+      } else {
+        throw Exception('User ID is null');
+      }
+    } catch (e) {
+      print('Error fetching ongoing course count: $e');
+    }
+  }
+
+  Future<void> fetchCompletedCourseCount() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final userId = prefs.getInt('user_id');
+
+      if (userId != null) {
+        final response =
+            await CountService.instance.getCompletedCourseCountByUserId(userId);
+
+        if (response != null) {
+          if (response is int) {
+            setState(() {
+              completedCourseCount = response;
+            });
+          } else {
+            throw Exception('Course count is not an integer');
+          }
+        } else {
+          throw Exception('Response is null');
+        }
+      } else {
+        throw Exception('User ID is null');
+      }
+    } catch (e) {
+      print('Error fetching ongoing course count: $e');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    fetchOngoingCourseCount();
+    fetchCompletedCourseCount();
   }
 
   @override
@@ -89,7 +153,7 @@ class _MyCoursesState extends State<MyCourses>
                         ),
                         child: Center(
                           child: Text(
-                            '5',
+                            ongoingCourseCount.toString(),
                             style: GoogleFonts.poppins(
                               fontSize: 15,
                               color: white,
@@ -122,7 +186,7 @@ class _MyCoursesState extends State<MyCourses>
                         ),
                         child: Center(
                           child: Text(
-                            '10',
+                            completedCourseCount.toString(),
                             style: GoogleFonts.poppins(
                               fontSize: 15,
                               color: white,

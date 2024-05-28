@@ -4,7 +4,6 @@ import 'package:e_learning/services/adminServices.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 class AddAdmin extends StatefulWidget {
   const AddAdmin({Key? key}) : super(key: key);
 
@@ -32,7 +31,9 @@ class _AddAdminState extends State<AddAdmin> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Add New Admin', style: GoogleFonts.openSans(fontSize: 25, fontWeight: FontWeight.bold)),
+              Text('Add New Admin',
+                  style: GoogleFonts.openSans(
+                      fontSize: 25, fontWeight: FontWeight.bold)),
               TextFormField(
                 controller: firstnameController,
                 decoration: InputDecoration(labelText: 'First Name'),
@@ -75,7 +76,7 @@ class _AddAdminState extends State<AddAdmin> {
                   }
                   return null;
                 },
-              ),              
+              ),
               SizedBox(height: 20),
               DropdownButtonFormField<String>(
                 decoration: InputDecoration(labelText: 'Role'),
@@ -104,7 +105,10 @@ class _AddAdminState extends State<AddAdmin> {
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Password',
-                  hintStyle: GoogleFonts.openSans(color: lightgrey, fontWeight: FontWeight.w500, fontSize: 15),
+                  hintStyle: GoogleFonts.openSans(
+                      color: lightgrey,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -132,14 +136,18 @@ class _AddAdminState extends State<AddAdmin> {
                         EdgeInsets.all(15.0),
                       ),
                     ),
-                    child: Text('CANCEL', style: GoogleFonts.openSans(color: white, fontWeight: FontWeight.bold,fontSize: 15)),
+                    child: Text('CANCEL',
+                        style: GoogleFonts.openSans(
+                            color: white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15)),
                   ),
                   SizedBox(width: 10),
                   ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         try {
-                          await AdminService.instance.poastAdmin(
+                          await AdminService.instance.postAdmin(
                             selectedRole!, // role
                             emailController.text, // email
                             firstnameController.text,
@@ -160,7 +168,11 @@ class _AddAdminState extends State<AddAdmin> {
                                     onPressed: () {
                                       Navigator.pushReplacement(
                                         context,
-                                        MaterialPageRoute(builder: (context) => Admins(username: '', accessToken: '', refreshToken: '')),
+                                        MaterialPageRoute(
+                                            builder: (context) => Admins(
+                                                username: '',
+                                                accessToken: '',
+                                                refreshToken: '')),
                                       );
                                     },
                                     child: Text('OK'),
@@ -202,7 +214,13 @@ class _AddAdminState extends State<AddAdmin> {
                         EdgeInsets.all(15.0),
                       ),
                     ),
-                    child: Text('SAVE',style: GoogleFonts.openSans(color: white, fontWeight: FontWeight.bold,fontSize: 15),),
+                    child: Text(
+                      'SAVE',
+                      style: GoogleFonts.openSans(
+                          color: white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15),
+                    ),
                   ),
                 ],
               ),

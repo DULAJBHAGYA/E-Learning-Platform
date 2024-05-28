@@ -8,7 +8,9 @@ import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../color.dart';
+import '../../services/countServices.dart';
 import '../../services/enrollServices.dart';
+import '../../services/materialServices.dart';
 import '../../services/requestServices.dart';
 import '../course content/courseContent.dart';
 
@@ -42,6 +44,9 @@ class _CourseDescriptionState extends State<CourseDescription>
   bool active = false;
   bool pending = false;
   int progress = 0;
+  int materialCount = 0;
+  int subCount = 0;
+  List<dynamic> _addedmaterials = [];
 
   @override
   void initState() {
@@ -49,6 +54,9 @@ class _CourseDescriptionState extends State<CourseDescription>
     _tabController = TabController(length: 2, vsync: this);
     fetchCourseDetails();
     fetchUserById();
+    fetchMaterialCountByCourseId();
+    fetchStudentCountByCourseId();
+    getMaterialByCourseId();
   }
 
   @override
@@ -70,6 +78,60 @@ class _CourseDescriptionState extends State<CourseDescription>
       setState(() {
         isLoading = false;
       });
+    }
+  }
+
+  Future<void> getMaterialByCourseId() async {
+    try {
+      final addedMaterialData = await MaterialService.instance
+          .getMaterialByCourseId(widget.course_id);
+      setState(() {
+        _addedmaterials = addedMaterialData ?? [];
+      });
+    } catch (e) {
+      print('Error fetching courses: $e');
+    }
+  }
+
+  Future<void> fetchMaterialCountByCourseId() async {
+    try {
+      final response = await CountService.instance
+          .getMaterialCountByCourseId(widget.course_id);
+
+      if (response != null) {
+        if (response is int) {
+          setState(() {
+            materialCount = response;
+          });
+        } else {
+          throw Exception('Student count is not an integer');
+        }
+      } else {
+        throw Exception('Response is null');
+      }
+    } catch (e) {
+      print('Error fetching student count: $e');
+    }
+  }
+
+  Future<void> fetchStudentCountByCourseId() async {
+    try {
+      final response = await CountService.instance
+          .getStudentCountByCourseId(widget.course_id);
+
+      if (response != null) {
+        if (response is int) {
+          setState(() {
+            subCount = response;
+          });
+        } else {
+          throw Exception('Student count is not an integer');
+        }
+      } else {
+        throw Exception('Response is null');
+      }
+    } catch (e) {
+      print('Error fetching student count: $e');
     }
   }
 
@@ -193,7 +255,7 @@ class _CourseDescriptionState extends State<CourseDescription>
                                 style: GoogleFonts.poppins(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
-                                  color: lightblue,
+                                  color: lightgrey,
                                 ),
                               ),
                             ),
@@ -214,28 +276,29 @@ class _CourseDescriptionState extends State<CourseDescription>
                       Container(
                         width: MediaQuery.of(context).size.width,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Row(
                               children: [
-                                Icon(Iconsax.people, size: 20, color: darkblue),
+                                Icon(Iconsax.people, size: 15, color: darkblue),
                                 SizedBox(width: 2),
-                                Text('120 Students',
+                                Text('${subCount.toString()} Students',
                                     style: GoogleFonts.poppins(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
                                         color: black)),
                               ],
                             ),
                             SizedBox(width: 15),
                             Row(
                               children: [
-                                Icon(Iconsax.clock, size: 20, color: darkblue),
+                                Icon(Iconsax.video_play,
+                                    size: 15, color: darkblue),
                                 SizedBox(width: 2),
-                                Text('2.5 Hours',
+                                Text('${materialCount.toString()} Lessons',
                                     style: GoogleFonts.poppins(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
                                         color: black)),
                               ],
                             ),
@@ -243,12 +306,12 @@ class _CourseDescriptionState extends State<CourseDescription>
                             Row(
                               children: [
                                 Icon(Iconsax.document,
-                                    size: 20, color: darkblue),
+                                    size: 15, color: darkblue),
                                 SizedBox(width: 2),
                                 Text('Certificate',
                                     style: GoogleFonts.poppins(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
                                         color: black)),
                               ],
                             ),
@@ -326,8 +389,24 @@ class _CourseDescriptionState extends State<CourseDescription>
                                     ),
                                   ),
                                   SingleChildScrollView(
-                                    child:
-                                        Lessons(courseDetails: courseDetails),
+                                    child: Column(
+                                      children:
+                                          _addedmaterials.map((addedmaterial) {
+                                        return Lessons(
+                                          course_id:
+                                              addedmaterial['course_id'] ?? 0,
+                                          material_id:
+                                              addedmaterial['material_id'] ?? 0,
+                                          order_number:
+                                              addedmaterial['order_number'] ??
+                                                  0,
+                                          material_file:
+                                              addedmaterial['material_file'] ??
+                                                  '',
+                                          title: addedmaterial['title'] ?? '',
+                                        );
+                                      }).toList(),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -492,43 +571,51 @@ class MyClipper extends CustomClipper<Path> {
 }
 
 class Lessons extends StatelessWidget {
-  final Map<String, dynamic>? courseDetails;
+  final int course_id;
+  final int material_id;
+  final String material_file;
+  final String title;
+  final int order_number;
 
-  const Lessons({Key? key, this.courseDetails}) : super(key: key);
+  const Lessons({
+    required this.course_id,
+    required this.order_number,
+    required this.material_id,
+    required this.material_file,
+    required this.title,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return courseDetails == null
-        ? Center(child: Text('No lessons available'))
-        : Container(
-            child: Column(children: [
-              ListView(
-                shrinkWrap: true,
-                children:
-                    List.generate(courseDetails!['content'].length, (index) {
-                  return ListTile(
-                    leading:
-                        Icon(EneftyIcons.chart_success_outline, color: black),
-                    title: Text(
-                      courseDetails!['content'][index]['title'],
-                      style: GoogleFonts.openSans(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: black),
-                    ),
-                    subtitle: Text(
-                      courseDetails!['content'][index]['description'],
-                      textAlign: TextAlign.justify,
-                      style: GoogleFonts.openSans(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400,
-                          color: black),
-                    ),
-                  );
-                }),
-              )
-            ]),
-          );
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      height: 50,
+      width: MediaQuery.of(context).size.width * 0.9,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: white,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          children: [
+            SizedBox(width: 20),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '$title',
+                  overflow: TextOverflow.clip,
+                  style: GoogleFonts.poppins(
+                      fontSize: 15, fontWeight: FontWeight.bold, color: black),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

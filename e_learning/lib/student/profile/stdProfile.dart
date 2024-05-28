@@ -6,6 +6,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../color.dart';
+import '../../edit profile/editProfile.dart';
 import '../../login/login.dart';
 import '../../services/userServices.dart';
 import '../../shared/bottomNavBar.dart';
@@ -31,7 +32,7 @@ class _StudentProfileState extends State<StudentProfile> {
   late String last_name = '';
   late String email = '';
   late String user_name = '';
-
+  late int user_id;
   @override
   void initState() {
     super.initState();
@@ -136,14 +137,18 @@ class _StudentProfileState extends State<StudentProfile> {
                                   color: black,
                                   fontWeight: FontWeight.w600)),
                           SizedBox(width: 20),
-                          Text(
-                            '$email',
-                            overflow: TextOverflow.clip,
-                            style: GoogleFonts.poppins(
+                          SizedBox(
+                            width: 200,
+                            child: Text(
+                              '$email',
+                              overflow: TextOverflow.clip,
+                              style: GoogleFonts.poppins(
                                 fontSize: 15,
                                 color: lightgrey,
-                                fontWeight: FontWeight.w600),
-                          ),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ],
@@ -188,66 +193,78 @@ class _StudentProfileState extends State<StudentProfile> {
               SizedBox(
                 height: 10,
               ),
-              Container(
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: background,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: background2,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  padding: EdgeInsets.all(
-                                      5), // Adjust padding to your needs
-                                  child: Icon(
-                                    Iconsax.user,
-                                    color: black,
-                                    size: 20,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              'Manage Profile',
-                              style: GoogleFonts.poppins(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700,
-                                  color: black),
-                            ),
-                            Spacer(),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: white,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Align(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Icon(
-                                    Iconsax.arrow_right_3,
-                                    size: 20,
-                                    color: black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+              GestureDetector(
+                onTap: () {
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => EditProfile(
+                  //             user_id: user_id,
+                  //             username: widget.username,
+                  //             accessToken: widget.accessToken,
+                  //             refreshToken: widget.refreshToken)));
+                },
+                child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: background,
                     ),
-                  )),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: background2,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    padding: EdgeInsets.all(
+                                        5), // Adjust padding to your needs
+                                    child: Icon(
+                                      Iconsax.user,
+                                      color: black,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                'Manage Profile',
+                                style: GoogleFonts.poppins(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                    color: black),
+                              ),
+                              Spacer(),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: white,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Align(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Icon(
+                                      Iconsax.arrow_right_3,
+                                      size: 20,
+                                      color: black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )),
+              ),
               SizedBox(
                 height: 30,
               ),
