@@ -61,6 +61,7 @@ dependencies:
   gif: ^2.3.0
   fluentui_system_icons: ^1.1.239
   http_parser: ^4.0.2
+  webview_flutter: ^4.8.0
 
 dev_dependencies:
   flutter_test:

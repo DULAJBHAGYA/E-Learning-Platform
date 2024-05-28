@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 import '../../../color.dart';
+import 'package:http_parser/http_parser.dart';
 
 class Newmaterial extends StatefulWidget {
   const Newmaterial({
@@ -42,27 +43,24 @@ class _NewmaterialState extends State<Newmaterial> {
   @override
   void initState() {
     super.initState();
-    _courseidController.text =
-        widget.course_id.toString(); // Pre-fill course ID
+    _courseidController.text = widget.course_id.toString();
   }
 
   Future<void> _pickFile() async {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['mp4', 'avi', 'mov'], // Allow only video files
+        allowedExtensions: ['mp4', 'avi', 'mov'],
       );
 
       if (result != null) {
         if (kIsWeb) {
-          // For web, get the bytes and create a Uint8List
           Uint8List bytes = await result.files.first.bytes!;
           setState(() {
             _selectedVideoBytes = bytes;
             _fileName = result.files.first.name;
           });
         } else {
-          // For mobile, get the file directly
           PlatformFile file = result.files.first;
           setState(() async {
             _selectedVideoBytes = await File(file.path!).readAsBytes();
@@ -85,15 +83,25 @@ class _NewmaterialState extends State<Newmaterial> {
   }
 
   FormData _buildFormData() {
-    return FormData.fromMap({
+    final formData = FormData.fromMap({
       'course_id': _courseidController.text.trim(),
       'title': _titleController.text.trim(),
       'order_number': _ordernumberController.text.trim(),
       'resource': _resourceController.text.trim(),
-      'material_file': _selectedVideoBytes != null
-          ? MultipartFile.fromBytes(_selectedVideoBytes!, filename: _fileName)
-          : null,
     });
+
+    if (_selectedVideoBytes != null) {
+      formData.files.add(MapEntry(
+        'material_file',
+        MultipartFile.fromBytes(
+          _selectedVideoBytes!,
+          filename: _fileName!,
+          contentType: MediaType('video', 'mp4'), // Ensure proper content type
+        ),
+      ));
+    }
+
+    return formData;
   }
 
   void _showSuccessDialog(int material_id) {
@@ -118,7 +126,15 @@ class _NewmaterialState extends State<Newmaterial> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddMaterial(
+                              username: widget.username,
+                              accessToken: widget.accessToken,
+                              refreshToken: widget.refreshToken,
+                              course_id: widget.course_id,
+                            )));
               },
               child: Text('OK'),
             ),
