@@ -1,5 +1,6 @@
 import 'package:e_learning/services/courseServices.dart'; // Import the service for fetching course details
 import 'package:e_learning/student/all%20courses/allCourses.dart';
+import 'package:e_learning/student/my%20courses/myCourses.dart';
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -374,9 +375,8 @@ class _CourseDescriptionState extends State<CourseDescription>
                                     child: Column(
                                       children: [
                                         AboutCourse(
-                                          what_will: {
-                                            'what_will': widget.what_will
-                                          },
+                                          what_will:
+                                              widget.what_will['what_will'],
                                           active: active,
                                           pending: pending,
                                         ),
@@ -502,9 +502,7 @@ class _CourseDescriptionState extends State<CourseDescription>
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => CourseContent(course_id: widget.course_id),
-            ),
+            MaterialPageRoute(builder: (context) => MyCourses()),
           );
         },
         child: Text(
@@ -640,7 +638,6 @@ class AboutCourse extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              // Corrected this line
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -669,7 +666,7 @@ class AboutCourse extends StatelessWidget {
                           .entries
                           .map((entry) {
                         return Text(
-                          '${entry.key}: ${entry.value}',
+                          '${entry.value}',
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w400,
@@ -694,7 +691,7 @@ class AboutCourse extends StatelessWidget {
                           .entries
                           .map((entry) {
                         return Text(
-                          '${entry.key}: ${entry.value}',
+                          '${entry.value}',
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w400,
@@ -719,7 +716,7 @@ class AboutCourse extends StatelessWidget {
                           .entries
                           .map((entry) {
                         return Text(
-                          '${entry.key}: ${entry.value}',
+                          '${entry.value}',
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w400,

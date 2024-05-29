@@ -196,59 +196,144 @@ class AdminAddedMaterialViewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-      height: 100,
-      width: MediaQuery.of(context).size.width * 0.9,
+      height: 130,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: white,
+        color: Colors.white,
       ),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Row(
           children: [
-            SizedBox(width: 20),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '$material_id) $title',
-                  overflow: TextOverflow.clip,
-                  style: GoogleFonts.poppins(
-                      fontSize: 15, fontWeight: FontWeight.bold, color: black),
+            // Image
+            Container(
+              height: 120,
+              width: 120,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(material_file),
+                  fit: BoxFit.cover,
                 ),
-                SizedBox(height: 10),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddAssignment(
-                          course_id: course_id,
-                          material_id: material_id,
-                          username: '',
-                          accessToken: '',
-                          refreshToken: '',
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            SizedBox(width: 20),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          '$order_number) $title',
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.poppins(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
-                    );
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(3),
-                    decoration: BoxDecoration(
-                      color: darkblue,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Text(
-                      'Add Assignment',
-                      style: GoogleFonts.poppins(
-                          fontSize: 12,
+                      PopupMenuButton<String>(
+                        icon: Icon(Icons.more_vert),
+                        onSelected: (value) async {
+                          switch (value) {
+                            case 'Edit Material':
+                              // Handle Edit Course action
+                              print('Edit Course');
+                              break;
+                            case 'Delete Material':
+                              // Handle Delete Course action
+                              bool confirmed = await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text('Confirm Deletion'),
+                                    content: Text(
+                                        'Are you sure you want to delete this material?'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(false),
+                                        child: Text('No'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(true),
+                                        child: Text('Yes'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                              if (confirmed) {
+                                try {
+                                  await MaterialService.instance
+                                      .deleteMaterial(course_id, material_id);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            'Material deleted successfully')),
+                                  );
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            'Failed to delete material: $e')),
+                                  );
+                                }
+                              }
+                              break;
+                          }
+                        },
+                        itemBuilder: (BuildContext context) {
+                          return {'Edit Material', 'Delete Material'}
+                              .map((String choice) {
+                            return PopupMenuItem<String>(
+                              value: choice,
+                              child: Text(choice),
+                            );
+                          }).toList();
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddAssignment(
+                            username: '',
+                            accessToken: '',
+                            refreshToken: '',
+                            material_id: material_id,
+                            course_id: course_id,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(3),
+                      decoration: BoxDecoration(
+                        color: darkblue,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Text(
+                        'Add Assignments',
+                        style: GoogleFonts.poppins(
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
-                          color: white),
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),

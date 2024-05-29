@@ -32,7 +32,6 @@ class MaterialService {
       }
 
       _dio.options.headers['Authorization'] = 'Bearer $accessToken';
-      _dio.options.headers['Content-Type'] = 'multipart/form-data';
 
       final response = await _dio.post(
         '/api/v3/create/material/$course_id',
@@ -51,6 +50,7 @@ class MaterialService {
 
         return redirectedResponse.data;
       } else {
+        // Handle other status codes (e.g., 404, 500)
         throw Exception(
             'Failed to post course. Status code: ${response.statusCode}');
       }
@@ -146,6 +146,22 @@ class MaterialService {
       throw Exception('Error fetching materials: ${e.message}');
     } catch (e) {
       print('Unexpected Error: $e');
+      rethrow;
+    }
+  }
+
+  Future<dynamic> deleteMaterial(int course_id, int material_id) async {
+    try {
+      final response = await _dio.delete(
+          '/api/v3/del/material?material_id=$material_id&course_id=$course_id');
+
+      return response.data;
+    } on DioError catch (e) {
+      print("Dio Error: $e");
+      print("Response Data: ${e.response?.data}");
+      throw Exception(e.response?.data['detail'] ?? e.toString());
+    } catch (e) {
+      print("Unexpected Error: $e");
       rethrow;
     }
   }
