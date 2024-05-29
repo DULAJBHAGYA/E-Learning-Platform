@@ -124,7 +124,7 @@ class UserService {
 
       _dio.options.headers['Authorization'] = 'Bearer $accessToken';
 
-      final response = await _dio.put(
+      final response = await _dio.patch(
         '/api/v2/edit/user',
         data: {
           'user_id': user_id,

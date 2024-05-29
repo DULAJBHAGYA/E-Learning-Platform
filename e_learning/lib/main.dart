@@ -36,9 +36,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'U-Learn',
       initialRoute: '/',
-      routes: {
-        '/': (context) => Login(),
-      },
+      routes: {'/': (context) => Login()},
     );
   }
 }

@@ -194,15 +194,26 @@ class _StudentProfileState extends State<StudentProfile> {
                 height: 10,
               ),
               GestureDetector(
-                onTap: () {
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => EditProfile(
-                  //             user_id: user_id,
-                  //             username: widget.username,
-                  //             accessToken: widget.accessToken,
-                  //             refreshToken: widget.refreshToken)));
+                onTap: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  final user_id = prefs.getInt('user_id');
+
+                  if (user_id != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditProfile(
+                          username: widget.username,
+                          accessToken: widget.accessToken,
+                          refreshToken: widget.refreshToken,
+                          user_id: user_id,
+                        ),
+                      ),
+                    );
+                  } else {
+                    // Handle the case where user_id is null
+                    print('User ID not found in SharedPreferences');
+                  }
                 },
                 child: Container(
                     width: MediaQuery.of(context).size.width,

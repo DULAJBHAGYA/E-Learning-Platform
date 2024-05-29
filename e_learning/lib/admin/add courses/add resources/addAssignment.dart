@@ -38,20 +38,23 @@ class _AddAssignmentState extends State<AddAssignment> {
   @override
   void initState() {
     super.initState();
-    fetchResourceById(widget.material_id);
+    fetchResourceById(widget.material_id, widget.course_id);
   }
 
   Future<void> _fetchMaterialId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     assignment_id = prefs.getInt('assignment_id') ?? 0;
     print('Material ID: $assignment_id');
-    fetchResourceById(assignment_id);
+    fetchResourceById(widget.material_id, widget.course_id);
   }
 
-  Future<void> fetchResourceById(int material_id) async {
+  Future<void> fetchResourceById(int material_id, int course_id) async {
     try {
-      final assignmentsData = await AssignmentService.instance
-          .getAssignmentByMaterialId(material_id);
+      final assignmentsData =
+          await AssignmentService.instance.getAssignmentByMaterialId(
+        material_id,
+        course_id,
+      );
       setState(() {
         _assignments = assignmentsData ?? [];
       });
