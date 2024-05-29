@@ -68,9 +68,10 @@ class AssignmentService {
     }
   }
 
-  Future<dynamic> fetchCourseDetails() async {
+  Future<dynamic> fetchCourseDetails(int course_id, int material_id) async {
     try {
-      final response = await _dio.get('/courses');
+      final response = await _dio.get(
+          '/api/v3/list/assignment/bymaterial?material_id=$material_id&course_id=$course_id');
 
       return response.data;
     } on DioError catch (e) {
@@ -121,7 +122,9 @@ class AssignmentService {
     }
   }
 
-  Future<dynamic> getAssignmentByMaterialId(int material_id) async {
+  Future<dynamic> getAssignmentByMaterialId(
+    int material_id,
+  int course_id) async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? accessToken = prefs.getString('access_token');
@@ -132,7 +135,7 @@ class AssignmentService {
       }
 
       final response = await _dio.get(
-        '/api/v3/list/assignment/bymaterial?material_id=$material_id',
+        '/api/v3/list/assignment/bymaterial?material_id=$material_id&course_id=$course_id',
         options: Options(headers: headers),
       );
 
