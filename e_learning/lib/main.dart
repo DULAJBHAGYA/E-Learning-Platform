@@ -23,6 +23,7 @@ import 'edit profile/editProfile.dart';
 import 'student/course display/courseDescription.dart';
 import 'student/home/stdHome.dart';
 import 'student/profile/stdProfile.dart';
+import 'student/submit assignment/submitAssignment.dart';
 
 void main() {
   runApp(MyApp());

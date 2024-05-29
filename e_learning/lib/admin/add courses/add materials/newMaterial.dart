@@ -37,8 +37,9 @@ class _NewmaterialState extends State<Newmaterial> {
   TextEditingController _courseidController = TextEditingController();
   TextEditingController _resourceController = TextEditingController();
 
-  Uint8List? _selectedVideoBytes;
   String? _fileName;
+  File? _selectedImage;
+  Uint8List? _selectedImageBytes;
 
   @override
   void initState() {
@@ -50,27 +51,24 @@ class _NewmaterialState extends State<Newmaterial> {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['mp4', 'avi', 'mov'],
+        allowedExtensions: ['jpg', 'jpeg', 'png'], // Allow only image files
       );
 
       if (result != null) {
         if (kIsWeb) {
           Uint8List bytes = await result.files.first.bytes!;
           setState(() {
-            _selectedVideoBytes = bytes;
-            _fileName = result.files.first.name;
+            _selectedImageBytes = bytes;
           });
         } else {
           PlatformFile file = result.files.first;
-          setState(() async {
-            _selectedVideoBytes = await File(file.path!).readAsBytes();
-            _fileName = file.name;
+          setState(() {
+            _selectedImage = File(file.path!);
           });
         }
-
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Selected video: $_fileName'),
+            content: Text('Selected image: ${result.files.first.name}'),
             duration: Duration(seconds: 2),
           ),
         );
@@ -83,25 +81,15 @@ class _NewmaterialState extends State<Newmaterial> {
   }
 
   FormData _buildFormData() {
-    final formData = FormData.fromMap({
+    return FormData.fromMap({
       'course_id': _courseidController.text.trim(),
       'title': _titleController.text.trim(),
       'order_number': _ordernumberController.text.trim(),
       'resource': _resourceController.text.trim(),
+      'material': _selectedImageBytes != null
+          ? MultipartFile.fromBytes(_selectedImageBytes!, filename: 'image.jpg')
+          : null,
     });
-
-    if (_selectedVideoBytes != null) {
-      formData.files.add(MapEntry(
-        'material_file',
-        MultipartFile.fromBytes(
-          _selectedVideoBytes!,
-          filename: _fileName!,
-          contentType: MediaType('video', 'mp4'), // Ensure proper content type
-        ),
-      ));
-    }
-
-    return formData;
   }
 
   void _showSuccessDialog(int material_id) {
@@ -227,15 +215,10 @@ class _NewmaterialState extends State<Newmaterial> {
                       color: Colors.grey[300],
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: _selectedVideoBytes != null
-                        ? Center(
-                            child: Text(
-                              'Video Selected',
-                              style: GoogleFonts.openSans(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                    child: _selectedImageBytes != null
+                        ? Image.memory(
+                            _selectedImageBytes!,
+                            fit: BoxFit.cover,
                           )
                         : Icon(
                             Icons.file_upload,
@@ -300,6 +283,7 @@ class _NewmaterialState extends State<Newmaterial> {
                         if (_formKey.currentState!.validate()) {
                           try {
                             final FormData formData = _buildFormData();
+                            print('Sending FormData to backend...');
                             final response = await MaterialService.instance
                                 .postMaterial(formData, widget.course_id);
 
@@ -336,7 +320,7 @@ class _NewmaterialState extends State<Newmaterial> {
                           fontSize: 15,
                         ),
                       ),
-                    ),
+                    )
                   ],
                 ),
               ],

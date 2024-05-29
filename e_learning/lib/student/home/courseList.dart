@@ -82,16 +82,17 @@ class CourseListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: white,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: Row(children: [
-            //image
+      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Row(
+          children: [
+            // image
             Container(
               height: 100,
               width: 100,
@@ -103,36 +104,48 @@ class CourseListCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
-
             SizedBox(width: 20),
-
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              SizedBox(height: 10),
-              Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  catagory.toUpperCase(),
-                  style: GoogleFonts.poppins(
-                      fontSize: 15,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 10),
+                  Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      catagory.toUpperCase(),
+                      style: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: lightgrey,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    title,
+                    style: GoogleFonts.nunito(
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: lightgrey),
-                ),
+                      color: Colors.black,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                  SizedBox(height: 5),
+                ],
               ),
-              SizedBox(height: 5),
-              Text(
-                title,
-                overflow: TextOverflow.fade,
-                style: GoogleFonts.nunito(
-                    fontSize: 18, fontWeight: FontWeight.bold, color: black),
-              ),
-              SizedBox(height: 5),
-            ]),
-          ]),
-        ));
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

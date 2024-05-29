@@ -109,7 +109,7 @@ class OnGoingCourseCard extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: white,
+          color: Colors.white,
         ),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -130,46 +130,52 @@ class OnGoingCourseCard extends StatelessWidget {
             SizedBox(width: 20),
 
             // Course Details
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 10),
-                Text(
-                  title,
-                  style: GoogleFonts.nunito(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    color: black,
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: background2,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Text(
-                    catagory.toUpperCase(),
-                    overflow: TextOverflow.clip,
-                    style: GoogleFonts.poppins(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: lightgrey,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 10),
+                  Expanded(
+                    child: Text(
+                      title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.nunito(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(height: 5),
-              ],
+                  Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Text(
+                      catagory.toUpperCase(),
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                ],
+              ),
             ),
 
-            Spacer(),
+            SizedBox(width: 10),
 
             // Progress Indicator
             CircularPercentIndicator(
               radius: 40.0,
               lineWidth: 8.0,
-              progressColor: blue,
+              progressColor: Colors.blue,
               animation: true,
               percent: progress / 100,
               center: Text(
