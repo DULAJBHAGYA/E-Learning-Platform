@@ -131,23 +131,44 @@ class CourseService {
     }
   }
 
-  Future<dynamic> updateCourseById(
-      int course_id, String title, String description, String type) async {
+  Future<dynamic> editCourse(FormData formData, int course_id) async {
     try {
-      final response = await _dio.put(
-        '/course/$course_id',
-        data: jsonEncode({
-          'title': title,
-          'description': description,
-          'type': type,
-        }),
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? accessToken = prefs.getString('access_token');
+
+      if (accessToken == null || accessToken.isEmpty) {
+        throw Exception('Access token not found');
+      }
+
+      _dio.options.headers['Authorization'] = 'Bearer $accessToken';
+
+      final response = await _dio.patch(
+        '/api/v3/edit/course/$course_id',
+        data: formData,
       );
 
-      return response.data;
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        return response.data;
+      } else if (response.statusCode == 307) {
+        String redirectUrl = response.headers['location']?.first ?? '';
+        final redirectedResponse = await _dio.patch(
+          redirectUrl,
+          data: formData,
+        );
+
+        return redirectedResponse.data;
+      } else {
+        throw Exception(
+            'Failed to edit course. Status code: ${response.statusCode}');
+      }
     } on DioError catch (e) {
-      print("Dio Error: $e");
-      print("Response Data: ${e.response?.data}");
-      throw Exception(e.response?.data['detail'] ?? e.toString());
+      if (e.response != null && e.response!.statusCode == 404) {
+        throw Exception('Course not found. Please check your request.');
+      } else {
+        print("Dio Error: $e");
+        print("Response Data: ${e.response?.data}");
+        throw Exception(e.response?.data['detail'] ?? e.toString());
+      }
     } catch (e) {
       print("Unexpected Error: $e");
       rethrow;

@@ -11,6 +11,7 @@ import 'package:unicons/unicons.dart';
 
 import '../../services/courseServices.dart';
 import '../admin home/adminDash.dart';
+import 'editCourses.dart';
 
 class AddCourses extends StatefulWidget {
   const AddCourses({
@@ -250,7 +251,17 @@ class AdminAddedCourseViewCard extends StatelessWidget {
                           switch (value) {
                             case 'Edit Course':
                               // Handle Edit Course action
-                              print('Edit Course');
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => EditCourse(
+                                    username: '',
+                                    accessToken: '',
+                                    refreshToken: '',
+                                    course_id: course_id,
+                                  ),
+                                ),
+                              );
                               break;
                             case 'Delete Course':
                               // Handle Delete Course action

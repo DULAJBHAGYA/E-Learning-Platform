@@ -33,6 +33,8 @@ class _StudentProfileState extends State<StudentProfile> {
   late String email = '';
   late String user_name = '';
   late int user_id;
+  late String picture = '';
+
   @override
   void initState() {
     super.initState();
@@ -54,6 +56,7 @@ class _StudentProfileState extends State<StudentProfile> {
           last_name = response['GetUserIDRow']['last_name'];
           user_name = response['GetUserIDRow']['user_name'];
           email = response['GetUserIDRow']['email'];
+          picture = response['GetUserIDRow']['picture'];
         });
 
         print('Fetched User: $first_name $last_name');
@@ -124,7 +127,7 @@ class _StudentProfileState extends State<StudentProfile> {
                         height: 100,
                         child: CircleAvatar(
                           radius: 120,
-                          backgroundImage: AssetImage('/images/user1.jpg'),
+                          backgroundImage: NetworkImage(picture),
                         ),
                       ),
                       SizedBox(width: 20),

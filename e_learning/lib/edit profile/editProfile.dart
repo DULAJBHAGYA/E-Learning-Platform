@@ -1,5 +1,11 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:dio/dio.dart';
 import 'package:e_learning/services/requestServices.dart';
 import 'package:e_learning/services/userServices.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
@@ -7,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../color.dart';
 import '../login/login.dart';
+import '../services/profilePictureServices.dart';
 import '../student/profile/stdProfile.dart';
 
 class EditProfile extends StatefulWidget {
@@ -36,6 +43,10 @@ class _EditProfileState extends State<EditProfile> {
   late String last_name = '';
   late String email = '';
   late String user_name = '';
+  late String picture = '';
+
+  Uint8List? _selectedImageBytes;
+  File? _selectedImage;
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -53,6 +64,67 @@ class _EditProfileState extends State<EditProfile> {
   void initState() {
     super.initState();
     fetchUserById();
+  }
+
+  Future<void> _pickFile() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'jpeg', 'png'], // Allow only image files
+      );
+
+      if (result != null) {
+        if (kIsWeb) {
+          // For web, get the bytes and create a Uint8List
+          Uint8List bytes = await result.files.first.bytes!;
+          setState(() {
+            _selectedImageBytes = bytes;
+          });
+        } else {
+          // For mobile, get the file directly
+          PlatformFile file = result.files.first;
+          setState(() {
+            _selectedImage = File(file.path!);
+          });
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Selected image: ${result.files.first.name}'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      } else {
+        print('No file selected.');
+      }
+    } catch (e) {
+      print('Error picking file: $e');
+    }
+  }
+
+  FormData _buildFormData() {
+    return FormData.fromMap({
+      'user_id': widget.user_id,
+      'image': _selectedImageBytes != null
+          ? MultipartFile.fromBytes(_selectedImageBytes!, filename: 'image.jpg')
+          : null,
+    });
+  }
+
+  Future<void> _handleProfilePictureAction(String action) async {
+    switch (action) {
+      case 'upload':
+        await _pickFile();
+        await ProfilePicService.instance.postProfilePicture(_buildFormData());
+        break;
+      case 'update':
+        await _pickFile();
+        await ProfilePicService.instance.updateProfilePicture(_buildFormData());
+        break;
+      case 'delete':
+        await ProfilePicService.instance.deleteProfilePicture(widget.user_id);
+        break;
+    }
   }
 
   String? _validateFirstName(String? value) {
@@ -275,63 +347,85 @@ class _EditProfileState extends State<EditProfile> {
                             SizedBox(
                               height: 20,
                             ),
-                            Center(
-                              child: Stack(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 80,
-                                    backgroundImage:
-                                        AssetImage('/images/user1.jpg')
-                                            as ImageProvider,
-                                  ),
-                                  Positioned(
-                                    bottom: 0,
-                                    right: 0,
-                                    child: GestureDetector(
-                                      onTap: () {},
-                                      child: Container(
-                                        height: 40,
-                                        width: 40,
-                                        decoration: BoxDecoration(
-                                          color: white,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Icon(
-                                          Iconsax.edit,
-                                          color: black,
-                                          size: 20,
+                            Container(
+                                child: Column(children: [
+                              Center(
+                                child: Stack(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 80,
+                                      backgroundImage: NetworkImage(picture)
+                                          as ImageProvider,
+                                    ),
+                                    Positioned(
+                                      bottom: 0,
+                                      right: 0,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          showMenu(
+                                            context: context,
+                                            position: RelativeRect.fromLTRB(
+                                                100, 100, 0, 0),
+                                            items: [
+                                              PopupMenuItem(
+                                                value: 'upload',
+                                                child: Text('Upload'),
+                                              ),
+                                              PopupMenuItem(
+                                                value: 'update',
+                                                child: Text('Update'),
+                                              ),
+                                              PopupMenuItem(
+                                                value: 'delete',
+                                                child: Text('Delete'),
+                                              ),
+                                            ],
+                                          ).then((value) {
+                                            if (value != null) {
+                                              _handleProfilePictureAction(
+                                                  value);
+                                            }
+                                          });
+                                        },
+                                        child: CircleAvatar(
+                                          backgroundColor: Colors.blue,
+                                          radius: 25,
+                                          child: Icon(
+                                            Icons.camera_alt,
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        color: white,
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                            color: background2, width: 1)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Text(
+                                        'UPLOAD PHOTO',
+                                        style: GoogleFonts.poppins(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                            color: lightgrey),
+                                      ),
+                                    ),
+                                  )
                                 ],
                               ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: white,
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                          color: background2, width: 1)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Text(
-                                      'UPLOAD PHOTO',
-                                      style: GoogleFonts.poppins(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          color: lightgrey),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
+                            ])),
                             SizedBox(
                               height: 20,
                             ),
