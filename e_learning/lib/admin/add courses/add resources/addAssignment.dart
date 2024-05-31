@@ -169,6 +169,7 @@ class _AddAssignmentState extends State<AddAssignment> {
                 child: Column(
                   children: _assignments.map((addedassignment) {
                     return AdminAddedAssingmentViewCard(
+                      assignment_id: addedassignment['assignment_id'] ?? 0,
                       course_id: addedassignment['course_id'] ?? 0,
                       material_id: addedassignment['material_id'] ?? 0,
                       assignment_file: addedassignment['assignment_file'] ?? '',
@@ -190,12 +191,14 @@ class AdminAddedAssingmentViewCard extends StatelessWidget {
   final int material_id;
   final String assignment_file;
   final String title;
+  final int assignment_id;
 
   const AdminAddedAssingmentViewCard({
     required this.course_id,
     required this.material_id,
     required this.assignment_file,
     required this.title,
+    required this.assignment_id,
     Key? key,
   }) : super(key: key);
 
@@ -218,7 +221,7 @@ class AdminAddedAssingmentViewCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '$material_id) $title',
+                  '$assignment_id) $title',
                   overflow: TextOverflow.clip,
                   style: GoogleFonts.openSans(
                       fontSize: 15, fontWeight: FontWeight.bold, color: black),

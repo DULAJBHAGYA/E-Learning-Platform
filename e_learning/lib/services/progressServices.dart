@@ -1,13 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'baseurl.dart';
 
-class CategoryServices {
+class ProgressService {
   late final Dio _dio;
 
-  static final CategoryServices _instance = CategoryServices._internal();
+  static final ProgressService _instance = ProgressService._internal();
 
-  CategoryServices._internal() {
+  ProgressService._internal() {
     _dio = Dio(
       BaseOptions(
         baseUrl: baseUrl,
@@ -18,9 +19,13 @@ class CategoryServices {
     );
   }
 
-  static CategoryServices get instance => _instance;
+  static ProgressService get instance => _instance;
 
-  Future<dynamic> fetchAllCategories() async {
+  Future<dynamic> editProgress({
+    required bool completed,
+    required int course_id,
+    required int user_id,
+  }) async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? accessToken = prefs.getString('access_token');
@@ -31,7 +36,13 @@ class CategoryServices {
 
       _dio.options.headers['Authorization'] = 'Bearer $accessToken';
 
-      final response = await _dio.get('/api/v3/list/catagories');
+      final response = await _dio.patch(
+        '/api/v4/edit/progress?course_id=$course_id&user_id=$user_id&completed=$completed',
+        data: {
+          'user_id': user_id,
+          'course_id': course_id,
+          'completed': completed, },
+      );
 
       return response.data;
     } on DioError catch (e) {

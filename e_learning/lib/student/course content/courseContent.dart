@@ -1,10 +1,9 @@
 import 'package:e_learning/student/my%20courses/myCourses.dart';
 import 'package:flutter/material.dart';
 import 'package:enefty_icons/enefty_icons.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../color.dart';
 import '../../services/courseServices.dart';
@@ -14,9 +13,11 @@ class CourseContent extends StatefulWidget {
   const CourseContent({
     Key? key,
     required this.course_id,
+    required this.progress,
   }) : super(key: key);
 
   final int course_id;
+  final int progress;
 
   @override
   _CourseContentState createState() => _CourseContentState();
@@ -25,9 +26,9 @@ class CourseContent extends StatefulWidget {
 class _CourseContentState extends State<CourseContent> {
   List<dynamic> _contents = [];
   late int course_id;
-  late String title;
-  late String image;
-  late String catagory;
+  late String title = '';
+  late String image = '';
+  late String catagory = '';
 
   @override
   void initState() {
@@ -41,7 +42,7 @@ class _CourseContentState extends State<CourseContent> {
       final courseContentData = await MaterialService.instance
           .fetchMaterialssForStudents(widget.course_id);
       setState(() {
-        _contents = courseContentData ?? [];
+        _contents = courseContentData['material'] ?? [];
       });
     } catch (e) {
       print('Error fetching courses: $e');
@@ -71,7 +72,12 @@ class _CourseContentState extends State<CourseContent> {
         padding: const EdgeInsets.all(0.0),
         child: Column(
           children: [
-            CourseContentHeader(title: title, image: image, catagory: catagory),
+            CourseContentHeader(
+              title: title,
+              image: image,
+              catagory: catagory,
+              progress: widget.progress,
+            ),
             SizedBox(height: 10),
             Expanded(
               child: SingleChildScrollView(
@@ -80,8 +86,16 @@ class _CourseContentState extends State<CourseContent> {
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
                     children: _contents.map((content) {
+                      final resource = content['resource'];
+                      final resourseLink = resource['resourse_link'];
+                      final urls = [
+                        resourseLink['url1'] as String,
+                        resourseLink['url2'] as String,
+                        resourseLink['url3'] as String,
+                      ];
                       return LessonDisplayWidget(
-                        title: content['title'],
+                        title: content['title'] as String,
+                        urls: urls,
                       );
                     }).toList(),
                   ),
@@ -138,13 +152,30 @@ class QuizDisplayWidget extends StatelessWidget {
   }
 }
 
-class LessonDisplayWidget extends StatelessWidget {
+class LessonDisplayWidget extends StatefulWidget {
   final String title;
+  final List<String> urls;
 
   const LessonDisplayWidget({
     required this.title,
+    required this.urls,
     Key? key,
   }) : super(key: key);
+
+  @override
+  _LessonDisplayWidgetState createState() => _LessonDisplayWidgetState();
+}
+
+class _LessonDisplayWidgetState extends State<LessonDisplayWidget> {
+  bool _isChecked = false;
+
+  Future<void> _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -157,47 +188,58 @@ class LessonDisplayWidget extends StatelessWidget {
       ),
       child: ExpansionTile(
         title: Text(
-          title,
+          widget.title,
           style: GoogleFonts.poppins(
             fontSize: 18,
             fontWeight: FontWeight.w600,
             color: Colors.black,
           ),
         ),
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'url1',
+        children: [
+          for (int i = 0; i < widget.urls.length; i++)
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: InkWell(
+                onTap: () {
+                  _launchURL(widget.urls[i]);
+                },
+                child: Text(
+                  widget.urls[i],
                   style: GoogleFonts.poppins(
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
-                    color: Colors.black,
+                    color: Colors.blue,
+                    decoration: i == widget.urls.length - 1
+                        ? TextDecoration.none
+                        : TextDecoration.underline,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(height: 8),
-                Text(
-                  'url2',
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black,
-                  ),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  'assignment',
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
+              ),
             ),
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: CheckboxListTile(
+                  title: Text(
+                    'Done',
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black,
+                    ),
+                  ),
+                  value: _isChecked,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isChecked = value ?? false;
+                    });
+                  },
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -209,11 +251,13 @@ class CourseContentHeader extends StatelessWidget {
   final String title;
   final String image;
   final String catagory;
+  final int progress;
 
   const CourseContentHeader({
     required this.title,
     required this.image,
     required this.catagory,
+    required this.progress,
     Key? key,
   }) : super(key: key);
 
@@ -276,25 +320,28 @@ class CourseContentHeader extends StatelessWidget {
                       overflow: TextOverflow.fade,
                       style: GoogleFonts.poppins(
                           fontSize: 18,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.bold,
                           color: black),
                     ),
                   ),
                   SizedBox(
                     height: 10,
                   ),
-                  Container(
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: white,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      catagory.toUpperCase(),
-                      style: GoogleFonts.poppins(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: lightgrey),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: white,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        catagory.toUpperCase(),
+                        style: GoogleFonts.poppins(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: darkblue),
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -303,7 +350,7 @@ class CourseContentHeader extends StatelessWidget {
                   Row(children: [
                     Icon(
                       EneftyIcons.video_play_outline,
-                      color: lightgrey,
+                      color: blue,
                       size: 15,
                     ),
                     SizedBox(
@@ -323,11 +370,11 @@ class CourseContentHeader extends StatelessWidget {
               CircularPercentIndicator(
                 radius: 45.0,
                 lineWidth: 8.0,
-                progressColor: it,
+                progressColor: blue,
                 animation: true,
-                percent: 0.7,
+                percent: progress / 100,
                 center: new Text(
-                  "70.0%",
+                  '${progress.toString()}%',
                   style: GoogleFonts.nunito(
                       fontWeight: FontWeight.w900, fontSize: 15.0),
                 ),

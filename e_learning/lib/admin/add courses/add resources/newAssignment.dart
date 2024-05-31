@@ -306,8 +306,8 @@ class _NewAssignmentState extends State<NewAssignment> {
                           try {
                             final FormData formData = _buildFormData();
                             final response = await AssignmentService.instance
-                                .postAssignment(formData, widget.course_id,
-                                    widget.material_id);
+                                .postAssignment(formData, widget.material_id,
+                                    widget.course_id);
 
                             if (response.containsKey('assignment_id') &&
                                 response['assignment_id'] != null) {
