@@ -154,7 +154,7 @@ class CompletedCourseCard extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                CourseContent(course_id: course_id),
+                                CourseContent(course_id: course_id, progress: progress ),
                           ),
                         );
                       },

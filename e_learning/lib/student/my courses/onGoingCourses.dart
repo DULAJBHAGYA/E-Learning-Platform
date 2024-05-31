@@ -99,7 +99,7 @@ class OnGoingCourseCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CourseContent(course_id: course_id),
+            builder: (context) => CourseContent(course_id: course_id,progress: progress,),
           ),
         );
       },

@@ -123,8 +123,7 @@ class AssignmentService {
   }
 
   Future<dynamic> getAssignmentByMaterialId(
-    int material_id,
-  int course_id) async {
+      int material_id, int course_id) async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? accessToken = prefs.getString('access_token');

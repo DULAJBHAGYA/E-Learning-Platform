@@ -15,6 +15,7 @@ import 'package:unicons/unicons.dart';
 import '../../../services/courseServices.dart';
 import '../../../services/materialServices.dart';
 import '../add resources/addAssignment.dart';
+import 'editMaterials.dart';
 
 class AddMaterial extends StatefulWidget {
   const AddMaterial({
@@ -240,8 +241,15 @@ class AdminAddedMaterialViewCard extends StatelessWidget {
                         onSelected: (value) async {
                           switch (value) {
                             case 'Edit Material':
-                              // Handle Edit Course action
-                              print('Edit Course');
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => EditMaterial(
+                                          course_id: course_id,
+                                          material_id: material_id,
+                                          username: '',
+                                          accessToken: '',
+                                          refreshToken: '')));
                               break;
                             case 'Delete Material':
                               // Handle Delete Course action

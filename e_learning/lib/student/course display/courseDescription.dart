@@ -372,11 +372,10 @@ class _CourseDescriptionState extends State<CourseDescription>
                                 controller: _tabController,
                                 children: [
                                   SingleChildScrollView(
-                                    child: Column(
+                                    child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         AboutCourse(
-                                          what_will:
-                                              widget.what_will['what_will'],
+                                          what_will: widget.what_will,
                                           active: active,
                                           pending: pending,
                                         ),
@@ -629,11 +628,38 @@ class AboutCourse extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  String _formatWhatWill(Map<String, dynamic> whatWill) {
+    String formattedString = '';
+
+    if (whatWill.containsKey('what_will_you_learn')) {
+      formattedString += 'What will you learn:\n';
+      whatWill['what_will_you_learn'].forEach((key, value) {
+        formattedString += ' - $value\n';
+      });
+    }
+
+    if (whatWill.containsKey('what_skil_you_gain')) {
+      formattedString += '\nWhat skills you will gain:\n';
+      whatWill['what_skil_you_gain'].forEach((key, value) {
+        formattedString += ' - $value\n';
+      });
+    }
+
+    if (whatWill.containsKey('who_should_learn')) {
+      formattedString += '\nWho should learn:\n';
+      whatWill['who_should_learn'].forEach((key, value) {
+        formattedString += ' - $value\n';
+      });
+    }
+
+    return formattedString;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(0.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -643,90 +669,22 @@ class AboutCourse extends StatelessWidget {
                 children: [
                   Text(
                     'About Course',
-                    style: GoogleFonts.nunito(
+                    style: GoogleFonts.poppins(
                       fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                      color: black,
                     ),
                   ),
                   SizedBox(height: 10),
-                  if (what_will != null) ...[
-                    if (what_will!['what_will_you_learn'] != null) ...[
-                      Text(
-                        'What You Will Learn:',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
+                  if (what_will != null)
+                    Text(
+                      _formatWhatWill(what_will!),
+                      style: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                        color: black,
                       ),
-                      SizedBox(height: 5),
-                      ...(what_will!['what_will_you_learn']
-                              as Map<String, dynamic>)
-                          .entries
-                          .map((entry) {
-                        return Text(
-                          '${entry.value}',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.black,
-                          ),
-                        );
-                      }),
-                      SizedBox(height: 20),
-                    ],
-                    if (what_will!['what_skil_you_gain'] != null) ...[
-                      Text(
-                        'Skills You Will Gain:',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      ...(what_will!['what_skil_you_gain']
-                              as Map<String, dynamic>)
-                          .entries
-                          .map((entry) {
-                        return Text(
-                          '${entry.value}',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.black,
-                          ),
-                        );
-                      }),
-                      SizedBox(height: 20),
-                    ],
-                    if (what_will!['who_should_learn'] != null) ...[
-                      Text(
-                        'Who Should Learn:',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      ...(what_will!['who_should_learn']
-                              as Map<String, dynamic>)
-                          .entries
-                          .map((entry) {
-                        return Text(
-                          '${entry.value}',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.black,
-                          ),
-                        );
-                      }),
-                      SizedBox(height: 20),
-                    ],
-                  ],
+                    ),
                 ],
               ),
             ),
