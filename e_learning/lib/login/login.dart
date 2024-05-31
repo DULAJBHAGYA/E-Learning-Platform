@@ -41,27 +41,20 @@ class _LoginState extends State<Login> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.asset(
-                            '/logos/logo.png',
-                            fit: BoxFit.fill,
-                            width: 100,
-                            height: 80,
+                      Row(
+                        children: [
+                          Text(
+                            'Welcome back'.toUpperCase(),
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30,
+                              color: black,
+                            ),
                           ),
-                        ),
-                      ),
-                      Text(
-                        'Welcome back,'.toUpperCase(),
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30,
-                          color: black,
-                        ),
+                          SizedBox(width: 10),
+                          Image.asset('/images/wave.png',
+                              width: 40, height: 40),
+                        ],
                       ),
                       SizedBox(height: 5),
                       Text(

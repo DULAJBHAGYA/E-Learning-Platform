@@ -39,7 +39,7 @@ class _CourseContentState extends State<CourseContent> {
   Future<void> fetchMaterials() async {
     try {
       final courseContentData = await MaterialService.instance
-          .getMaterialByCourseId(widget.course_id);
+          .fetchMaterialssForStudents(widget.course_id);
       setState(() {
         _contents = courseContentData ?? [];
       });
