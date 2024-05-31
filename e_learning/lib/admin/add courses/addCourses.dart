@@ -140,9 +140,9 @@ class _AddCoursesState extends State<AddCourses> {
                   ),
                   child: Text(
                     'ADD NEW COURSE',
-                    style: GoogleFonts.openSans(
+                    style: GoogleFonts.poppins(
                         fontSize: 15,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.bold,
                         color: white),
                   ),
                 ),
