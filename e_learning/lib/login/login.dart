@@ -8,6 +8,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../color.dart';
+import '../forgot password/checkEmail.dart';
 import '../services/userServices.dart';
 
 class Login extends StatefulWidget {
@@ -35,37 +36,31 @@ class _LoginState extends State<Login> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: 50),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Row(
-                        children: [
-                          Text(
-                            'Welcome back'.toUpperCase(),
-                            style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 30,
-                              color: black,
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          Image.asset('/images/wave.png',
-                              width: 40, height: 40),
-                        ],
+                      Text(
+                        'Welcome Back',
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
+                          color: black,
+                        ),
                       ),
                       SizedBox(height: 5),
                       Text(
                         'Sign in to continue',
                         style: GoogleFonts.poppins(
                           fontSize: 20,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w300,
                           color: black,
                         ),
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 50),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -171,7 +166,12 @@ class _LoginState extends State<Login> {
                           ),
                           Spacer(),
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => CheckEmail()));
+                            },
                             child: Text(
                               'Forgot Password?',
                               style: GoogleFonts.poppins(
@@ -223,6 +223,70 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           SizedBox(height: 20),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Divider(
+                                  color: lightgrey,
+                                  thickness: 1,
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Text(
+                                  'Or Login With',
+                                  style: GoogleFonts.poppins(
+                                    color: lightgrey,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Divider(
+                                  color: lightgrey,
+                                  thickness: 1,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Image.asset(
+                                    'images/google.png',
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Image.asset(
+                                    'images/apple.png',
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 30),
                           OutlinedButton(
                             onPressed: () {
                               Navigator.push(

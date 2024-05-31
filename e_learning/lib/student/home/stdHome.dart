@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../color.dart';
 import '../../shared/bottomNavBar.dart';
 import 'courseList.dart';
+import 'imageSlider.dart';
 import 'userInfo.dart';
 import 'userStats.dart';
 
@@ -43,7 +44,8 @@ class _StudentHomeState extends State<StudentHome> {
               UserStats(),
 
               SizedBox(height: 10),
-
+//i
+              // SizedBox(height: 10),
               //topcategories
               Topcategories(
                   username: widget.username,

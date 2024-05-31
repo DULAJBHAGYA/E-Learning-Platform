@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
+class ImageSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +18,7 @@ class HomePage extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8.0),
                   image: DecorationImage(
-                    image: NetworkImage("ADD IMAGE URL HERE"),
+                    image: AssetImage('/images/3d1.jpg'),
                     fit: BoxFit.cover,
                   ),
                 ),

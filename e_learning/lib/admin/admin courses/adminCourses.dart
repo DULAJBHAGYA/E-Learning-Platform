@@ -228,8 +228,8 @@ class AdminCourseView extends StatelessWidget {
                           alignment: Alignment.center,
                           padding: EdgeInsets.all(5),
                           decoration: BoxDecoration(
-                            color: Colors.blue.shade50,
-                            borderRadius: BorderRadius.circular(10),
+                            color: background2,
+                            borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
                             catagory.toUpperCase(),
@@ -254,7 +254,7 @@ class AdminCourseView extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                Icon(Iconsax.video_play,
+                                Icon(Iconsax.video_play2,
                                     color: darkblue,
                                     size:
                                         15), // Assuming 'darkblue' is a Color variable
@@ -315,10 +315,10 @@ class AdminCourseView extends StatelessWidget {
                               border: Border.all(color: darkblue, width: 2),
                             ),
                             child: Text(
-                              'View Details',
+                              'View Details'.toUpperCase(),
                               style: GoogleFonts.poppins(
                                   fontSize: 15,
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.bold,
                                   color: darkblue),
                             ),
                           ),

@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 import 'dart:io';
@@ -210,7 +211,13 @@ class _NewCourseState extends State<NewCourse> {
                 TextFormField(
                   controller: _useridController,
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(labelText: 'User ID'),
+                  decoration: InputDecoration(
+                      labelText: 'User ID',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      )),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'User ID is required';
@@ -225,7 +232,7 @@ class _NewCourseState extends State<NewCourse> {
                     width: double.infinity,
                     height: 200,
                     decoration: BoxDecoration(
-                      color: Colors.grey[300],
+                      color: white,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: _selectedImageBytes != null
@@ -234,8 +241,8 @@ class _NewCourseState extends State<NewCourse> {
                             fit: BoxFit.cover,
                           )
                         : Icon(
-                            Icons.file_upload,
-                            color: Colors.grey[800],
+                            Iconsax.camera,
+                            color: lightgrey,
                             size: 50,
                           ),
                   ),
@@ -244,23 +251,47 @@ class _NewCourseState extends State<NewCourse> {
                 SizedBox(height: 20),
                 TextFormField(
                   controller: _titleController,
-                  decoration: InputDecoration(labelText: 'Title'),
+                  decoration: InputDecoration(
+                      labelText: 'Title',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      )),
                 ),
                 SizedBox(height: 20),
                 TextFormField(
                   controller: _categoryController,
-                  decoration: InputDecoration(labelText: 'Category'),
+                  decoration: InputDecoration(
+                      labelText: 'Category',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      )),
                 ),
                 SizedBox(height: 20),
                 TextFormField(
                   controller: _descriptionController,
-                  decoration: InputDecoration(labelText: 'Description'),
+                  decoration: InputDecoration(
+                      labelText: 'Description',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      )),
                   maxLines: null,
                 ),
                 SizedBox(height: 20),
                 TextFormField(
                   controller: _aboutCourseController,
-                  decoration: InputDecoration(labelText: 'About Course'),
+                  decoration: InputDecoration(
+                      labelText: 'About Course',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      )),
                   maxLines: null,
                 ),
                 SizedBox(height: 20),
@@ -272,10 +303,10 @@ class _NewCourseState extends State<NewCourse> {
                         Navigator.pop(context);
                       },
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(blue),
+                        backgroundColor: MaterialStateProperty.all(darkblue),
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
                         ),
                         padding: MaterialStateProperty.all(
@@ -284,7 +315,7 @@ class _NewCourseState extends State<NewCourse> {
                       ),
                       child: Text(
                         'CANCEL',
-                        style: GoogleFonts.openSans(
+                        style: GoogleFonts.poppins(
                           color: white,
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
@@ -317,10 +348,10 @@ class _NewCourseState extends State<NewCourse> {
                         }
                       },
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(blue),
+                        backgroundColor: MaterialStateProperty.all(darkblue),
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
                         ),
                         padding: MaterialStateProperty.all(
@@ -329,7 +360,7 @@ class _NewCourseState extends State<NewCourse> {
                       ),
                       child: Text(
                         'SAVE',
-                        style: GoogleFonts.openSans(
+                        style: GoogleFonts.poppins(
                           color: white,
                           fontWeight: FontWeight.bold,
                           fontSize: 15,

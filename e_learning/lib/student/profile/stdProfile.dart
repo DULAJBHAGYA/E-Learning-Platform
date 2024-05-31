@@ -448,7 +448,7 @@ class _StudentProfileState extends State<StudentProfile> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: background2,
+                        color: darkblue,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       padding: EdgeInsets.only(
@@ -457,8 +457,8 @@ class _StudentProfileState extends State<StudentProfile> {
                         'Sign Out',
                         style: GoogleFonts.poppins(
                             fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            color: blue),
+                            fontWeight: FontWeight.bold,
+                            color: white),
                       ),
                     )
                   ],

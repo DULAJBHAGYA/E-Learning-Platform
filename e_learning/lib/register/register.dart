@@ -216,10 +216,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     children: [
                       SizedBox(height: 30),
                       Text(
-                        'Let\'s create your account',
+                        'Let\'s Create Your Account',
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.bold,
                           fontSize: 30,
+                          color: black,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'Sign Up to EduApp and start exploring hudreds of online courses',
+                        style: GoogleFonts.poppins(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w300,
                           color: black,
                         ),
                       ),
