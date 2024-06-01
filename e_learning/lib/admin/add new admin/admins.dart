@@ -6,12 +6,12 @@ import 'package:iconsax/iconsax.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../color.dart';
+import '../../shared/searchBar.dart';
 import '../admin home/adminDash.dart';
-
 
 class Admins extends StatefulWidget {
   const Admins({
-Key? key,
+    Key? key,
     required this.username,
     required this.accessToken,
     required this.refreshToken,
@@ -20,14 +20,13 @@ Key? key,
   final String username;
   final String accessToken;
   final String refreshToken;
-  
+
   @override
   _AdminsState createState() => _AdminsState();
-  
 }
 
 class _AdminsState extends State<Admins> with SingleTickerProviderStateMixin {
-    List<dynamic> _admins = [];
+  List<dynamic> _admins = [];
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -37,7 +36,7 @@ class _AdminsState extends State<Admins> with SingleTickerProviderStateMixin {
     fetchAdmins();
   }
 
-   Future<void> fetchAdmins() async {
+  Future<void> fetchAdmins() async {
     try {
       final adminsData = await AdminService.instance.fetchAllAdmins();
       setState(() {
@@ -48,61 +47,70 @@ class _AdminsState extends State<Admins> with SingleTickerProviderStateMixin {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
-      key: _scaffoldKey,  // Assign the GlobalKey to the Scaffold
-      drawer: NavDrawer(),  // Adding the NavDrawer
+      key: _scaffoldKey, // Assign the GlobalKey to the Scaffold
+      drawer: NavDrawer(), // Adding the NavDrawer
       appBar: AppBar(
         backgroundColor: background,
         elevation: 0,
         leading: IconButton(
           icon: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Icon(UniconsLine.bars, size: 30, color: black),
+            child: Icon(Iconsax.menu_1, size: 30, color: black),
           ),
           onPressed: () {
-            _scaffoldKey.currentState?.openDrawer();  // Opens the drawer using the GlobalKey
+            _scaffoldKey.currentState
+                ?.openDrawer(); // Opens the drawer using the GlobalKey
           },
         ),
-        
       ),
       body: Padding(
-        padding: const EdgeInsets.all(0),
+        padding: const EdgeInsets.all(10),
         child: Column(
           children: [
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(0),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: SizedBox(
+                        height: 30,
+                        width: 30,
+                        child: Image.asset(
+                          '/logos/logo.png',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 10),
+                Text(
+                  'Admins',
+                  style: GoogleFonts.poppins(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: black,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            CustomSearchBar(), SizedBox(height: 20),
+
             //header
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    margin: EdgeInsets.all(10),
-                    width: MediaQuery.of(context).size.width,
-                    height: 60.0,
-                    padding: EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: background,
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.search, color: lightgrey),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Search in here',
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: TextButton(
@@ -114,19 +122,19 @@ class _AdminsState extends State<Admins> with SingleTickerProviderStateMixin {
                         );
                       },
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(blue),
+                        backgroundColor: MaterialStateProperty.all(darkblue),
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                         ),
                         padding: MaterialStateProperty.all(
-                          EdgeInsets.all(15.0),
+                          EdgeInsets.all(10.0),
                         ),
                       ),
                       child: Text(
                         'ADD NEW ADMIN',
-                        style: GoogleFonts.openSans(
+                        style: GoogleFonts.poppins(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                           color: white,
@@ -137,7 +145,7 @@ class _AdminsState extends State<Admins> with SingleTickerProviderStateMixin {
                   const SizedBox(height: 10),
                   Expanded(
                     child: SingleChildScrollView(
-                      //inside scroll view it display all the admins 
+                      //inside scroll view it display all the admins
                       child: Column(
                         children: _admins.map((admin) {
                           return AdminDisplayCard(
@@ -200,44 +208,44 @@ class _AdminDisplayCardState extends State<AdminDisplayCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 1,
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ListTile(
-              contentPadding: EdgeInsets.all(16),
-              
-              title: Text(widget.first_name + ' ' + widget.last_name, style: GoogleFonts.openSans(fontWeight: FontWeight.bold, fontSize: 20)),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('${widget.user_name}', style: GoogleFonts.openSans(fontSize: 15)),
-                  Text('${widget.email}', style: GoogleFonts.openSans(fontSize: 15)),
-                ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  icon: Icon(Iconsax.trash, color: red),
-                  onPressed: () {
-                  },
+    return Container(
+      height: 180,
+      child: Card(
+        elevation: 1,
+        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        child: Padding(
+          padding: const EdgeInsets.all(0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ListTile(
+                title: Text(widget.first_name + ' ' + widget.last_name,
+                    style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.bold, fontSize: 15)),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('${widget.user_name}',
+                        style: GoogleFonts.poppins(
+                            fontSize: 15, fontWeight: FontWeight.w300)),
+                    Text('${widget.email}',
+                        style: GoogleFonts.poppins(
+                            fontSize: 15, fontWeight: FontWeight.w300)),
+                  ],
                 ),
-                SizedBox(width: 8),
+              ),
+              Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                 IconButton(
-                  //edit button
-                  icon: Icon(Iconsax.edit, color: blue,),
-                  //when tap on edit button it will open edit admin form
+                  icon: Icon(
+                    Iconsax.trash,
+                    color: red,
+                    size: 20,
+                  ),
                   onPressed: _showEditDialog,
                 ),
-              ],
-            ),
-          ],
+              ]),
+            ],
+          ),
         ),
       ),
     );

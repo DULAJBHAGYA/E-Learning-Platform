@@ -154,6 +154,7 @@ class _EditMaterialState extends State<EditMaterial> {
                               accessToken: widget.accessToken,
                               refreshToken: widget.refreshToken,
                               course_id: widget.course_id,
+                              title: '',
                             )));
               },
               child: Text('OK'),

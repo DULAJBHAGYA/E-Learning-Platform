@@ -227,24 +227,29 @@ class AdminAddedCourseViewCard extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: background,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            catagory.toUpperCase(),
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: lightgrey,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                color: background2,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                catagory.toUpperCase(),
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: lightgrey,
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                       ),
+                      Spacer(),
                       PopupMenuButton<String>(
                         icon: Icon(Icons.more_vert),
                         onSelected: (value) async {
@@ -321,12 +326,12 @@ class AdminAddedCourseViewCard extends StatelessWidget {
                   ),
                   SizedBox(height: 5),
                   Text(
-                    '${course_id.toString()}) $title',
+                    '$title',
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
                       fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      color: black,
                     ),
                   ),
                   SizedBox(height: 10),
@@ -336,29 +341,34 @@ class AdminAddedCourseViewCard extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => AddMaterial(
-                            username: '',
-                            accessToken: '',
-                            refreshToken: '',
-                            course_id: course_id,
-                          ),
+                              username: '',
+                              accessToken: '',
+                              refreshToken: '',
+                              course_id: course_id,
+                              title: title),
                         ),
                       );
                     },
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.all(3),
-                      decoration: BoxDecoration(
-                        color: darkblue,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Text(
-                        'Add Materials',
-                        style: GoogleFonts.poppins(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                            color: darkblue,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Text(
+                            'Add Materials'.toUpperCase(),
+                            style: GoogleFonts.poppins(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
                 ],

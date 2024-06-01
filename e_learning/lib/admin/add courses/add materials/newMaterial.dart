@@ -122,6 +122,7 @@ class _NewmaterialState extends State<Newmaterial> {
                               accessToken: widget.accessToken,
                               refreshToken: widget.refreshToken,
                               course_id: widget.course_id,
+                              title: ' ',
                             )));
               },
               child: Text('OK'),
