@@ -24,12 +24,14 @@ class AddMaterial extends StatefulWidget {
     required this.accessToken,
     required this.refreshToken,
     required this.course_id,
+    required this.title,
   }) : super(key: key);
 
   final String username;
   final String accessToken;
   final String refreshToken;
   final int course_id;
+  final String title;
 
   @override
   _AddmaterialState createState() => _AddmaterialState();
@@ -116,6 +118,14 @@ class _AddmaterialState extends State<AddMaterial> {
             ),
             SizedBox(height: 20),
             CustomSearchBar(),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              '$widget.title',
+              style: GoogleFonts.poppins(
+                  fontSize: 18, fontWeight: FontWeight.bold, color: black),
+            ),
             SizedBox(height: 20),
             GestureDetector(
               onTap: () {

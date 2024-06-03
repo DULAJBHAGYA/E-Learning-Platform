@@ -254,7 +254,7 @@ class AdminCourseView extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                Icon(Iconsax.video_play2,
+                                Icon(Iconsax.video_play4,
                                     color: darkblue,
                                     size:
                                         15), // Assuming 'darkblue' is a Color variable

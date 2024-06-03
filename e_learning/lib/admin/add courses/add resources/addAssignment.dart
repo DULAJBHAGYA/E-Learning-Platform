@@ -83,7 +83,7 @@ class _AddAssignmentState extends State<AddAssignment> {
                           course_id: widget.course_id,
                           username: '',
                           accessToken: '',
-                          refreshToken: '',
+                          refreshToken: '',title: '',
                         )));
           },
         ),
