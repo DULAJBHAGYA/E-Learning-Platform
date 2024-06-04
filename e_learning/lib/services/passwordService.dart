@@ -57,4 +57,30 @@ class Passwordservice {
       rethrow;
     }
   }
+
+  Future<dynamic> resetPassword({
+    required String hashed_password,
+    required String confirm_password,
+    required String email,
+  }) async {
+    try {
+      final response = await _dio.patch(
+        '/api/v2/reset/password',
+        data: {
+          'email': email,
+          'hashed_password': hashed_password,
+          'confirm_password': confirm_password,
+        },
+      );
+
+      return response.data;
+    } on DioError catch (e) {
+      print("Dio Error: $e");
+      print("Response Data: ${e.response?.data}");
+      throw Exception(e.response?.data['detail'] ?? e.toString());
+    } catch (e) {
+      print("Unexpected Error: $e");
+      rethrow;
+    }
+  }
 }

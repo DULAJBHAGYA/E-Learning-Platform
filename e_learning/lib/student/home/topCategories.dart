@@ -34,8 +34,14 @@ class _TopcategoriesState extends State<Topcategories> {
   Future<void> fetchCategories() async {
     try {
       final categoryData = await CategoryServices.instance.fetchAllCategories();
+      final List<Map<String, dynamic>> categoriesJson =
+          List<Map<String, dynamic>>.from(categoryData ?? []);
+      final List<String> categories = categoriesJson
+          .map((category) => category['catagory'].toString())
+          .toList();
+
       setState(() {
-        _categories = List<String>.from(categoryData ?? []);
+        _categories = categories;
       });
     } catch (e) {
       print('Error fetching categories: $e');

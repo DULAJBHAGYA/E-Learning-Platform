@@ -204,7 +204,7 @@ class AdminAddedCourseViewCard extends StatelessWidget {
         color: Colors.white,
       ),
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(5.0),
         child: Row(
           children: [
             // Image
@@ -231,7 +231,7 @@ class AdminAddedCourseViewCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Container(
-                              padding: EdgeInsets.all(5),
+                              padding: EdgeInsets.all(3),
                               decoration: BoxDecoration(
                                 color: background2,
                                 borderRadius: BorderRadius.circular(20),

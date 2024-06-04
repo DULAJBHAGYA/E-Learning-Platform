@@ -20,6 +20,7 @@ import 'admin/admin home/adminDash.dart';
 import 'admin/submissions/addMarks.dart';
 import 'change password/studentChangePassword.dart';
 import 'edit profile/editProfile.dart';
+import 'forgot password/resetPassword.dart';
 import 'student/course display/courseDescription.dart';
 import 'student/home/stdHome.dart';
 import 'student/profile/stdProfile.dart';

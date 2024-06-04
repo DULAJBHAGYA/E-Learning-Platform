@@ -170,7 +170,7 @@ class EnrollmentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: white,
@@ -191,16 +191,16 @@ class EnrollmentCard extends StatelessWidget {
               children: [
                 Text(
                   first_name + ' ' + last_name,
-                  style: GoogleFonts.nunito(
-                      fontSize: 18, fontWeight: FontWeight.bold, color: black),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  title,
-                  style: GoogleFonts.nunito(
+                  style: GoogleFonts.poppins(
                       fontSize: 15, fontWeight: FontWeight.bold, color: black),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 5),
+                Text(
+                  title,
+                  style: GoogleFonts.poppins(
+                      fontSize: 15, fontWeight: FontWeight.w300, color: black),
+                ),
+                SizedBox(height: 5),
                 Row(
                   children: [
                     Spacer(),
@@ -209,33 +209,33 @@ class EnrollmentCard extends StatelessWidget {
                         _acceptEnrollRequest(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.all(5),
-                        backgroundColor: white,
+                        padding: EdgeInsets.all(3),
+                        backgroundColor: darkblue,
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(color: darkblue, width: 2)),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
-                      child: Text('Accept',
-                          style: GoogleFonts.nunito(
-                              fontSize: 15,
+                      child: Text('ACCEPT',
+                          style: GoogleFonts.poppins(
+                              fontSize: 12,
                               fontWeight: FontWeight.bold,
-                              color: darkblue)),
+                              color: white)),
                     ),
                     SizedBox(width: 10),
                     ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.all(5),
-                        backgroundColor: white,
+                        padding: EdgeInsets.all(3),
+                        backgroundColor: red,
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(color: red, width: 2)),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
-                      child: Text('Decline',
-                          style: GoogleFonts.nunito(
-                              fontSize: 15,
+                      child: Text('DECLINE',
+                          style: GoogleFonts.poppins(
+                              fontSize: 12,
                               fontWeight: FontWeight.bold,
-                              color: red)),
+                              color: white)),
                     ),
                   ],
                 ),

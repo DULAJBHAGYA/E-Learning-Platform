@@ -68,10 +68,11 @@ class AssignmentService {
     }
   }
 
-  Future<dynamic> fetchCourseDetails(int course_id, int material_id) async {
+  Future<dynamic> fetchAssignmentDetails(
+      int course_id, int assignment_id) async {
     try {
-      final response = await _dio.get(
-          '/api/v3/list/assignment/bymaterial?material_id=$material_id&course_id=$course_id');
+      final response = await _dio
+          .get('/api/v4/get/materials/bycourse?$assignment_id&$course_id');
 
       return response.data;
     } on DioError catch (e) {

@@ -39,7 +39,7 @@ class _RegisteredStudentsState extends State<RegisteredStudents> {
                             first_name: students['first_name'],
                             last_name: students['last_name'],
                             user_name: students['user_name'],
-                            email: students['email'], 
+                            email: students['email'], user_id: students['user_id'],
                           );
                         }).toList(),
                       )

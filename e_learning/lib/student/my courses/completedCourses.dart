@@ -126,9 +126,9 @@ class CompletedCourseCard extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                           fontSize: 15,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           color: black),
                     ),
                     SizedBox(height: 5),
@@ -153,8 +153,8 @@ class CompletedCourseCard extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                CourseContent(course_id: course_id, progress: progress ),
+                            builder: (context) => CourseContent(
+                                course_id: course_id, progress: progress),
                           ),
                         );
                       },
@@ -162,14 +162,14 @@ class CompletedCourseCard extends StatelessWidget {
                         alignment: Alignment.center,
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                          color: blue,
+                          color: darkblue,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
-                          'Review Course',
-                          style: GoogleFonts.nunito(
+                          'REVIEW COURSE',
+                          style: GoogleFonts.poppins(
                               fontSize: 15,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.bold,
                               color: white),
                         ),
                       ),

@@ -306,7 +306,7 @@ class _CourseViewCardState extends State<CourseViewCard> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
-                              'View Course',
+                              'View Course'.toUpperCase(),
                               style: GoogleFonts.poppins(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
