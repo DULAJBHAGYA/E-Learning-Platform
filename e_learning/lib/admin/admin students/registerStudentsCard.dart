@@ -1,18 +1,22 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../color.dart';
+import '../../services/userServices.dart';
 
 class RegisterdStudentsCard extends StatelessWidget {
-  final String user_name;
+  final int user_id;
   final String first_name;
   final String last_name;
+  final String user_name;
   final String email;
 
   const RegisterdStudentsCard({
-    required this.user_name,
+    required this.user_id,
     required this.first_name,
     required this.last_name,
+    required this.user_name,
     required this.email,
     Key? key,
   }) : super(key: key);
@@ -48,15 +52,62 @@ class RegisterdStudentsCard extends StatelessWidget {
                 Text(
                   '$user_name',
                   style: GoogleFonts.poppins(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: lightgrey),
+                      fontSize: 15, fontWeight: FontWeight.w400, color: black),
                 ),
               ],
             ),
           ),
           Spacer(),
-          Icon(Icons.more_vert, color: black, size: 20),
+          PopupMenuButton<String>(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            color: white,
+            onSelected: (value) {
+              if (value == 'delete') {
+                // Handle delete action here
+                // You can show a confirmation dialog before deleting
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Confirm Deletion'),
+                    content: Text('Are you sure you want to delete this user?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context); // Close the dialog
+                        },
+                        child: Text('No'),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          try {
+                            await UserService.instance.deleteUser(user_id);
+                            // Optionally, you can show a success message or perform any other action after deletion
+                          } catch (e) {
+                            // Handle error if deletion fails
+                            print('Error deleting user: $e');
+                          }
+                          Navigator.pop(context); // Close the dialog
+                        },
+                        child: Text('Yes'),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+            itemBuilder: (BuildContext context) => [
+              PopupMenuItem(
+                value: 'delete',
+                child: Text('DELETE STUDENT',
+                    style: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                        color: black)),
+              ),
+            ],
+          ),
         ],
       ),
     );

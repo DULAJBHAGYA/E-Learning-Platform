@@ -42,9 +42,12 @@ class _StudentHomeState extends State<StudentHome> {
 
               //count details
               UserStats(),
+              SizedBox(height: 0),
 
-              SizedBox(height: 10),
-//i
+              //image slider
+              ImageSlider(),
+              SizedBox(height: 5),
+
               // SizedBox(height: 10),
               //topcategories
               Topcategories(

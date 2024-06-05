@@ -83,7 +83,8 @@ class _AddAssignmentState extends State<AddAssignment> {
                           course_id: widget.course_id,
                           username: '',
                           accessToken: '',
-                          refreshToken: '',title: '',
+                          refreshToken: '',
+                          title: '',
                         )));
           },
         ),
@@ -152,7 +153,7 @@ class _AddAssignmentState extends State<AddAssignment> {
                     ),
                     child: Text(
                       'ADD NEW ASSIGNMENT',
-                      style: GoogleFonts.openSans(
+                      style: GoogleFonts.poppins(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                           color: white),
@@ -223,7 +224,7 @@ class AdminAddedAssingmentViewCard extends StatelessWidget {
                 Text(
                   '$assignment_id) $title',
                   overflow: TextOverflow.clip,
-                  style: GoogleFonts.openSans(
+                  style: GoogleFonts.poppins(
                       fontSize: 15, fontWeight: FontWeight.bold, color: black),
                 ),
                 SizedBox(height: 10),

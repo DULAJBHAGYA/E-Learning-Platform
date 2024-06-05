@@ -1,14 +1,10 @@
-import 'dart:convert';
-import 'package:e_learning/admin/admin%20home/adminDash.dart';
-import 'package:e_learning/register/register.dart';
-import 'package:e_learning/student/home/stdHome.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../color.dart';
-import '../services/userServices.dart';
+import '../login/login.dart';
+import '../services/emailServices.dart';
+import 'resetPassword.dart';
 
 class CheckEmail extends StatefulWidget {
   const CheckEmail({Key? key}) : super(key: key);
@@ -30,13 +26,33 @@ class _CheckEmailState extends State<CheckEmail> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
 
+  // Function to handle sending the email verification request
+  void _sendEmailVerification() async {
+    if (_formKey.currentState!.validate()) {
+      String email = emailController.text;
+      try {
+        Map<String, dynamic> response =
+            await EmailService.instance.checkEmail(email);
+        // Handle the response here, for example:
+        // if (response['success']) {
+        //   // Email exists, handle accordingly
+        // } else {
+        //   // Email does not exist, handle accordingly
+        // }
+      } catch (e) {
+        // Handle any errors or exceptions
+        print('Error: $e');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Iconsax.arrow_left_2, color: black),
+          icon: Icon(Iconsax.arrow_left_2, color: black), // Changed the icon
           onPressed: () {
             Navigator.pop(context);
           },
@@ -60,7 +76,7 @@ class _CheckEmailState extends State<CheckEmail> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Forgot PassWord',
+                          'Forgot Password', // Corrected typo in "PassWord"
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.bold,
                             fontSize: 28,
@@ -96,7 +112,8 @@ class _CheckEmailState extends State<CheckEmail> {
                                       lightgrey,
                                       BlendMode.srcIn,
                                     ),
-                                    child: Icon(Iconsax.sms),
+                                    child: Icon(
+                                        Iconsax.message), // Changed the icon
                                   ),
                                   labelText: 'Email',
                                   labelStyle: GoogleFonts.poppins(
@@ -115,7 +132,15 @@ class _CheckEmailState extends State<CheckEmail> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             OutlinedButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                await _sendEmailVerification; // Call the function here
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ResetPassword(email: emailController.text,),
+                                  ),
+                                );
+                              },
                               style: ButtonStyle(
                                 elevation:
                                     MaterialStateProperty.all<double>(100.0),

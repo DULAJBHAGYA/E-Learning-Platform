@@ -4,88 +4,77 @@ import 'package:flutter/material.dart';
 class ImageSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("GFG Slider"),
-      ),
-      body: ListView(
-        children: [
-          CarouselSlider(
-            items: [
-              //1st Image of Slider
-              Container(
-                margin: EdgeInsets.all(6.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  image: DecorationImage(
-                    image: AssetImage('/images/3d1.jpg'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-
-              //2nd Image of Slider
-              Container(
-                margin: EdgeInsets.all(6.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  image: DecorationImage(
-                    image: NetworkImage("ADD IMAGE URL HERE"),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-
-              //3rd Image of Slider
-              Container(
-                margin: EdgeInsets.all(6.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  image: DecorationImage(
-                    image: NetworkImage("ADD IMAGE URL HERE"),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-
-              //4th Image of Slider
-              Container(
-                margin: EdgeInsets.all(6.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  image: DecorationImage(
-                    image: NetworkImage("ADD IMAGE URL HERE"),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-
-              //5th Image of Slider
-              Container(
-                margin: EdgeInsets.all(6.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  image: DecorationImage(
-                    image: NetworkImage("ADD IMAGE URL HERE"),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ],
-
-            //Slider Container properties
-            options: CarouselOptions(
-              height: 180.0,
-              enlargeCenterPage: true,
-              autoPlay: true,
-              aspectRatio: 16 / 9,
-              autoPlayCurve: Curves.fastOutSlowIn,
-              enableInfiniteScroll: true,
-              autoPlayAnimationDuration: Duration(milliseconds: 800),
-              viewportFraction: 0.8,
+    return CarouselSlider(
+      items: [
+        //1st Image of Slider
+        Container(
+          margin: EdgeInsets.all(6.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+            image: DecorationImage(
+              image: AssetImage('/images/goCourse.png'),
+              fit: BoxFit.cover,
             ),
           ),
-        ],
+        ),
+
+        //2nd Image of Slider
+        Container(
+          margin: EdgeInsets.all(6.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+            image: DecorationImage(
+              image: AssetImage("/images/belnderCourse.jpg"),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+
+        //3rd Image of Slider
+        Container(
+          margin: EdgeInsets.all(6.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+            image: DecorationImage(
+              image: AssetImage("/images/psCourse.jpg"),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+
+        //4th Image of Slider
+        Container(
+          margin: EdgeInsets.all(6.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+            image: DecorationImage(
+              image: AssetImage("/images/reactCourse.jpg"),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+
+        //5th Image of Slider
+        Container(
+          margin: EdgeInsets.all(6.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+            image: DecorationImage(
+              image: AssetImage("/images/awsCourse.jpg"),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      ],
+      options: CarouselOptions(
+        height: 150.0,
+        enlargeCenterPage: true,
+        autoPlay: true,
+        aspectRatio: 25 / 9,
+        autoPlayCurve: Curves.fastOutSlowIn,
+        enableInfiniteScroll: true,
+        autoPlayAnimationDuration: Duration(milliseconds: 1200),
+        viewportFraction: 0.8,
       ),
     );
   }

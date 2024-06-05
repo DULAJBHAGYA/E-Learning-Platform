@@ -163,6 +163,7 @@ class _CourseDescriptionState extends State<CourseDescription>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: background,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(0),
@@ -236,7 +237,7 @@ class _CourseDescriptionState extends State<CourseDescription>
                       Text(
                         widget.title,
                         style: GoogleFonts.poppins(
-                          fontSize: 25,
+                          fontSize: 28,
                           fontWeight: FontWeight.bold,
                           color: black,
                         ),
@@ -246,7 +247,7 @@ class _CourseDescriptionState extends State<CourseDescription>
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              color: background2,
+                              color: white,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Padding(
@@ -256,7 +257,7 @@ class _CourseDescriptionState extends State<CourseDescription>
                                 style: GoogleFonts.poppins(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
-                                  color: lightgrey,
+                                  color: darkblue,
                                 ),
                               ),
                             ),
@@ -268,7 +269,7 @@ class _CourseDescriptionState extends State<CourseDescription>
                         widget.description,
                         textAlign: TextAlign.justify,
                         style: GoogleFonts.poppins(
-                          fontSize: 15,
+                          fontSize: 18,
                           fontWeight: FontWeight.w400,
                           color: black,
                         ),
@@ -328,7 +329,7 @@ class _CourseDescriptionState extends State<CourseDescription>
                               'About',
                               style: GoogleFonts.poppins(
                                 fontSize: 15,
-                                fontWeight: FontWeight.w400,
+                                fontWeight: FontWeight.w600,
                                 color: _tabController.index == 0
                                     ? black
                                     : lightgrey,
@@ -340,7 +341,7 @@ class _CourseDescriptionState extends State<CourseDescription>
                               'Lessons',
                               style: GoogleFonts.poppins(
                                 fontSize: 15,
-                                fontWeight: FontWeight.w400,
+                                fontWeight: FontWeight.w600,
                                 color: _tabController.index == 1
                                     ? black
                                     : lightgrey,
@@ -372,7 +373,9 @@ class _CourseDescriptionState extends State<CourseDescription>
                                 controller: _tabController,
                                 children: [
                                   SingleChildScrollView(
-                                    child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         AboutCourse(
                                           what_will: widget.what_will,
@@ -425,10 +428,13 @@ class _CourseDescriptionState extends State<CourseDescription>
     if (!active && !pending) {
       return TextButton(
         style: TextButton.styleFrom(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          backgroundColor: white,
-          shape: StadiumBorder(
-            side: BorderSide(color: darkblue, width: 2),
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+          backgroundColor: darkblue,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          side: BorderSide(
+            color: darkblue,
+            width: 2,
           ),
         ),
         onPressed: () async {
@@ -462,40 +468,46 @@ class _CourseDescriptionState extends State<CourseDescription>
           }
         },
         child: Text(
-          'Enroll Now',
+          'Enroll Now'.toUpperCase(),
           style: GoogleFonts.poppins(
             fontSize: 15,
-            fontWeight: FontWeight.w600,
-            color: darkblue,
+            fontWeight: FontWeight.bold,
+            color: white,
           ),
         ),
       );
     } else if (!active && pending) {
       return TextButton(
         style: TextButton.styleFrom(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          backgroundColor: white,
-          shape: StadiumBorder(
-            side: BorderSide(color: pendingColor, width: 2),
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+          backgroundColor: pendingColor,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          side: BorderSide(
+            color: pendingColor,
+            width: 2,
           ),
         ),
         onPressed: null,
         child: Text(
-          'Pending',
+          'Pending'.toUpperCase(),
           style: GoogleFonts.poppins(
             fontSize: 15,
             fontWeight: FontWeight.bold,
-            color: pendingColor,
+            color: white,
           ),
         ),
       );
     } else if (active && !pending) {
       return TextButton(
         style: TextButton.styleFrom(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          backgroundColor: white,
-          shape: StadiumBorder(
-            side: BorderSide(color: darkblue, width: 2),
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+          backgroundColor: darkblue,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          side: BorderSide(
+            color: darkblue,
+            width: 2,
           ),
         ),
         onPressed: () {
@@ -505,11 +517,11 @@ class _CourseDescriptionState extends State<CourseDescription>
           );
         },
         child: Text(
-          'Get Started',
+          'Get Started'.toUpperCase(),
           style: GoogleFonts.poppins(
             fontSize: 15,
             fontWeight: FontWeight.bold,
-            color: darkblue,
+            color: white,
           ),
         ),
       );
@@ -605,7 +617,7 @@ class Lessons extends StatelessWidget {
                   '$title',
                   overflow: TextOverflow.clip,
                   style: GoogleFonts.poppins(
-                      fontSize: 15, fontWeight: FontWeight.bold, color: black),
+                      fontSize: 15, fontWeight: FontWeight.w500, color: black),
                 ),
               ],
             ),

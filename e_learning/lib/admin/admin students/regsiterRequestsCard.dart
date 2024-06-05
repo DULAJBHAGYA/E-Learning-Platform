@@ -80,9 +80,7 @@ class RegisterRequestsCard extends StatelessWidget {
                 Text(
                   '$user_name',
                   style: GoogleFonts.poppins(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: lightgrey),
+                      fontSize: 12, fontWeight: FontWeight.w400, color: black),
                 ),
                 SizedBox(height: 5),
                 Row(
@@ -92,32 +90,32 @@ class RegisterRequestsCard extends StatelessWidget {
                       onPressed: () => _acceptRequest(context),
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.all(5),
-                        backgroundColor: white,
+                        backgroundColor: darkblue,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(color: darkblue, width: 2)),
+                            ),
                       ),
                       child: Text('ACCEPT',
                           style: GoogleFonts.poppins(
                               fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: darkblue)),
+                              fontWeight: FontWeight.bold,
+                              color: white)),
                     ),
                     SizedBox(width: 10),
                     ElevatedButton(
                       onPressed: () => _deleteRequest(context),
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.all(5),
-                        backgroundColor: white,
+                        backgroundColor: red,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(color: red, width: 2)),
+                          ),
                       ),
                       child: Text('DECLINE',
                           style: GoogleFonts.poppins(
                               fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: red)),
+                              fontWeight: FontWeight.bold,
+                              color: white)),
                     ),
                   ],
                 ),

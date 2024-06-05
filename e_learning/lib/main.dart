@@ -18,8 +18,10 @@ import 'package:flutter/material.dart';
 
 import 'admin/admin home/adminDash.dart';
 import 'admin/submissions/addMarks.dart';
+import 'admin/submissions/submissions.dart';
 import 'change password/studentChangePassword.dart';
 import 'edit profile/editProfile.dart';
+import 'forgot password/resetPassword.dart';
 import 'student/course display/courseDescription.dart';
 import 'student/home/stdHome.dart';
 import 'student/profile/stdProfile.dart';
@@ -36,7 +38,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'U-Learn',
       initialRoute: '/',
-      routes: {'/': (context) => Login()},
+      routes: {
+        '/': (context) =>
+            Login()
+      },
     );
   }
 }

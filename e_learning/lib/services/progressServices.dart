@@ -36,12 +36,42 @@ class ProgressService {
 
       _dio.options.headers['Authorization'] = 'Bearer $accessToken';
 
-      final response = await _dio.patch(
+      final response = await _dio.put(
         '/api/v4/edit/progress?course_id=$course_id&user_id=$user_id&completed=$completed',
         data: {
           'user_id': user_id,
           'course_id': course_id,
-          'completed': completed, },
+          'completed': completed,
+        },
+      );
+
+      return response.data;
+    } on DioError catch (e) {
+      print("Dio Error: $e");
+      print("Response Data: ${e.response?.data}");
+      throw Exception(e.response?.data['detail'] ?? e.toString());
+    } catch (e) {
+      print("Unexpected Error: $e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> gteProgress({
+    required int user_id,
+    required int course_id,
+  }) async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? accessToken = prefs.getString('access_token');
+
+      if (accessToken == null || accessToken.isEmpty) {
+        throw Exception('Access token not found');
+      }
+
+      _dio.options.headers['Authorization'] = 'Bearer $accessToken';
+
+      final response = await _dio.get(
+        '/api/v4/get/progress?user_id=$user_id&course_id=$course_id',
       );
 
       return response.data;

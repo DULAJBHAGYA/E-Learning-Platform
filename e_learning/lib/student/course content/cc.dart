@@ -3,14 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../color.dart';
 import '../../services/courseServices.dart';
 import '../../services/materialServices.dart';
-import '../../services/progressServices.dart';
-import '../submit assignment/submitAssignment.dart';
 
 class CourseContent extends StatefulWidget {
   const CourseContent({
@@ -32,14 +29,12 @@ class _CourseContentState extends State<CourseContent> {
   late String title = '';
   late String image = '';
   late String catagory = '';
-  late int progress = widget.progress;
 
   @override
   void initState() {
     super.initState();
     fetchMaterials();
     fetchCourseDetails();
-    fetchProgress();
   }
 
   Future<void> fetchMaterials() async {
@@ -50,7 +45,7 @@ class _CourseContentState extends State<CourseContent> {
         _contents = courseContentData['material'] ?? [];
       });
     } catch (e) {
-      print('Error fetching materials: $e');
+      print('Error fetching courses: $e');
     }
   }
 
@@ -69,41 +64,6 @@ class _CourseContentState extends State<CourseContent> {
     }
   }
 
-  Future<void> fetchProgress() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final user_id = prefs.getInt('user_id');
-      if (user_id != null) {
-        final progressData = await ProgressService.instance.gteProgress(
-          user_id: user_id,
-          course_id: widget.course_id,
-        );
-        setState(() {
-          progress = progressData['progress'];
-        });
-      }
-    } catch (e) {
-      print('Error fetching progress: $e');
-    }
-  }
-
-  Future<void> updateProgress(bool completed) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final user_id = prefs.getInt('user_id');
-      if (user_id != null) {
-        await ProgressService.instance.editProgress(
-          completed: completed,
-          course_id: widget.course_id,
-          user_id: user_id,
-        );
-        await fetchProgress();
-      }
-    } catch (e) {
-      print('Error updating progress: $e');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,7 +76,7 @@ class _CourseContentState extends State<CourseContent> {
               title: title,
               image: image,
               catagory: catagory,
-              progress: progress,
+              progress: widget.progress,
             ),
             SizedBox(height: 10),
             Expanded(
@@ -136,8 +96,7 @@ class _CourseContentState extends State<CourseContent> {
                       final assignments = content['assignments']
                               ?.map((e) => {
                                     'title': e['title'],
-                                    'file': e['assignment_file'],
-                                    'assignment_id': e['assignment_id']
+                                    'file': e['assignment_file']
                                   })
                               .toList() ??
                           [];
@@ -145,37 +104,12 @@ class _CourseContentState extends State<CourseContent> {
                         title: content['title'] as String,
                         urls: urls,
                         assignments: assignments,
-                        course_id: widget.course_id,
                       );
                     }).toList(),
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 10),
-            if (progress > 98)
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      style: ButtonStyle(),
-                      onPressed: () async {
-                        await updateProgress(true);
-                      },
-                      child: Text(
-                        'COMPLETED',
-                        style: GoogleFonts.poppins(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: darkblue,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            )
           ],
         ),
       ),
@@ -224,13 +158,11 @@ class LessonDisplayWidget extends StatefulWidget {
   final String title;
   final List<String> urls;
   final List<dynamic> assignments;
-  final int course_id;
 
   const LessonDisplayWidget({
     required this.title,
     required this.urls,
     required this.assignments,
-    required this.course_id,
     Key? key,
   }) : super(key: key);
 
@@ -240,160 +172,98 @@ class LessonDisplayWidget extends StatefulWidget {
 
 class _LessonDisplayWidgetState extends State<LessonDisplayWidget> {
   bool isChecked = false;
-  bool _isExpanded = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadProgress();
-  }
-
-  Future<void> _loadProgress() async {
-    final prefs = await SharedPreferences.getInstance();
-    final progressKey = 'progress_${widget.title}';
-    setState(() {
-      isChecked = prefs.getBool(progressKey) ?? false;
-    });
-  }
-
-  Future<void> _updateProgress(bool completed) async {
-    final prefs = await SharedPreferences.getInstance();
-    final progressKey = 'progress_${widget.title}';
-    await prefs.setBool(progressKey, completed);
-
-    try {
-      final user_id = prefs.getInt('user_id');
-      if (user_id == null || widget.course_id == null) {
-        throw Exception('User ID or Course ID not found');
-      }
-
-      await ProgressService.instance.editProgress(
-        completed: completed,
-        course_id: widget.course_id,
-        user_id: user_id!,
-      );
-    } catch (e) {
-      print('Error updating progress: $e');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-        color: background,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: ExpansionPanelList(
-        dividerColor: white,
-        expandIconColor: black,
-        elevation: 1,
-        expandedHeaderPadding: EdgeInsets.all(0),
-        expansionCallback: (int index, bool isExpanded) {
-          setState(() {
-            _isExpanded = !_isExpanded;
-          });
-        },
-        children: [
-          ExpansionPanel(
-            headerBuilder: (BuildContext context, bool isExpanded) {
-              return ListTile(
-                title: Text(
-                  widget.title,
-                  style: GoogleFonts.poppins(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: black,
-                  ),
-                ),
-              );
-            },
-            body: Padding(
+        margin: const EdgeInsets.only(bottom: 10),
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          children: [
+            Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  for (var url in widget.urls)
-                    if (url.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GestureDetector(
-                          onTap: () async {
-                            if (await canLaunch(url)) {
-                              await launch(url);
-                            }
-                          },
-                          child: Text(
-                            url,
-                            style: GoogleFonts.poppins(
-                              color: darkblue,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                      ),
-                  for (var assignment in widget.assignments)
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SubmitAssignment(
-                                username: '',
-                                accessToken: '',
-                                refreshToken: '',
-                                course_id: widget.course_id,
-                                assignment_id: assignment['assignment_id'],
-                              ),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          assignment['title'],
-                          style: GoogleFonts.poppins(
-                            color: black,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Checkbox(
-                        value: isChecked,
-                        onChanged: (bool? value) async {
-                          setState(() {
-                            isChecked = value!;
-                          });
-                          await _updateProgress(isChecked);
-                        },
-                      ),
-                      Text(
-                        'Done',
+                      padding: const EdgeInsets.all(0.0),
+                      child: Text(
+                        widget.title,
                         style: GoogleFonts.poppins(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                           color: black,
                         ),
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                    for (var url in widget.urls)
+                      if (url.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GestureDetector(
+                            onTap: () async {
+                              if (await canLaunch(url)) {
+                                await launch(url);
+                              }
+                            },
+                            child: Text(
+                              url,
+                              style: GoogleFonts.poppins(
+                                  color: darkblue,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 15),
+                            ),
+                          ),
+                        ),
+                    for (var assignment in widget.assignments)
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(assignment['title'],
+                            style: GoogleFonts.poppins(
+                                color: black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15)),
+                      ),
+                    SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: isChecked,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              isChecked = value!;
+                            });
+                          },
+                        ),
+                        Text(
+                          'Done',
+                          style: GoogleFonts.poppins(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: black,
+                          ),
+                        ),
+                        Spacer(),
+                        TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            'COMPLETED',
+                            style: GoogleFonts.poppins(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: darkblue,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ]),
             ),
-            isExpanded: _isExpanded,
-          ),
-        ],
-      ),
-    );
+          ],
+        ));
   }
 }
 
@@ -414,11 +284,6 @@ class CourseContentHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-        color: background,
-        borderRadius: BorderRadius.circular(20),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -443,31 +308,7 @@ class CourseContentHeader extends StatelessWidget {
                     image,
                     fit: BoxFit.cover,
                     width: MediaQuery.of(context).size.width,
-                    height: 300,
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) {
-                        return child;
-                      }
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  (loadingProgress.expectedTotalBytes ?? 1)
-                              : null,
-                        ),
-                      );
-                    },
-                    errorBuilder: (BuildContext context, Object exception,
-                        StackTrace? stackTrace) {
-                      return Center(
-                        child: Icon(
-                          Icons.error,
-                          color: Colors.red,
-                          size: 40,
-                        ),
-                      );
-                    },
+                    height: 30,
                   ),
                 ),
               ),
@@ -510,9 +351,9 @@ class CourseContentHeader extends StatelessWidget {
                       width: MediaQuery.of(context).size.width * 0.6,
                       child: Text(
                         title,
-                        overflow: TextOverflow.fade,
+                        overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: black,
                         ),
@@ -575,7 +416,7 @@ class CourseContentHeader extends StatelessWidget {
                     '${progress.toString()}%',
                     style: GoogleFonts.poppins(
                       fontSize: 12,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       color: black,
                     ),
                   ),

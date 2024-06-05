@@ -147,7 +147,7 @@ class UserService {
   }
 
 //delete user method
-  Future<dynamic> deleteUser() async {
+  Future<dynamic> deleteUser(int user_id) async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? accessToken = prefs.getString('access_token');
@@ -159,7 +159,7 @@ class UserService {
       _dio.options.headers['Authorization'] = 'Bearer $accessToken';
 
       final response = await _dio.delete(
-        '/del/user',
+        '/api/v3/del/users?user_id=$user_id',
       );
 
       return response.data;

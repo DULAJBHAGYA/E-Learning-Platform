@@ -68,6 +68,11 @@ class _StudentProfileState extends State<StudentProfile> {
     }
   }
 
+  Future<void> clearAccessToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('access_token');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -440,7 +445,8 @@ class _StudentProfileState extends State<StudentProfile> {
                 height: 30,
               ),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
+                  await clearAccessToken();
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => Login()));
                 },
@@ -454,7 +460,7 @@ class _StudentProfileState extends State<StudentProfile> {
                       padding: EdgeInsets.only(
                           top: 5, bottom: 5, right: 10, left: 10),
                       child: Text(
-                        'Sign Out',
+                        'SIGN OUT',
                         style: GoogleFonts.poppins(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

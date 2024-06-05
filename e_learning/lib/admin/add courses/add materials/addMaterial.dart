@@ -153,9 +153,9 @@ class _AddmaterialState extends State<AddMaterial> {
                     ),
                     child: Text(
                       'ADD NEW MATERIAL',
-                      style: GoogleFonts.openSans(
+                      style: GoogleFonts.poppins(
                           fontSize: 15,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.bold,
                           color: white),
                     ),
                   ),
@@ -210,7 +210,7 @@ class AdminAddedMaterialViewCard extends StatelessWidget {
       height: 130,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Colors.white,
+        color: white,
       ),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -237,12 +237,12 @@ class AdminAddedMaterialViewCard extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          '$order_number) $title',
+                          '$title',
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.poppins(
                             fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            color: black,
                           ),
                         ),
                       ),
@@ -317,6 +317,7 @@ class AdminAddedMaterialViewCard extends StatelessWidget {
                       ),
                     ],
                   ),
+                  Spacer(),
                   SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
@@ -333,21 +334,29 @@ class AdminAddedMaterialViewCard extends StatelessWidget {
                         ),
                       );
                     },
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.all(3),
-                      decoration: BoxDecoration(
-                        color: darkblue,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Text(
-                        'Add Assignments',
-                        style: GoogleFonts.poppins(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Container(
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.all(3),
+                            decoration: BoxDecoration(
+                              color: darkblue,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Text(
+                              'Add Assignments'.toUpperCase(),
+                              style: GoogleFonts.poppins(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: white,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
                 ],

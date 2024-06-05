@@ -9,6 +9,7 @@ import '../../color.dart';
 import '../../login/login.dart';
 import '../../services/userServices.dart';
 import '../admin home/adminDash.dart';
+import 'submissions.dart';
 
 class AddMarks extends StatefulWidget {
   const AddMarks({
@@ -45,7 +46,18 @@ class _AddMarksState extends State<AddMarks> {
               padding: const EdgeInsets.all(10.0),
               child: Icon(Iconsax.arrow_left_2, size: 30, color: black),
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Submissions(
+                    username: '',
+                    accessToken: '',
+                    refreshToken: '',
+                  ),
+                ),
+              );
+            },
           ),
         ),
         body: Padding(

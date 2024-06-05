@@ -4,12 +4,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'baseurl.dart';
 
-class AssignmentService {
+class SubmissionService {
   late final Dio _dio;
 
-  static final AssignmentService _instance = AssignmentService._internal();
+  static final SubmissionService _instance = SubmissionService._internal();
 
-  AssignmentService._internal() {
+  SubmissionService._internal() {
     _dio = Dio(
       BaseOptions(
         baseUrl: baseUrl,
@@ -20,10 +20,10 @@ class AssignmentService {
     );
   }
 
-  static AssignmentService get instance => _instance;
+  static SubmissionService get instance => _instance;
 
-  Future<dynamic> postAssignment(
-      FormData formData, int material_id, int course_id) async {
+  Future<dynamic> postSubmission(
+      FormData file, int assignment_id, int user_id) async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? accessToken = prefs.getString('access_token');
@@ -35,8 +35,8 @@ class AssignmentService {
       _dio.options.headers['Authorization'] = 'Bearer $accessToken';
 
       final response = await _dio.post(
-        '/api/v3/create/assignment/$material_id/$course_id',
-        data: formData,
+        '/api/v4/create/submission/$assignment_id/$user_id',
+        data: file,
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -45,7 +45,7 @@ class AssignmentService {
         String redirectUrl = response.headers['location']?.first ?? '';
         final redirectedResponse = await _dio.post(
           redirectUrl,
-          data: formData,
+          data: file,
         );
 
         return redirectedResponse.data;
@@ -130,8 +130,7 @@ class AssignmentService {
     }
   }
 
-  Future<dynamic> getAssignmentByMaterialId(
-      int material_id, int course_id) async {
+  Future<dynamic> getSubmissionsByAdminId(int user_id) async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? accessToken = prefs.getString('access_token');
@@ -142,7 +141,7 @@ class AssignmentService {
       }
 
       final response = await _dio.get(
-        '/api/v3/list/assignment/bymaterial?material_id=$material_id&course_id=$course_id',
+        '/api/v3/list/submission?user_id=$user_id',
         options: Options(headers: headers),
       );
 

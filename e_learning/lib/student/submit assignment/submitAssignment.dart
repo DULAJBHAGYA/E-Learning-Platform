@@ -1,7 +1,5 @@
 import 'dart:typed_data';
-
 import 'package:e_learning/admin/add%20courses/addCourses.dart';
-import 'package:e_learning/services/courseServices.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +7,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:io';
 import '../../color.dart';
+import '../../services/assignmentServices.dart';
+import '../../services/submissionServices.dart';
+import '../course content/cc.dart';
 
 class SubmitAssignment extends StatefulWidget {
   const SubmitAssignment({
@@ -18,11 +20,15 @@ class SubmitAssignment extends StatefulWidget {
     required this.username,
     required this.accessToken,
     required this.refreshToken,
+    required this.course_id,
+    required this.assignment_id,
   }) : super(key: key);
 
   final String username;
   final String accessToken;
   final String refreshToken;
+  final int course_id;
+  final int assignment_id;
 
   @override
   _SubmitAssignmentState createState() => _SubmitAssignmentState();
@@ -30,40 +36,75 @@ class SubmitAssignment extends StatefulWidget {
 
 class _SubmitAssignmentState extends State<SubmitAssignment> {
   final _formKey = GlobalKey<FormState>();
+  late String title = '';
+  late String assignment_file = '';
+  late String due_date = '';
 
-  File? _selectedImage;
-  Uint8List? _selectedImageBytes;
+  File? _selectedFile;
+  Uint8List? _selectedFileBytes;
+  String? _selectedFileName;
 
   @override
   void initState() {
     super.initState();
+    fetchAssignmentDetails();
+    _submitAssignment();
+  }
+
+  Future<void> fetchAssignmentDetails() async {
+    try {
+      if (widget.course_id != null && widget.assignment_id != null) {
+        final response =
+            await AssignmentService.instance.fetchAssignmentDetails(
+          widget.course_id,
+          widget.assignment_id,
+        );
+
+        setState(() {
+          title = response['title'];
+          assignment_file = response['assignment_file'];
+          due_date = response['due_date'];
+        });
+      } else {
+        print('Access Token not found in SharedPreferences');
+      }
+    } catch (e) {
+      print('Error fetching assignment info: $e');
+    }
   }
 
   Future<void> _pickFile() async {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['jpg', 'jpeg', 'png'], // Allow only image files
+        allowedExtensions: [
+          'jpg',
+          'jpeg',
+          'png',
+          'pdf',
+          'doc',
+          'docx'
+        ], // Allow images, PDFs, and DOC files
       );
 
       if (result != null) {
         if (kIsWeb) {
-          // For web, get the bytes and create a Uint8List
           Uint8List bytes = await result.files.first.bytes!;
           setState(() {
-            _selectedImageBytes = bytes;
+            _selectedFileBytes = bytes;
+            _selectedFileName = result.files.first.name;
           });
         } else {
-          // For mobile, get the file directly
           PlatformFile file = result.files.first;
           setState(() {
-            _selectedImage = File(file.path!);
+            _selectedFile = File(file.path!);
+            _selectedFileName = file.name;
           });
         }
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Selected image: ${result.files.first.name}'),
+            content: Text('Selected file: ${result.files.first.name}'),
             duration: Duration(seconds: 2),
           ),
         );
@@ -76,11 +117,43 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
   }
 
   FormData _buildFormData() {
-    return FormData.fromMap({
-      'image': _selectedImageBytes != null
-          ? MultipartFile.fromBytes(_selectedImageBytes!, filename: 'image.jpg')
-          : null,
-    });
+    if (_selectedFileBytes != null) {
+      return FormData.fromMap({
+        'file': MultipartFile.fromBytes(_selectedFileBytes!,
+            filename: _selectedFileName),
+      });
+    } else if (_selectedFile != null) {
+      return FormData.fromMap({
+        'file': MultipartFile.fromFileSync(_selectedFile!.path,
+            filename: _selectedFileName),
+      });
+    } else {
+      return FormData();
+    }
+  }
+
+  Future<void> _submitAssignment() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      int? user_id = prefs.getInt('user_id');
+
+      if (user_id == null) {
+        throw Exception('User ID not found');
+      }
+
+      FormData file = _buildFormData();
+
+      final response = await SubmissionService.instance.postSubmission(
+        file,
+        widget.assignment_id,
+        user_id,
+      );
+
+      _showSuccessDialog(widget.course_id);
+    } catch (e) {
+      print('Error submitting assignment: $e');
+      _showErrorDialog(e.toString());
+    }
   }
 
   void _showSuccessDialog(int courseId) {
@@ -97,7 +170,7 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Course preview added successfully"),
+              Text("Assignment submitted successfully"),
               SizedBox(height: 10),
               Text("Course ID: $courseId"),
             ],
@@ -130,7 +203,7 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Failed"),
-          content: Text("Course preview adding failed {$errorMessage}"),
+          content: Text("Assignment submission failed: $errorMessage"),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -144,6 +217,14 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
     );
   }
 
+  Future<void> _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,7 +236,15 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
             padding: const EdgeInsets.all(10.0),
             child: Icon(Iconsax.arrow_left_2, size: 30, color: black),
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CourseContent(
+                          course_id: widget.course_id,
+                          progress: 0,
+                        )));
+          },
         ),
       ),
       body: Padding(
@@ -193,33 +282,42 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
               ],
             ),
             SizedBox(height: 20),
-            Text('Assignment title',
+            Text('$title',
                 style: GoogleFonts.poppins(
                     color: black, fontSize: 18, fontWeight: FontWeight.w600)),
             SizedBox(height: 10),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                color: blue,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text(
-                  'View Assignment',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: white,
+            GestureDetector(
+              onTap: () => _launchURL(assignment_file),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: blue,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    'VIEW ASSIGNMENT',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: white,
+                    ),
                   ),
                 ),
               ),
             ),
             SizedBox(height: 20),
+            Text(
+              'Due Date: $due_date',
+              style: GoogleFonts.poppins(
+                  fontSize: 15, color: black, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 20),
             Text('Upload Answers',
                 style: GoogleFonts.poppins(
-                    color: black, fontSize: 18, fontWeight: FontWeight.w500)),
+                    color: black, fontSize: 18, fontWeight: FontWeight.w800)),
             SizedBox(height: 10),
             GestureDetector(
               onTap: _pickFile,
@@ -230,10 +328,13 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
                   color: Colors.grey[300],
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: _selectedImageBytes != null
-                    ? Image.memory(
-                        _selectedImageBytes!,
-                        fit: BoxFit.cover,
+                child: _selectedFileBytes != null || _selectedFile != null
+                    ? Center(
+                        child: Text(
+                          _selectedFileName ?? 'File selected',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.black),
+                        ),
                       )
                     : Icon(
                         Icons.file_upload,
@@ -247,7 +348,7 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: _submitAssignment,
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(blue),
                     shape: MaterialStateProperty.all(
