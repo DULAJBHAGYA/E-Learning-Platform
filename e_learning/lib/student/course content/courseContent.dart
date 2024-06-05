@@ -136,7 +136,8 @@ class _CourseContentState extends State<CourseContent> {
                       final assignments = content['assignments']
                               ?.map((e) => {
                                     'title': e['title'],
-                                    'file': e['assignment_file']
+                                    'file': e['assignment_file'],
+                                    'assignment_id': e['assignment_id']
                                   })
                               .toList() ??
                           [];
@@ -338,7 +339,7 @@ class _LessonDisplayWidgetState extends State<LessonDisplayWidget> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
-                        onTap: () async {
+                        onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -346,6 +347,8 @@ class _LessonDisplayWidgetState extends State<LessonDisplayWidget> {
                                 username: '',
                                 accessToken: '',
                                 refreshToken: '',
+                                course_id: widget.course_id,
+                                assignment_id: assignment['assignment_id'],
                               ),
                             ),
                           );
@@ -441,6 +444,30 @@ class CourseContentHeader extends StatelessWidget {
                     fit: BoxFit.cover,
                     width: MediaQuery.of(context).size.width,
                     height: 300,
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      }
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                  (loadingProgress.expectedTotalBytes ?? 1)
+                              : null,
+                        ),
+                      );
+                    },
+                    errorBuilder: (BuildContext context, Object exception,
+                        StackTrace? stackTrace) {
+                      return Center(
+                        child: Icon(
+                          Icons.error,
+                          color: Colors.red,
+                          size: 40,
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),

@@ -302,7 +302,7 @@ class _CourseViewCardState extends State<CourseViewCard> {
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
-                              color: blue,
+                              color: darkblue,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
@@ -356,8 +356,14 @@ class _HorizontalListviewState extends State<HorizontalListview> {
   Future<void> fetchCategories() async {
     try {
       final categoryData = await CategoryServices.instance.fetchAllCategories();
+      final List<Map<String, dynamic>> categoriesJson =
+          List<Map<String, dynamic>>.from(categoryData ?? []);
+      final List<String> categories = categoriesJson
+          .map((category) => category['catagory'].toString())
+          .toList();
+
       setState(() {
-        _categories = ['ALL COURSES', ...List<String>.from(categoryData ?? [])];
+        _categories = ['ALL COURSES', ...categories];
       });
     } catch (e) {
       print('Error fetching categories: $e');
