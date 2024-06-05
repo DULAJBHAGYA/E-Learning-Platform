@@ -11,10 +11,12 @@ import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unicons/unicons.dart';
 
+import '../../services/countServices.dart';
 import '../add new admin/admins.dart';
 import '../admin courses/adminCourses.dart';
 import '../admin profile/adminProfile.dart';
 import '../admin students/adminStudents.dart';
+import '../delete requests/deleteRequests.dart';
 import '../enrollments/enrolments.dart';
 import '../submissions/submissions.dart';
 import 'adminDashCourses.dart';
@@ -43,11 +45,41 @@ class _AdminDashState extends State<AdminDash> {
   late String first_name = '';
   late String last_name = '';
   late String picture = '';
+  int deleteRequestCount = 0;
 
   @override
   void initState() {
     super.initState();
     fetchUserById();
+    fetchDeleteRequestCount();
+  }
+
+  Future<void> fetchDeleteRequestCount() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final userId = prefs.getInt('user_id');
+
+      if (userId != null) {
+        final response =
+            await CountService.instance.getDeleteRequestByUserId(userId);
+
+        if (response != null) {
+          if (response is int) {
+            setState(() {
+              deleteRequestCount = response;
+            });
+          } else {
+            throw Exception('Course count is not an integer');
+          }
+        } else {
+          throw Exception('Response is null');
+        }
+      } else {
+        throw Exception('User ID is null');
+      }
+    } catch (e) {
+      print('Error fetching ongoing course count: $e');
+    }
   }
 
   Future<void> fetchUserById() async {
@@ -112,44 +144,55 @@ class _AdminDashState extends State<AdminDash> {
                   borderRadius: BorderRadius.circular(10),
                   color: white,
                 ),
-                child: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: Stack(
-                    children: [
-                      Center(
-                        child: Icon(
-                          Iconsax.notification_status4,
-                          size: 30,
-                          color: black,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DeleteRequests(
+                                username: '',
+                                accessToken: '',
+                                refreshToken: '')));
+                  },
+                  child: SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: Icon(
+                            Iconsax.notification_status4,
+                            size: 30,
+                            color: black,
+                          ),
                         ),
-                      ),
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        child: Container(
-                          padding: EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            color: darkblue,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          constraints: BoxConstraints(
-                            minWidth: 16,
-                            minHeight: 16,
-                          ),
-                          child: Center(
-                            child: Text(
-                              '10',
-                              style: GoogleFonts.poppins(
-                                color: white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
+                        Positioned(
+                          right: 0,
+                          top: 0,
+                          child: Container(
+                            padding: EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: darkblue,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            constraints: BoxConstraints(
+                              minWidth: 16,
+                              minHeight: 16,
+                            ),
+                            child: Center(
+                              child: Text(
+                                deleteRequestCount.toString(),
+                                style: GoogleFonts.poppins(
+                                  color: white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

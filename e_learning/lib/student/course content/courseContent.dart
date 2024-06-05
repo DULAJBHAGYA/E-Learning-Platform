@@ -11,6 +11,7 @@ import '../../services/courseServices.dart';
 import '../../services/materialServices.dart';
 import '../../services/progressServices.dart';
 import '../submit assignment/submitAssignment.dart';
+import '../videos display/videoDisplay.dart';
 
 class CourseContent extends StatefulWidget {
   const CourseContent({
@@ -320,10 +321,13 @@ class _LessonDisplayWidgetState extends State<LessonDisplayWidget> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: GestureDetector(
-                          onTap: () async {
-                            if (await canLaunch(url)) {
-                              await launch(url);
-                            }
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => VideoDisplay(url: url),
+                              ),
+                            );
                           },
                           child: Text(
                             url,

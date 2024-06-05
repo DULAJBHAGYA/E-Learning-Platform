@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:unicons/unicons.dart';
 
 import '../../services/courseServices.dart';
 import '../admin home/adminDash.dart';
