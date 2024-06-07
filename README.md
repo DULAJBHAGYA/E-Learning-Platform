@@ -72,4 +72,4 @@ To contribute:
 
 
 ## Contact
-For any questions or suggestions, feel free to reach out to us at 📧 [dulajupananda@gmail.com].
+For any questions or suggestions, feel free to reach out to us at 📧 dulajupananda@gmail.com.
