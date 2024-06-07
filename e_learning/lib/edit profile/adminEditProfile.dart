@@ -11,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../admin/admin profile/adminProfile.dart';
 import '../color.dart';
 import '../login/login.dart';
 import '../services/profilePictureServices.dart';
@@ -279,7 +280,7 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => StudentProfile(
+                    builder: (context) => AdminProfile(
                           username: widget.username,
                           accessToken: widget.accessToken,
                           refreshToken: widget.refreshToken,

@@ -13,9 +13,9 @@ import '../../services/countServices.dart';
 import '../../services/enrollServices.dart';
 import '../../services/materialServices.dart';
 import '../../services/requestServices.dart';
-import '../course content/courseContent.dart';
+import 'adminCourses.dart';
 
-class CourseDescription extends StatefulWidget {
+class AdminCourseDescription extends StatefulWidget {
   final int course_id;
   final String description;
   final String image;
@@ -23,7 +23,7 @@ class CourseDescription extends StatefulWidget {
   final String catagory;
   final Map<String, dynamic> what_will;
 
-  const CourseDescription({
+  const AdminCourseDescription({
     Key? key,
     required this.course_id,
     required this.description,
@@ -34,10 +34,10 @@ class CourseDescription extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CourseDescriptionState createState() => _CourseDescriptionState();
+  _AdminCourseDescriptionState createState() => _AdminCourseDescriptionState();
 }
 
-class _CourseDescriptionState extends State<CourseDescription>
+class _AdminCourseDescriptionState extends State<AdminCourseDescription>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   Map<String, dynamic>? courseDetails;
@@ -194,7 +194,7 @@ class _CourseDescriptionState extends State<CourseDescription>
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const StdAllCourses(
+                                  builder: (context) => const AdminCourses(
                                     username: '',
                                     accessToken: '',
                                     refreshToken: '',
@@ -425,109 +425,82 @@ class _CourseDescriptionState extends State<CourseDescription>
   }
 
   Widget getActionButton() {
-    if (!active && !pending) {
-      return TextButton(
-        style: TextButton.styleFrom(
-          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-          backgroundColor: darkblue,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          side: BorderSide(
-            color: darkblue,
-            width: 2,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        TextButton(
+          style: TextButton.styleFrom(
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+            backgroundColor: darkblue,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          onPressed: () {},
+          child: Text(
+            'Edit Course'.toUpperCase(),
+            style: GoogleFonts.poppins(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: white,
+            ),
           ),
         ),
-        onPressed: () async {
-          try {
-            int? user_id = await SharedPreferencesHelper.getUserId();
-            if (user_id == null) {
-              print('User ID not found in SharedPreferences');
-              return;
-            }
-
-            await EnrollService.instance.postEnrollment(
-              user_id,
-              widget.course_id,
+        SizedBox(width: 10),
+        TextButton(
+          style: TextButton.styleFrom(
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+            backgroundColor: red,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text('Confirm Deletion'),
+                  content: Text('Are you sure you want to delete this course?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      child: Text('No'),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        try {
+                          await CourseService.instance
+                              .deleteCourseById(widget.course_id);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text('Course deleted successfully')),
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text('Failed to delete course: $e')),
+                          );
+                        }
+                      },
+                      child: Text('Yes'),
+                    ),
+                  ],
+                );
+              },
             );
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Enroll request sent successfully!'),
-                duration: Duration(seconds: 2),
-              ),
-            );
-          } catch (e) {
-            print('Enrollment Error: $e');
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content:
-                    Text('Failed to send enroll request. Please try again.'),
-                duration: Duration(seconds: 2),
-              ),
-            );
-          }
-        },
-        child: Text(
-          'Enroll Now'.toUpperCase(),
-          style: GoogleFonts.poppins(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-            color: white,
+          },
+          child: Text(
+            'delete Course'.toUpperCase(),
+            style: GoogleFonts.poppins(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: white,
+            ),
           ),
         ),
-      );
-    } else if (!active && pending) {
-      return TextButton(
-        style: TextButton.styleFrom(
-          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-          backgroundColor: pendingColor,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          side: BorderSide(
-            color: pendingColor,
-            width: 2,
-          ),
-        ),
-        onPressed: null,
-        child: Text(
-          'Pending'.toUpperCase(),
-          style: GoogleFonts.poppins(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-            color: white,
-          ),
-        ),
-      );
-    } else if (active && !pending) {
-      return TextButton(
-        style: TextButton.styleFrom(
-          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-          backgroundColor: darkblue,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          side: BorderSide(
-            color: darkblue,
-            width: 2,
-          ),
-        ),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MyCourses()),
-          );
-        },
-        child: Text(
-          'Get Started'.toUpperCase(),
-          style: GoogleFonts.poppins(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-            color: white,
-          ),
-        ),
-      );
-    } else {
-      return SizedBox.shrink();
-    }
+      ],
+    );
   }
 }
 
@@ -575,7 +548,7 @@ class MyClipper extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
-    return false; // Return true if the new instance needs to repaint the path
+    return false;
   }
 }
 

@@ -28,11 +28,22 @@ class StdAllCourses extends StatefulWidget {
 
 class _StdAllCoursesState extends State<StdAllCourses> {
   List<dynamic> _courses = [];
+  List<dynamic> _filteredCourses = [];
+  final TextEditingController _searchController = TextEditingController();
+  String _selectedCategory = 'ALL COURSES';
 
   @override
   void initState() {
     super.initState();
     fetchCourses();
+    _searchController.addListener(_filterCourses);
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_filterCourses);
+    _searchController.dispose();
+    super.dispose();
   }
 
   Future<void> fetchCourses() async {
@@ -40,80 +51,108 @@ class _StdAllCoursesState extends State<StdAllCourses> {
       final courseData = await CourseService.instance.fetchAllCourses();
       setState(() {
         _courses = courseData ?? [];
+        _filterCourses();
       });
     } catch (e) {
       print('Error fetching courses: $e');
     }
   }
 
+  void _filterCourses() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      _filteredCourses = _courses.where((course) {
+        final title = course['title'].toLowerCase();
+        final category = course['catagory'].toLowerCase();
+        return title.contains(query) &&
+            (_selectedCategory == 'ALL COURSES' ||
+                category == _selectedCategory.toLowerCase());
+      }).toList();
+    });
+  }
+
+  void _selectCategory(String category) {
+    setState(() {
+      _selectedCategory = category;
+      _filterCourses();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: background,
-      body: Padding(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(0),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: SizedBox(
-                      height: 30,
-                      width: 30,
-                      child: Image.asset(
-                        '/logos/logo.png',
-                        fit: BoxFit.cover,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: background,
+        body: Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(0),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: SizedBox(
+                        height: 30,
+                        width: 30,
+                        child: Image.asset(
+                          '/logos/logo.png',
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(width: 10),
-                Text(
-                  'All Courses',
-                  style: GoogleFonts.poppins(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: black,
+                  SizedBox(width: 10),
+                  Text(
+                    'All Courses',
+                    style: GoogleFonts.poppins(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: black,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              CustomSearchBar(
+                controller: _searchController,
+                onChanged: (value) => _filterCourses(),
+              ),
+              SizedBox(height: 20),
+              HorizontalListview(
+                username: widget.username,
+                accessToken: widget.accessToken,
+                refreshToken: widget.refreshToken,
+                selectedCategory: _selectedCategory,
+                onSelectCategory: _selectCategory,
+              ),
+              SizedBox(height: 20),
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: _filteredCourses.map((course) {
+                      return CourseViewCard(
+                        what_will: course['what_will'] ?? {},
+                        description: course['description'] ?? 'No Description',
+                        course_id: course['course_id'] ?? 0,
+                        image: course['image'] ?? '',
+                        title: course['title'] ?? 'No Title',
+                        catagory: course['catagory'] ?? 'Uncategorized',
+                      );
+                    }).toList(),
                   ),
                 ),
-              ],
-            ),
-            SizedBox(height: 10),
-            CustomSearchBar(),
-            SizedBox(height: 20),
-            HorizontalListview(
-              username: '',
-              accessToken: '',
-              refreshToken: '',
-            ),
-            SizedBox(height: 20),
-            Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  children: _courses.map((course) {
-                    return CourseViewCard(
-                      what_will: course['what_will'] ?? {},
-                      description: course['description'] ?? 'No Description',
-                      course_id: course['course_id'] ?? 0,
-                      image: course['image'] ?? '',
-                      title: course['title'] ?? 'No Title',
-                      catagory: course['catagory'] ?? 'Uncategorized',
-                    );
-                  }).toList(),
-                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+        bottomNavigationBar: BottomNavBar(),
       ),
-      bottomNavigationBar: BottomNavBar(),
     );
   }
 }
@@ -334,11 +373,15 @@ class HorizontalListview extends StatefulWidget {
     required this.username,
     required this.accessToken,
     required this.refreshToken,
+    required this.selectedCategory,
+    required this.onSelectCategory,
   }) : super(key: key);
 
   final String username;
   final String accessToken;
   final String refreshToken;
+  final String selectedCategory;
+  final ValueChanged<String> onSelectCategory;
 
   @override
   _HorizontalListviewState createState() => _HorizontalListviewState();
@@ -382,10 +425,17 @@ class _HorizontalListviewState extends State<HorizontalListview> {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: _categories.map((catagory) {
+              children: _categories.map((category) {
+                final isSelected = category == widget.selectedCategory;
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: CategoryChip(label: catagory),
+                  child: GestureDetector(
+                    onTap: () => widget.onSelectCategory(category),
+                    child: CategoryChip(
+                      label: category,
+                      isSelected: isSelected,
+                    ),
+                  ),
                 );
               }).toList(),
             ),
@@ -398,10 +448,12 @@ class _HorizontalListviewState extends State<HorizontalListview> {
 
 class CategoryChip extends StatelessWidget {
   final String label;
+  final bool isSelected;
 
   const CategoryChip({
     Key? key,
     required this.label,
+    this.isSelected = false,
   }) : super(key: key);
 
   @override
@@ -410,7 +462,7 @@ class CategoryChip extends StatelessWidget {
       alignment: Alignment.center,
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: white,
+        color: isSelected ? blue : white,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: blue, width: 2),
       ),
@@ -419,7 +471,7 @@ class CategoryChip extends StatelessWidget {
         style: GoogleFonts.poppins(
           fontSize: 12,
           fontWeight: FontWeight.w700,
-          color: blue,
+          color: isSelected ? white : blue,
         ),
       ),
     );

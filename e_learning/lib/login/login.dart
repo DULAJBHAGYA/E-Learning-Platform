@@ -26,54 +26,88 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: background,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(10),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 50),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Welcome Back',
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30,
-                          color: black,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: background,
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(10),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 50),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Welcome Back',
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30,
+                            color: black,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        'Sign in to continue',
-                        style: GoogleFonts.poppins(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w300,
-                          color: black,
+                        SizedBox(height: 5),
+                        Text(
+                          'Sign in to continue',
+                          style: GoogleFonts.poppins(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w300,
+                            color: black,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 50),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(padding: EdgeInsets.all(10)),
-                          Container(
-                            child: TextFormField(
+                        SizedBox(height: 50),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(padding: EdgeInsets.all(10)),
+                            Container(
+                              child: TextFormField(
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Username is required';
+                                  }
+                                  return null;
+                                },
+                                controller: _usernameController,
+                                decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(width: 2, color: lightgrey),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  prefixIcon: ColorFiltered(
+                                    colorFilter: ColorFilter.mode(
+                                      lightgrey, // Change the color here
+                                      BlendMode.srcIn,
+                                    ),
+                                    child: Icon(Iconsax.direct_right),
+                                  ),
+                                  iconColor: lightgrey,
+                                  labelText: 'User name',
+                                  labelStyle: GoogleFonts.poppins(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w400,
+                                    color: lightgrey,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 30),
+                            TextFormField(
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Username is required';
+                                  return 'Password is required';
                                 }
                                 return null;
                               },
-                              controller: _usernameController,
+                              controller: _passwordController,
+                              obscureText: _obscurePassword,
                               decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
                                   borderSide:
@@ -82,255 +116,223 @@ class _LoginState extends State<Login> {
                                 ),
                                 prefixIcon: ColorFiltered(
                                   colorFilter: ColorFilter.mode(
-                                    lightgrey, // Change the color here
+                                    lightgrey,
                                     BlendMode.srcIn,
                                   ),
-                                  child: Icon(Iconsax.direct_right),
+                                  child: Icon(Iconsax.password_check),
                                 ),
-                                iconColor: lightgrey,
-                                labelText: 'User name',
+                                labelText: 'Password',
                                 labelStyle: GoogleFonts.poppins(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,
                                   color: lightgrey,
                                 ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 30),
-                          TextFormField(
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Password is required';
-                              }
-                              return null;
-                            },
-                            controller: _passwordController,
-                            obscureText: _obscurePassword,
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(width: 2, color: lightgrey),
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              prefixIcon: ColorFiltered(
-                                colorFilter: ColorFilter.mode(
-                                  lightgrey,
-                                  BlendMode.srcIn,
+                                suffixIcon: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      _obscurePassword = !_obscurePassword;
+                                    });
+                                  },
+                                  child: ColorFiltered(
+                                    colorFilter: ColorFilter.mode(
+                                      lightgrey, // Change the color here
+                                      BlendMode.srcIn,
+                                    ),
+                                    child: Icon(
+                                      _obscurePassword
+                                          ? Iconsax.eye_slash
+                                          : Iconsax.eye,
+                                    ),
+                                  ),
                                 ),
-                                child: Icon(Iconsax.password_check),
                               ),
-                              labelText: 'Password',
-                              labelStyle: GoogleFonts.poppins(
-                                fontSize: 15,
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          children: [
+                            SizedBox(width: 10),
+                            Checkbox(
+                              value: true,
+                              activeColor: darkblue,
+                              onChanged: (value) {},
+                            ),
+                            Text(
+                              'Remember me',
+                              style: GoogleFonts.poppins(
+                                fontSize: 15.0,
                                 fontWeight: FontWeight.w400,
-                                color: lightgrey,
                               ),
-                              suffixIcon: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    _obscurePassword = !_obscurePassword;
-                                  });
-                                },
-                                child: ColorFiltered(
-                                  colorFilter: ColorFilter.mode(
-                                    lightgrey, // Change the color here
-                                    BlendMode.srcIn,
+                            ),
+                            Spacer(),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => CheckEmail()));
+                              },
+                              child: Text(
+                                'Forgot Password?',
+                                style: GoogleFonts.poppins(
+                                  color: darkblue,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 30),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            OutlinedButton(
+                              onPressed: () {
+                                _login(context);
+                              },
+                              style: ButtonStyle(
+                                elevation:
+                                    MaterialStateProperty.all<double>(100.0),
+                                side: MaterialStateProperty.all<BorderSide>(
+                                  BorderSide(
+                                    width: 0.0,
+                                    color: darkblue,
                                   ),
-                                  child: Icon(
-                                    _obscurePassword
-                                        ? Iconsax.eye_slash
-                                        : Iconsax.eye,
+                                ),
+                                padding: MaterialStateProperty.all<EdgeInsets>(
+                                  EdgeInsets.all(25.0),
+                                ),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
                                   ),
+                                ),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(darkblue),
+                              ),
+                              child: Text(
+                                'SIGN IN',
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 20,
+                                  color: white,
                                 ),
                               ),
                             ),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      Row(
-                        children: [
-                          SizedBox(width: 10),
-                          Checkbox(
-                            value: true,
-                            activeColor: darkblue,
-                            onChanged: (value) {},
-                          ),
-                          Text(
-                            'Remember me',
-                            style: GoogleFonts.poppins(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
+                            SizedBox(height: 20),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Divider(
+                                    color: lightgrey,
+                                    thickness: 1,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Text(
+                                    'Or Login With',
+                                    style: GoogleFonts.poppins(
+                                      color: lightgrey,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Divider(
+                                    color: lightgrey,
+                                    thickness: 1,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          Spacer(),
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
+                            SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Image.asset(
+                                      'images/google.png',
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Image.asset(
+                                      'images/apple.png',
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 30),
+                            OutlinedButton(
+                              onPressed: () {
+                                Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => CheckEmail()));
-                            },
-                            child: Text(
-                              'Forgot Password?',
-                              style: GoogleFonts.poppins(
-                                color: darkblue,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 30),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          OutlinedButton(
-                            onPressed: () {
-                              _login(context);
-                            },
-                            style: ButtonStyle(
-                              elevation:
-                                  MaterialStateProperty.all<double>(100.0),
-                              side: MaterialStateProperty.all<BorderSide>(
-                                BorderSide(
-                                  width: 0.0,
-                                  color: darkblue,
-                                ),
-                              ),
-                              padding: MaterialStateProperty.all<EdgeInsets>(
-                                EdgeInsets.all(25.0),
-                              ),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                ),
-                              ),
-                              backgroundColor:
-                                  MaterialStateProperty.all<Color>(darkblue),
-                            ),
-                            child: Text(
-                              'SIGN IN',
-                              style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20,
-                                color: white,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Divider(
-                                  color: lightgrey,
-                                  thickness: 1,
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Text(
-                                  'Or Login With',
-                                  style: GoogleFonts.poppins(
-                                    color: lightgrey,
-                                    fontSize: 12,
+                                      builder: (context) => RegisterScreen()),
+                                );
+                              },
+                              style: ButtonStyle(
+                                elevation:
+                                    MaterialStateProperty.all<double>(100.0),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                child: Divider(
-                                  color: lightgrey,
-                                  thickness: 1,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white,
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Image.asset(
-                                    'images/google.png',
-                                    fit: BoxFit.contain,
+                                side: MaterialStateProperty.all<BorderSide>(
+                                  BorderSide(
+                                    width: 1.0,
+                                    color: background2,
                                   ),
                                 ),
-                              ),
-                              Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white,
+                                padding: MaterialStateProperty.all<EdgeInsets>(
+                                  EdgeInsets.all(25.0),
                                 ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Image.asset(
-                                    'images/apple.png',
-                                    fit: BoxFit.contain,
-                                  ),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(white),
+                              ),
+                              child: Text(
+                                'SIGN UP',
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 20,
+                                  color: black,
                                 ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 30),
-                          OutlinedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => RegisterScreen()),
-                              );
-                            },
-                            style: ButtonStyle(
-                              elevation:
-                                  MaterialStateProperty.all<double>(100.0),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                ),
-                              ),
-                              side: MaterialStateProperty.all<BorderSide>(
-                                BorderSide(
-                                  width: 1.0,
-                                  color: background2,
-                                ),
-                              ),
-                              padding: MaterialStateProperty.all<EdgeInsets>(
-                                EdgeInsets.all(25.0),
-                              ),
-                              backgroundColor:
-                                  MaterialStateProperty.all<Color>(white),
-                            ),
-                            child: Text(
-                              'SIGN UP',
-                              style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20,
-                                color: black,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                )
-              ],
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

@@ -14,6 +14,8 @@ class VideoDisplay extends StatefulWidget {
 class _VideoDisplayState extends State<VideoDisplay> {
   ChewieController? _chewieController;
   late VideoPlayerController _videoPlayerController;
+  bool _isError = false;
+  String _errorMessage = '';
 
   @override
   void initState() {
@@ -22,16 +24,30 @@ class _VideoDisplayState extends State<VideoDisplay> {
   }
 
   Future<void> _initializeVideoPlayer() async {
-    _videoPlayerController = VideoPlayerController.network(widget.url)
-      ..initialize().then((_) {
-        setState(() {
-          _chewieController = ChewieController(
-            videoPlayerController: _videoPlayerController,
-            autoPlay: true,
-            looping: false,
-          );
+    try {
+      _videoPlayerController = VideoPlayerController.network(widget.url)
+        ..initialize().then((_) {
+          setState(() {
+            _chewieController = ChewieController(
+              videoPlayerController: _videoPlayerController,
+              autoPlay: true,
+              looping: false,
+            );
+          });
+        }).catchError((error) {
+          _handleError(error);
         });
-      });
+    } catch (error) {
+      _handleError(error);
+    }
+  }
+
+  void _handleError(dynamic error) {
+    print('Error initializing video player: $error');
+    setState(() {
+      _isError = true;
+      _errorMessage = 'Error initializing video player: ${error.toString()}';
+    });
   }
 
   @override
@@ -48,12 +64,34 @@ class _VideoDisplayState extends State<VideoDisplay> {
         title: Text('Video Player'),
       ),
       body: Center(
-        child: _chewieController != null &&
-                _videoPlayerController.value.isInitialized
-            ? Chewie(
-                controller: _chewieController!,
+        child: _isError
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error,
+                    color: Colors.red,
+                    size: 40,
+                  ),
+                  SizedBox(height: 10),
+                  Flexible(
+                    child: Text(
+                      _errorMessage,
+                      style: TextStyle(color: Colors.red, fontSize: 18),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
               )
-            : CircularProgressIndicator(),
+            : _chewieController != null &&
+                    _videoPlayerController.value.isInitialized
+                ? AspectRatio(
+                    aspectRatio: _videoPlayerController.value.aspectRatio,
+                    child: Chewie(
+                      controller: _chewieController!,
+                    ),
+                  )
+                : CircularProgressIndicator(),
       ),
     );
   }

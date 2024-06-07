@@ -124,7 +124,7 @@ class _AddAssignmentState extends State<AddAssignment> {
               ],
             ),
             SizedBox(height: 20),
-            CustomSearchBar(),
+            // CustomSearchBar(),
             SizedBox(height: 20),
             GestureDetector(
               onTap: () {

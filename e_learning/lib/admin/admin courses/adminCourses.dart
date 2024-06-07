@@ -8,8 +8,10 @@ import 'package:iconsax/iconsax.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../color.dart';
+import '../../services/countServices.dart';
 import '../../student/course display/courseDescription.dart';
 import '../admin home/adminDash.dart';
+import 'adminCourseDesc.dart';
 
 class AdminCourses extends StatefulWidget {
   const AdminCourses({
@@ -30,13 +32,32 @@ class AdminCourses extends StatefulWidget {
 class _AdminCoursesState extends State<AdminCourses>
     with SingleTickerProviderStateMixin {
   List<dynamic> _courses = [];
-
+  List<dynamic> _filteredCourses = [];
+  final TextEditingController _searchController = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
     fetchCourses();
+    _searchController.addListener(_filterCourses);
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_filterCourses);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _filterCourses() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      _filteredCourses = _courses.where((course) {
+        final title = course['title'].toLowerCase();
+        return title.startsWith(query);
+      }).toList();
+    });
   }
 
   Future<void> fetchCourses() async {
@@ -44,6 +65,7 @@ class _AdminCoursesState extends State<AdminCourses>
       final courseData = await CourseService.instance.fetchAllCourses();
       setState(() {
         _courses = courseData ?? [];
+        _filterCourses();
       });
     } catch (e) {
       print('Error fetching courses: $e');
@@ -53,7 +75,7 @@ class _AdminCoursesState extends State<AdminCourses>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey, // Assign the key to the Scaffold
+      key: _scaffoldKey,
       backgroundColor: background,
       drawer: NavDrawer(),
       appBar: AppBar(
@@ -104,13 +126,16 @@ class _AdminCoursesState extends State<AdminCourses>
               ],
             ),
             SizedBox(height: 10),
-            CustomSearchBar(),
+            CustomSearchBar(
+              controller: _searchController,
+              onChanged: (value) => _filterCourses(),
+            ),
             SizedBox(height: 20),
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Column(
-                  children: _courses.map((course) {
+                  children: _filteredCourses.map((course) {
                     return AdminCourseView(
                       what_will: course['what_will'] ?? {},
                       description: course['description'] ?? 'No Description',
@@ -130,7 +155,7 @@ class _AdminCoursesState extends State<AdminCourses>
   }
 }
 
-class AdminCourseView extends StatelessWidget {
+class AdminCourseView extends StatefulWidget {
   final int course_id;
   final String description;
   final String image;
@@ -149,11 +174,44 @@ class AdminCourseView extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<AdminCourseView> createState() => _AdminCourseViewState();
+}
+
+class _AdminCourseViewState extends State<AdminCourseView> {
+  int materialCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchMaterialCountByCourseId();
+  }
+
+  Future<void> fetchMaterialCountByCourseId() async {
+    try {
+      final response = await CountService.instance
+          .getMaterialCountByCourseId(widget.course_id);
+
+      if (response != null) {
+        if (response is int) {
+          setState(() {
+            materialCount = response;
+          });
+        } else {
+          throw Exception('Student count is not an integer');
+        }
+      } else {
+        throw Exception('Response is null');
+      }
+    } catch (e) {
+      print('Error fetching student count: $e');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       width: MediaQuery.of(context).size.width,
-      height: 250,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: white,
@@ -163,145 +221,116 @@ class AdminCourseView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(
-              children: [
-                Container(
-                  height: 100,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20)),
-                    image: DecorationImage(
-                      image: NetworkImage(image),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: PopupMenuButton<String>(
-                      icon: Icon(UniconsLine.ellipsis_h,
-                          color: Colors.white,
-                          size: 30), // Assuming 'white' is a Color variable
-                      onSelected: (value) {
-                        switch (value) {
-                          case 'Edit Course':
-                            // Handle Edit Course action
-                            print('Edit Course');
-                            break;
-                          case 'Delete Course':
-                            // Handle Delete Course action
-                            print('Delete Course');
-                            break;
-                        }
-                      },
-                      itemBuilder: (BuildContext context) {
-                        return {'Edit Course', 'Delete Course'}
-                            .map((String choice) {
-                          return PopupMenuItem<String>(
-                            value: choice,
-                            child: Text(choice),
-                          );
-                        }).toList();
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 10),
             Container(
+              height: 100,
               width: MediaQuery.of(context).size.width,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 20.0, right: 20.0, bottom: 10.0, top: 10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+                image: DecorationImage(
+                  image: widget.image.isNotEmpty
+                      ? NetworkImage(widget.image)
+                      : AssetImage('/logos/logo.png') as ImageProvider,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            SizedBox(height: 0),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 20.0,
+                right: 20.0,
+                bottom: 20.0,
+                top: 10.0,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    child: Row(
                       children: [
                         Container(
                           alignment: Alignment.center,
                           padding: EdgeInsets.all(5),
                           decoration: BoxDecoration(
                             color: background2,
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
-                            catagory.toUpperCase(),
+                            widget.catagory.toUpperCase(),
                             style: GoogleFonts.poppins(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: lightgrey),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: lightgrey,
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 5),
-                    Text(title,
-                        style: GoogleFonts.poppins(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            color: black)),
-                    Row(
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    widget.title,
+                    style: GoogleFonts.poppins(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: black,
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Row(
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Iconsax.video_play, size: 15, color: darkblue),
+                          SizedBox(width: 5),
+                          Text(
+                            '${materialCount.toString()} lessons',
+                            style: GoogleFonts.poppins(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: lightgrey,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(width: 20),
+                      Row(
+                        children: [
+                          Icon(Iconsax.document, size: 15, color: darkblue),
+                          SizedBox(width: 5),
+                          Text(
+                            'Certificate',
+                            style: GoogleFonts.poppins(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: lightgrey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 5),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(Iconsax.video_play4,
-                                    color: darkblue,
-                                    size:
-                                        15), // Assuming 'darkblue' is a Color variable
-                                SizedBox(width: 5),
-                                Text(
-                                  '11 Lessons',
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600,
-                                      color:
-                                          lightgrey), // Assuming 'lightgrey' is a Color variable
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Icon(Iconsax.clock,
-                                    color: darkblue,
-                                    size:
-                                        15), // Assuming 'darkblue' is a Color variable
-                                SizedBox(width: 5),
-                                Text(
-                                  '3.5 Hours',
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600,
-                                      color:
-                                          lightgrey), // Assuming 'lightgrey' is a Color variable
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Spacer(),
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => CourseDescription(
-                                  course_id: course_id,
-                                  image: image,
-                                  title: title,
-                                  catagory: catagory,
-                                  description: description,
-                                  what_will: what_will,
+                                builder: (context) => AdminCourseDescription(
+                                  course_id: widget.course_id,
+                                  image: widget.image,
+                                  title: widget.title,
+                                  catagory: widget.catagory,
+                                  description: widget.description,
+                                  what_will: widget.what_will,
                                 ),
                               ),
                             );
@@ -310,23 +339,23 @@ class AdminCourseView extends StatelessWidget {
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
-                              color: white,
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: darkblue, width: 2),
+                              color: darkblue,
+                              borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
-                              'View Details'.toUpperCase(),
+                              'View Course'.toUpperCase(),
                               style: GoogleFonts.poppins(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: darkblue),
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: white,
+                              ),
                             ),
                           ),
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],

@@ -76,14 +76,7 @@ class _DeleteRequestsState extends State<DeleteRequests>
             child: Icon(Iconsax.arrow_left_2, size: 30, color: black),
           ),
           onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AdminDash(
-                          username: widget.username,
-                          accessToken: widget.accessToken,
-                          refreshToken: widget.refreshToken,
-                        )));
+            Navigator.pop(context);
           },
         ),
       ),

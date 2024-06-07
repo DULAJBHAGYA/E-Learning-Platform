@@ -243,6 +243,8 @@ class _AdminDashState extends State<AdminDash> {
 }
 
 class NavDrawer extends StatefulWidget {
+  const NavDrawer({Key? key}) : super(key: key);
+
   @override
   _NavDrawerState createState() => _NavDrawerState();
 }
@@ -318,90 +320,143 @@ class _NavDrawerState extends State<NavDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: white,
-      child: ListView(
-        padding: EdgeInsets.all(20),
-        children: <Widget>[
+      child: Column(
+        children: [
           Container(
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10), color: white),
-            child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                '/logos/logo.png',
-                width: 100,
-                height: 80,
+              color: white,
+            ),
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: 100,
+              decoration: BoxDecoration(color: darkblue),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.asset(
+                            '/logos/logo.png',
+                            width: 50,
+                            height: 50,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        RichText(
+                          text: TextSpan(
+                            text: 'Edu',
+                            style: GoogleFonts.poppins(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w800,
+                              color: lightblue,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: 'App',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w800,
+                                  color: white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-          SizedBox(height: 20),
-          _buildListTile(
-            index: 0,
-            icon: Iconsax.home,
-            title: 'Dashboard',
-            destination:
-                AdminDash(username: '', accessToken: '', refreshToken: ''),
-          ),
-          SizedBox(height: 10),
-          _buildListTile(
-            index: 1,
-            icon: Iconsax.book,
-            title: 'Courses',
-            destination:
-                AdminCourses(username: '', accessToken: '', refreshToken: ''),
-          ),
-          SizedBox(height: 10),
-          _buildListTile(
-            index: 2,
-            icon: Iconsax.book_saved,
-            title: 'Add Courses',
-            destination:
-                AddCourses(username: '', accessToken: '', refreshToken: ''),
-          ),
-          SizedBox(height: 10),
-          _buildListTile(
-            index: 3,
-            icon: Iconsax.people,
-            title: 'Students',
-            destination:
-                AdminStudents(username: '', accessToken: '', refreshToken: ''),
-          ),
-          SizedBox(height: 10),
-          _buildListTile(
-            index: 4,
-            icon: Iconsax.add,
-            title: 'Enrollments',
-            destination:
-                Enrollments(username: '', accessToken: '', refreshToken: ''),
-          ),
-          SizedBox(height: 10),
-          _buildListTile(
-              index: 5,
-              icon: Iconsax.document,
-              title: 'Submissions',
-              destination:
-                  Submissions(username: '', accessToken: '', refreshToken: '')),
-          SizedBox(height: 10),
-          _buildListTile(
-            index: 6,
-            icon: Iconsax.people,
-            title: 'Admins',
-            destination:
-                Admins(username: '', accessToken: '', refreshToken: ''),
-          ),
-          SizedBox(height: 10),
-          _buildListTile(
-            index: 7,
-            icon: Iconsax.user,
-            title: 'Profile',
-            destination:
-                AdminProfile(username: '', accessToken: '', refreshToken: ''),
-          ),
-          SizedBox(height: 10),
-          _buildListTile(
-            index: 8,
-            icon: Iconsax.logout,
-            title: 'Logout',
-            destination: Login(),
+          Expanded(
+            child: ListView.builder(
+              padding: EdgeInsets.all(20),
+              itemCount: 9, // Number of items
+              itemBuilder: (context, index) {
+                switch (index) {
+                  case 0:
+                    return _buildListTile(
+                      index: 0,
+                      icon: Iconsax.home,
+                      title: 'Dashboard',
+                      destination: AdminDash(
+                          username: '', accessToken: '', refreshToken: ''),
+                    );
+                  case 1:
+                    return _buildListTile(
+                      index: 1,
+                      icon: Iconsax.book,
+                      title: 'Courses',
+                      destination: AdminCourses(
+                          username: '', accessToken: '', refreshToken: ''),
+                    );
+                  case 2:
+                    return _buildListTile(
+                      index: 2,
+                      icon: Iconsax.book_saved,
+                      title: 'Add Courses',
+                      destination: AddCourses(
+                          username: '', accessToken: '', refreshToken: ''),
+                    );
+                  case 3:
+                    return _buildListTile(
+                      index: 3,
+                      icon: Iconsax.people,
+                      title: 'Students',
+                      destination: AdminStudents(
+                          username: '', accessToken: '', refreshToken: ''),
+                    );
+                  case 4:
+                    return _buildListTile(
+                      index: 4,
+                      icon: Iconsax.add,
+                      title: 'Enrollments',
+                      destination: Enrollments(
+                          username: '', accessToken: '', refreshToken: ''),
+                    );
+                  case 5:
+                    return _buildListTile(
+                      index: 5,
+                      icon: Iconsax.document,
+                      title: 'Submissions',
+                      destination: Submissions(
+                          username: '', accessToken: '', refreshToken: ''),
+                    );
+                  case 6:
+                    return _buildListTile(
+                      index: 6,
+                      icon: Iconsax.people,
+                      title: 'Admins',
+                      destination: Admins(
+                          username: '', accessToken: '', refreshToken: ''),
+                    );
+                  case 7:
+                    return _buildListTile(
+                      index: 7,
+                      icon: Iconsax.user,
+                      title: 'Profile',
+                      destination: AdminProfile(
+                          username: '', accessToken: '', refreshToken: ''),
+                    );
+                  case 8:
+                    return _buildListTile(
+                      index: 8,
+                      icon: Iconsax.logout,
+                      title: 'Logout',
+                      destination: Login(),
+                    );
+                  default:
+                    return SizedBox.shrink();
+                }
+              },
+            ),
           ),
         ],
       ),

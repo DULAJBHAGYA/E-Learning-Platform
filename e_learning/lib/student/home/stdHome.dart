@@ -28,48 +28,50 @@ class StudentHome extends StatefulWidget {
 class _StudentHomeState extends State<StudentHome> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: background,
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Container(
-          child: Column(
-            children: [
-              //user info
-              UserInfo(),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: background,
+        body: Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+          child: Container(
+            child: Column(
+              children: [
+                //user info
+                UserInfo(),
 
-              SizedBox(height: 10),
+                SizedBox(height: 10),
 
-              //count details
-              UserStats(),
-              SizedBox(height: 0),
+                //count details
+                UserStats(),
+                SizedBox(height: 0),
 
-              //image slider
-              ImageSlider(),
-              SizedBox(height: 5),
+                //image slider
+                ImageSlider(),
+                SizedBox(height: 5),
 
-              // SizedBox(height: 10),
-              //topcategories
-              Topcategories(
-                  username: widget.username,
-                  accessToken: widget.accessToken,
-                  refreshToken: widget.refreshToken),
-              SizedBox(height: 30),
+                // SizedBox(height: 10),
+                //topcategories
+                Topcategories(
+                    username: widget.username,
+                    accessToken: widget.accessToken,
+                    refreshToken: widget.refreshToken),
+                SizedBox(height: 30),
 
-              //course filter
-              HorizontalListview(),
+                //course filter
+                HorizontalListview(),
 
-              SizedBox(height: 10),
+                SizedBox(height: 10),
 
-              CourseList(
-                  username: widget.username,
-                  accessToken: widget.accessToken,
-                  refreshToken: widget.refreshToken),
-            ],
+                CourseList(
+                    username: widget.username,
+                    accessToken: widget.accessToken,
+                    refreshToken: widget.refreshToken),
+              ],
+            ),
           ),
         ),
+        bottomNavigationBar: BottomNavBar(),
       ),
-      bottomNavigationBar: BottomNavBar(),
     );
   }
 }

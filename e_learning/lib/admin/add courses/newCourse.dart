@@ -168,208 +168,210 @@ class _NewCourseState extends State<NewCourse> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          physics: AlwaysScrollableScrollPhysics(),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(0),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: SizedBox(
-                          height: 30,
-                          width: 30,
-                          child: Image.asset(
-                            '/logos/logo.png',
-                            fit: BoxFit.cover,
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: Image.asset(
+                              '/logos/logo.png',
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      'Add New Course',
-                      style: GoogleFonts.poppins(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: black,
+                      SizedBox(width: 10),
+                      Text(
+                        'Add New Course',
+                        style: GoogleFonts.poppins(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: black,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                TextFormField(
-                  controller: _useridController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                      labelText: 'User ID',
-                      labelStyle: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w300,
-                        color: black,
-                      )),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'User ID is required';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 20),
-                GestureDetector(
-                  onTap: _pickFile,
-                  child: Container(
-                    width: double.infinity,
-                    height: 200,
-                    decoration: BoxDecoration(
-                      color: white,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: _selectedImageBytes != null
-                        ? Image.memory(
-                            _selectedImageBytes!,
-                            fit: BoxFit.cover,
-                          )
-                        : Icon(
-                            Iconsax.camera,
-                            color: lightgrey,
-                            size: 50,
-                          ),
+                    ],
                   ),
-                ),
-                // Display the file path
-                SizedBox(height: 20),
-                TextFormField(
-                  controller: _titleController,
-                  decoration: InputDecoration(
-                      labelText: 'Title',
-                      labelStyle: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w300,
-                        color: black,
-                      )),
-                ),
-                SizedBox(height: 20),
-                TextFormField(
-                  controller: _categoryController,
-                  decoration: InputDecoration(
-                      labelText: 'Category',
-                      labelStyle: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w300,
-                        color: black,
-                      )),
-                ),
-                SizedBox(height: 20),
-                TextFormField(
-                  controller: _descriptionController,
-                  decoration: InputDecoration(
-                      labelText: 'Description',
-                      labelStyle: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w300,
-                        color: black,
-                      )),
-                  maxLines: null,
-                ),
-                SizedBox(height: 20),
-                TextFormField(
-                  controller: _aboutCourseController,
-                  decoration: InputDecoration(
-                      labelText: 'About Course',
-                      labelStyle: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w300,
-                        color: black,
-                      )),
-                  maxLines: null,
-                ),
-                SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(darkblue),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _useridController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        labelText: 'User ID',
+                        labelStyle: GoogleFonts.poppins(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w300,
+                          color: black,
+                        )),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'User ID is required';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: _pickFile,
+                    child: Container(
+                      width: double.infinity,
+                      height: 200,
+                      decoration: BoxDecoration(
+                        color: white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: _selectedImageBytes != null
+                          ? Image.memory(
+                              _selectedImageBytes!,
+                              fit: BoxFit.cover,
+                            )
+                          : Icon(
+                              Iconsax.camera,
+                              color: lightgrey,
+                              size: 50,
+                            ),
+                    ),
+                  ),
+                  // Display the file path
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _titleController,
+                    decoration: InputDecoration(
+                        labelText: 'Title',
+                        labelStyle: GoogleFonts.poppins(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w300,
+                          color: black,
+                        )),
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _categoryController,
+                    decoration: InputDecoration(
+                        labelText: 'Category',
+                        labelStyle: GoogleFonts.poppins(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w300,
+                          color: black,
+                        )),
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _descriptionController,
+                    decoration: InputDecoration(
+                        labelText: 'Description',
+                        labelStyle: GoogleFonts.poppins(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w300,
+                          color: black,
+                        )),
+                    maxLines: null,
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _aboutCourseController,
+                    decoration: InputDecoration(
+                        labelText: 'About Course',
+                        labelStyle: GoogleFonts.poppins(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w300,
+                          color: black,
+                        )),
+                    maxLines: null,
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(darkblue),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                          padding: MaterialStateProperty.all(
+                            EdgeInsets.all(15.0),
                           ),
                         ),
-                        padding: MaterialStateProperty.all(
-                          EdgeInsets.all(15.0),
+                        child: Text(
+                          'CANCEL',
+                          style: GoogleFonts.poppins(
+                            color: white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
                         ),
                       ),
-                      child: Text(
-                        'CANCEL',
-                        style: GoogleFonts.poppins(
-                          color: white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          try {
-                            final FormData formData = _buildFormData();
+                      SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            try {
+                              final FormData formData = _buildFormData();
 
-                            final response = await CourseService.instance
-                                .postCourse(formData, user_id!);
+                              final response = await CourseService.instance
+                                  .postCourse(formData, user_id!);
 
-                            if (response.containsKey('course_id') &&
-                                response['course_id'] != null) {
-                              final courseId =
-                                  int.parse(response['course_id'].toString());
-                              _showSuccessDialog(courseId);
-                            } else {
-                              _showErrorDialog(
-                                  "Course ID not found in the response");
+                              if (response.containsKey('course_id') &&
+                                  response['course_id'] != null) {
+                                final courseId =
+                                    int.parse(response['course_id'].toString());
+                                _showSuccessDialog(courseId);
+                              } else {
+                                _showErrorDialog(
+                                    "Course ID not found in the response");
+                              }
+                            } catch (e) {
+                              print('Error: $e');
+                              _showErrorDialog(e.toString());
                             }
-                          } catch (e) {
-                            print('Error: $e');
-                            _showErrorDialog(e.toString());
                           }
-                        }
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(darkblue),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(darkblue),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                          padding: MaterialStateProperty.all(
+                            EdgeInsets.all(15.0),
                           ),
                         ),
-                        padding: MaterialStateProperty.all(
-                          EdgeInsets.all(15.0),
+                        child: Text(
+                          'SAVE',
+                          style: GoogleFonts.poppins(
+                            color: white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
                         ),
                       ),
-                      child: Text(
-                        'SAVE',
-                        style: GoogleFonts.poppins(
-                          color: white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

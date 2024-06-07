@@ -199,352 +199,353 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-          child: Padding(
-        padding: EdgeInsets.all(10),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 30),
-                      Text(
-                        'Let\'s Create Your Account',
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30,
-                          color: black,
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+            child: Padding(
+          padding: EdgeInsets.all(10),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Let\'s Create Your Account',
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30,
+                            color: black,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Sign Up to EduApp and start exploring hudreds of online courses',
-                        style: GoogleFonts.poppins(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w300,
-                          color: black,
+                        SizedBox(height: 10),
+                        Text(
+                          'Sign Up to EduApp and start exploring hudreds of online courses',
+                          style: GoogleFonts.poppins(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w300,
+                            color: black,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(10),
-                          ),
-                          TextFormField(
-                            controller: firstNameController,
-                            validator: _validateFirstName,
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(width: 2, color: lightgrey),
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              prefixIcon: ColorFiltered(
-                                colorFilter: ColorFilter.mode(
-                                  lightgrey,
-                                  BlendMode.srcIn,
-                                ),
-                                child: Icon(Iconsax.user),
-                              ),
-                              iconColor: lightgrey,
-                              labelText: 'First Name',
-                              labelStyle: GoogleFonts.poppins(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w400,
-                                color: lightgrey,
-                              ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(10),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          TextFormField(
-                            controller: lastNameController,
-                            validator: _validateLastName,
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(width: 2, color: lightgrey),
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              prefixIcon: ColorFiltered(
-                                colorFilter: ColorFilter.mode(
-                                  lightgrey,
-                                  BlendMode.srcIn,
-                                ),
-                                child: Icon(Iconsax.user),
-                              ),
-                              iconColor: lightgrey,
-                              labelText: 'Last Name',
-                              labelStyle: GoogleFonts.poppins(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w400,
-                                color: lightgrey,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          TextFormField(
-                            controller: userNameController,
-                            validator: _validateUserName,
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(width: 2, color: lightgrey),
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              prefixIcon: ColorFiltered(
-                                colorFilter: ColorFilter.mode(
-                                  lightgrey,
-                                  BlendMode.srcIn,
-                                ),
-                                child: Icon(Iconsax.direct_right),
-                              ),
-                              iconColor: lightgrey,
-                              labelText: 'User Name',
-                              labelStyle: GoogleFonts.poppins(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w400,
-                                color: lightgrey,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          TextFormField(
-                            controller: emailController,
-                            validator: _validateEmail,
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(width: 2, color: lightgrey),
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              prefixIcon: ColorFiltered(
-                                colorFilter: ColorFilter.mode(
-                                  lightgrey,
-                                  BlendMode.srcIn,
-                                ),
-                                child: Icon(Iconsax.sms),
-                              ),
-                              labelText: 'Email',
-                              labelStyle: GoogleFonts.poppins(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w400,
-                                color: lightgrey,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          TextFormField(
-                            controller: passwordController,
-                            obscureText: _obscurePassword,
-                            validator: _validatePassword,
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(width: 2, color: lightgrey),
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              prefixIcon: ColorFiltered(
-                                colorFilter: ColorFilter.mode(
-                                  lightgrey,
-                                  BlendMode.srcIn,
-                                ),
-                                child: Icon(Iconsax.password_check),
-                              ),
-                              labelText: 'Password',
-                              labelStyle: GoogleFonts.poppins(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w400,
-                                color: lightgrey,
-                              ),
-                              suffixIcon: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    _obscurePassword = !_obscurePassword;
-                                  });
-                                },
-                                child: ColorFiltered(
-                                  colorFilter: ColorFilter.mode(
-                                    lightgrey,
-                                    BlendMode.srcIn,
-                                  ),
-                                  child: Icon(_obscurePassword
-                                      ? Iconsax.eye_slash
-                                      : Iconsax.eye),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          TextFormField(
-                            controller: confirmPasswordController,
-                            obscureText: _obscureConfirmPassword,
-                            validator: _validateConfirmPassword,
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(width: 2, color: lightgrey),
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              prefixIcon: ColorFiltered(
-                                colorFilter: ColorFilter.mode(
-                                  lightgrey,
-                                  BlendMode.srcIn,
-                                ),
-                                child: Icon(Iconsax.password_check),
-                              ),
-                              labelText: 'Confirm Password',
-                              labelStyle: GoogleFonts.poppins(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w400,
-                                color: lightgrey,
-                              ),
-                              suffixIcon: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    _obscureConfirmPassword =
-                                        !_obscureConfirmPassword;
-                                  });
-                                },
-                                child: ColorFiltered(
-                                  colorFilter: ColorFilter.mode(
-                                    lightgrey,
-                                    BlendMode.srcIn,
-                                  ),
-                                  child: Icon(_obscureConfirmPassword
-                                      ? Iconsax.eye_slash
-                                      : Iconsax.eye),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Checkbox(
-                            value: false,
-                            onChanged: (value) {},
-                          ),
-                          Text(
-                            'Agree with terms and conditions',
-                            style: GoogleFonts.poppins(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          OutlinedButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                _submitForm();
-                                postSubscription();
-                              }
-                            },
-                            style: ButtonStyle(
-                              elevation:
-                                  MaterialStateProperty.all<double>(100.0),
-                              side: MaterialStateProperty.all<BorderSide>(
-                                BorderSide(
-                                  width: 0.0,
-                                  color: darkblue,
-                                ),
-                              ),
-                              padding: MaterialStateProperty.all<EdgeInsets>(
-                                EdgeInsets.all(25.0),
-                              ),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
+                            TextFormField(
+                              controller: firstNameController,
+                              validator: _validateFirstName,
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(width: 2, color: lightgrey),
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
+                                prefixIcon: ColorFiltered(
+                                  colorFilter: ColorFilter.mode(
+                                    lightgrey,
+                                    BlendMode.srcIn,
+                                  ),
+                                  child: Icon(Iconsax.user),
+                                ),
+                                iconColor: lightgrey,
+                                labelText: 'First Name',
+                                labelStyle: GoogleFonts.poppins(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                  color: lightgrey,
+                                ),
                               ),
-                              backgroundColor:
-                                  MaterialStateProperty.all<Color>(darkblue),
                             ),
-                            child: Text(
-                              'CREATE ACCOUNT',
-                              style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20,
-                                color: white,
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            TextFormField(
+                              controller: lastNameController,
+                              validator: _validateLastName,
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(width: 2, color: lightgrey),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                prefixIcon: ColorFiltered(
+                                  colorFilter: ColorFilter.mode(
+                                    lightgrey,
+                                    BlendMode.srcIn,
+                                  ),
+                                  child: Icon(Iconsax.user),
+                                ),
+                                iconColor: lightgrey,
+                                labelText: 'Last Name',
+                                labelStyle: GoogleFonts.poppins(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                  color: lightgrey,
+                                ),
                               ),
                             ),
-                          ),
-                          Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Already have an account?',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.w500,
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            TextFormField(
+                              controller: userNameController,
+                              validator: _validateUserName,
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(width: 2, color: lightgrey),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                prefixIcon: ColorFiltered(
+                                  colorFilter: ColorFilter.mode(
+                                    lightgrey,
+                                    BlendMode.srcIn,
+                                  ),
+                                  child: Icon(Iconsax.direct_right),
+                                ),
+                                iconColor: lightgrey,
+                                labelText: 'User Name',
+                                labelStyle: GoogleFonts.poppins(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                  color: lightgrey,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            TextFormField(
+                              controller: emailController,
+                              validator: _validateEmail,
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(width: 2, color: lightgrey),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                prefixIcon: ColorFiltered(
+                                  colorFilter: ColorFilter.mode(
+                                    lightgrey,
+                                    BlendMode.srcIn,
+                                  ),
+                                  child: Icon(Iconsax.sms),
+                                ),
+                                labelText: 'Email',
+                                labelStyle: GoogleFonts.poppins(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                  color: lightgrey,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            TextFormField(
+                              controller: passwordController,
+                              obscureText: _obscurePassword,
+                              validator: _validatePassword,
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(width: 2, color: lightgrey),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                prefixIcon: ColorFiltered(
+                                  colorFilter: ColorFilter.mode(
+                                    lightgrey,
+                                    BlendMode.srcIn,
+                                  ),
+                                  child: Icon(Iconsax.password_check),
+                                ),
+                                labelText: 'Password',
+                                labelStyle: GoogleFonts.poppins(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                  color: lightgrey,
+                                ),
+                                suffixIcon: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      _obscurePassword = !_obscurePassword;
+                                    });
+                                  },
+                                  child: ColorFiltered(
+                                    colorFilter: ColorFilter.mode(
+                                      lightgrey,
+                                      BlendMode.srcIn,
+                                    ),
+                                    child: Icon(_obscurePassword
+                                        ? Iconsax.eye_slash
+                                        : Iconsax.eye),
                                   ),
                                 ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Login()),
-                                    );
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            TextFormField(
+                              controller: confirmPasswordController,
+                              obscureText: _obscureConfirmPassword,
+                              validator: _validateConfirmPassword,
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(width: 2, color: lightgrey),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                prefixIcon: ColorFiltered(
+                                  colorFilter: ColorFilter.mode(
+                                    lightgrey,
+                                    BlendMode.srcIn,
+                                  ),
+                                  child: Icon(Iconsax.password_check),
+                                ),
+                                labelText: 'Confirm Password',
+                                labelStyle: GoogleFonts.poppins(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                  color: lightgrey,
+                                ),
+                                suffixIcon: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      _obscureConfirmPassword =
+                                          !_obscureConfirmPassword;
+                                    });
                                   },
-                                  child: Text(
-                                    'Login',
+                                  child: ColorFiltered(
+                                    colorFilter: ColorFilter.mode(
+                                      lightgrey,
+                                      BlendMode.srcIn,
+                                    ),
+                                    child: Icon(_obscureConfirmPassword
+                                        ? Iconsax.eye_slash
+                                        : Iconsax.eye),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Checkbox(
+                              value: false,
+                              onChanged: (value) {},
+                            ),
+                            Text(
+                              'Agree with terms and conditions',
+                              style: GoogleFonts.poppins(
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            OutlinedButton(
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  _submitForm();
+                                  postSubscription();
+                                }
+                              },
+                              style: ButtonStyle(
+                                elevation:
+                                    MaterialStateProperty.all<double>(100.0),
+                                side: MaterialStateProperty.all<BorderSide>(
+                                  BorderSide(
+                                    width: 0.0,
+                                    color: darkblue,
+                                  ),
+                                ),
+                                padding: MaterialStateProperty.all<EdgeInsets>(
+                                  EdgeInsets.all(25.0),
+                                ),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                ),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(darkblue),
+                              ),
+                              child: Text(
+                                'CREATE ACCOUNT',
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 20,
+                                  color: white,
+                                ),
+                              ),
+                            ),
+                            Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Already have an account?',
                                     style: GoogleFonts.poppins(
                                       fontSize: 15.0,
                                       fontWeight: FontWeight.w500,
-                                      color: darkblue,
                                     ),
                                   ),
-                                ),
-                              ]),
-                        ],
-                      ),
-                    ]),
-              )
-            ],
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Login()),
+                                      );
+                                    },
+                                    child: Text(
+                                      'Login',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 15.0,
+                                        fontWeight: FontWeight.w500,
+                                        color: darkblue,
+                                      ),
+                                    ),
+                                  ),
+                                ]),
+                          ],
+                        ),
+                      ]),
+                )
+              ],
+            ),
           ),
-        ),
-      )),
+        )),
+      ),
     );
   }
 }
