@@ -11,6 +11,7 @@ class RegisterdStudentsCard extends StatelessWidget {
   final String last_name;
   final String user_name;
   final String email;
+  final String picture;
 
   const RegisterdStudentsCard({
     required this.user_id,
@@ -18,6 +19,7 @@ class RegisterdStudentsCard extends StatelessWidget {
     required this.last_name,
     required this.user_name,
     required this.email,
+    required this.picture,
     Key? key,
   }) : super(key: key);
 
@@ -36,7 +38,7 @@ class RegisterdStudentsCard extends StatelessWidget {
           // Profile Image
           CircleAvatar(
             radius: 25,
-            backgroundImage: AssetImage('images/user1.jpg'),
+            backgroundImage: NetworkImage('$picture'),
           ),
           SizedBox(width: 20),
           Expanded(

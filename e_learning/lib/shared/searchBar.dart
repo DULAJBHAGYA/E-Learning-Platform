@@ -7,7 +7,12 @@ import 'package:iconsax/iconsax.dart';
 import '../color.dart';
 
 class CustomSearchBar extends StatelessWidget {
+  final TextEditingController controller;
+  final Function(String) onChanged;
+
   const CustomSearchBar({
+    required this.controller,
+    required this.onChanged,
     super.key,
   });
 
@@ -31,6 +36,8 @@ class CustomSearchBar extends StatelessWidget {
           SizedBox(width: 10),
           Expanded(
             child: TextField(
+              controller: controller,
+              onChanged: onChanged,
               decoration: InputDecoration(
                 hintText: 'search courses here',
                 hintStyle: GoogleFonts.poppins(

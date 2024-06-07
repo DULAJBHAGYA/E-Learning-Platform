@@ -95,16 +95,17 @@ class CompletedCourseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 120,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: white,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: Row(children: [
-            //image
+      height: 120,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Row(
+          children: [
+            // Image
             Container(
               height: 100,
               width: 100,
@@ -116,67 +117,85 @@ class CompletedCourseCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
-
             SizedBox(width: 20),
-
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       title,
+                      overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.poppins(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: black),
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: black,
+                      ),
                     ),
                     SizedBox(height: 5),
-                    Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        color: background2,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Text(
-                        catagory.toUpperCase(),
-                        style: GoogleFonts.poppins(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: lightgrey),
-                      ),
-                    ),
-                    Spacer(),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CourseContent(
-                                course_id: course_id, progress: progress),
+                    Row(
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                            color: background,
+                            borderRadius: BorderRadius.circular(5),
                           ),
-                        );
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: darkblue,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          'REVIEW COURSE',
-                          style: GoogleFonts.poppins(
+                          child: Text(
+                            catagory.toUpperCase(),
+                            style: GoogleFonts.poppins(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
-                              color: white),
+                              color: lightgrey,
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ]),
+                    Spacer(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CourseContent(
+                                  course_id: course_id,
+                                  progress: progress,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              color: darkblue,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              'REVIEW COURSE',
+                              style: GoogleFonts.poppins(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ]),
-        ));
+          ],
+        ),
+      ),
+    );
   }
 }

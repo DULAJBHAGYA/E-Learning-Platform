@@ -105,7 +105,7 @@ class _EnrollmentsState extends State<Enrollments>
               ],
             ),
             SizedBox(height: 20),
-            CustomSearchBar(),
+            // CustomSearchBar(),
             SizedBox(height: 20),
             Expanded(
               child: SingleChildScrollView(
@@ -179,12 +179,6 @@ class EnrollmentCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Profile Image
-          CircleAvatar(
-            radius: 40,
-            backgroundImage: NetworkImage(image),
-          ),
-          SizedBox(width: 20),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

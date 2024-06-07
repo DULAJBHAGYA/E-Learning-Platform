@@ -7,11 +7,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../change password/adminChangePassword.dart';
 import '../../color.dart';
+import '../../edit profile/adminEditProfile.dart';
 import '../../edit profile/editProfile.dart';
 import '../../login/login.dart';
 import '../../services/userServices.dart';
 import '../../shared/bottomNavBar.dart';
 import '../admin home/adminDash.dart';
+import '../delete requests/deleteRequests.dart';
+import '../requests/requests.dart';
 
 class AdminProfile extends StatefulWidget {
   const AdminProfile({
@@ -34,6 +37,7 @@ class _AdminProfileState extends State<AdminProfile> {
   late String last_name = '';
   late String email = '';
   late String user_name = '';
+  late String picture = '';
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -58,6 +62,7 @@ class _AdminProfileState extends State<AdminProfile> {
           last_name = response['GetUserIDRow']['last_name'];
           user_name = response['GetUserIDRow']['user_name'];
           email = response['GetUserIDRow']['email'];
+          picture = response['GetUserIDRow']['picture'];
         });
 
         print('Fetched User: $first_name $last_name');
@@ -67,6 +72,11 @@ class _AdminProfileState extends State<AdminProfile> {
     } catch (e) {
       print('Error fetching user info: $e');
     }
+  }
+
+  Future<void> clearAccessToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('access_token');
   }
 
   @override
@@ -144,7 +154,7 @@ class _AdminProfileState extends State<AdminProfile> {
                         height: 100,
                         child: CircleAvatar(
                           radius: 120,
-                          backgroundImage: AssetImage('/images/user1.jpg'),
+                          backgroundImage: NetworkImage(picture),
                         ),
                       ),
                       SizedBox(width: 20),
@@ -214,7 +224,27 @@ class _AdminProfileState extends State<AdminProfile> {
                 height: 10,
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  final user_id = prefs.getInt('user_id');
+
+                  if (user_id != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AdminEditProfile(
+                          username: widget.username,
+                          accessToken: widget.accessToken,
+                          refreshToken: widget.refreshToken,
+                          user_id: user_id,
+                        ),
+                      ),
+                    );
+                  } else {
+                    // Handle the case where user_id is null
+                    print('User ID not found in SharedPreferences');
+                  }
+                },
                 child: Container(
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
@@ -287,65 +317,77 @@ class _AdminProfileState extends State<AdminProfile> {
               SizedBox(
                 height: 10,
               ),
-              Container(
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: background,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: background2,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  padding: EdgeInsets.all(5),
-                                  child: Icon(
-                                    Iconsax.notification_status4,
-                                    color: black,
-                                    size: 20,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              'Notifications',
-                              style: GoogleFonts.poppins(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700,
-                                  color: black),
-                            ),
-                            Spacer(),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: white,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Align(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Icon(
-                                    Iconsax.arrow_right_3,
-                                    size: 20,
-                                    color: black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DeleteRequests(
+                                username: '',
+                                accessToken: '',
+                                refreshToken: '',
+                              )));
+                },
+                child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: background,
                     ),
-                  )),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: background2,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    padding: EdgeInsets.all(5),
+                                    child: Icon(
+                                      Iconsax.notification_status4,
+                                      color: black,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                'Notifications',
+                                style: GoogleFonts.poppins(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                    color: black),
+                              ),
+                              Spacer(),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: white,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Align(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Icon(
+                                      Iconsax.arrow_right_3,
+                                      size: 20,
+                                      color: black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )),
+              ),
               SizedBox(
                 height: 20,
               ),
@@ -437,7 +479,8 @@ class _AdminProfileState extends State<AdminProfile> {
                 height: 30,
               ),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
+                  await clearAccessToken();
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => Login()));
                 },
@@ -445,17 +488,17 @@ class _AdminProfileState extends State<AdminProfile> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: background2,
+                        color: darkblue,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       padding: EdgeInsets.only(
                           top: 5, bottom: 5, right: 10, left: 10),
                       child: Text(
-                        'Sign Out',
+                        'SIGN OUT',
                         style: GoogleFonts.poppins(
                             fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            color: blue),
+                            fontWeight: FontWeight.bold,
+                            color: white),
                       ),
                     )
                   ],

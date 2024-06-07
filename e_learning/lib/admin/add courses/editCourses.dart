@@ -181,179 +181,181 @@ class _EditCourseState extends State<EditCourse> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          physics: AlwaysScrollableScrollPhysics(),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(0),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: SizedBox(
-                          height: 30,
-                          width: 30,
-                          child: Image.asset(
-                            '/logos/logo.png',
-                            fit: BoxFit.cover,
-                          ),
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(0),
                         ),
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      'Edit Course',
-                      style: GoogleFonts.poppins(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: black,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                TextFormField(
-                  controller: _useridController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(labelText: 'User ID'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'User ID is required';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 20),
-                Stack(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: _selectedImageBytes != null
-                          ? Image.memory(
-                              _selectedImageBytes!,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: Image.asset(
+                              '/logos/logo.png',
                               fit: BoxFit.cover,
-                            )
-                          : (_imageUrl != null && _imageUrl!.isNotEmpty)
-                              ? Image.network(
-                                  _imageUrl!,
-                                  fit: BoxFit.cover,
-                                )
-                              : Icon(
-                                  Icons.image,
-                                  color: Colors.grey[800],
-                                  size: 50,
-                                ),
-                    ),
-                    Positioned(
-                      right: 10,
-                      bottom: 10,
-                      child: GestureDetector(
-                        onTap: _pickFile,
-                        child: Container(
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(50),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black26,
-                                blurRadius: 4,
-                                offset: Offset(2, 2),
-                              ),
-                            ],
-                          ),
-                          child: Icon(
-                            Icons.camera_alt,
-                            color: Colors.grey[800],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                TextFormField(
-                  controller: _titleController,
-                  decoration: InputDecoration(labelText: 'Title'),
-                ),
-                SizedBox(height: 20),
-                TextFormField(
-                  controller: _categoryController,
-                  decoration: InputDecoration(labelText: 'Category'),
-                ),
-                SizedBox(height: 20),
-                TextFormField(
-                  controller: _descriptionController,
-                  decoration: InputDecoration(labelText: 'Description'),
-                  maxLines: null,
-                ),
-                SizedBox(height: 20),
-                TextFormField(
-                  controller: _aboutCourseController,
-                  decoration: InputDecoration(labelText: 'About Course'),
-                  maxLines: null,
-                ),
-                SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          FormData formData = _buildFormData();
-
-                          try {
-                            final response = await CourseService.instance
-                                .editCourse(formData, widget.course_id);
-
-                            if (response != null &&
-                                response.containsKey('id')) {
-                              _showSuccessDialog(response['id']);
-                            } else {
-                              _showErrorDialog('Course editing failed.');
-                            }
-                          } catch (e) {
-                            _showErrorDialog(e.toString());
-                          }
-                        }
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(blue),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                        ),
-                        padding: MaterialStateProperty.all(
-                          EdgeInsets.all(15.0),
-                        ),
-                      ),
-                      child: Text(
-                        'SAVE',
-                        style: GoogleFonts.openSans(
-                          color: white,
+                      SizedBox(width: 10),
+                      Text(
+                        'Edit Course',
+                        style: GoogleFonts.poppins(
+                          fontSize: 28,
                           fontWeight: FontWeight.bold,
-                          fontSize: 15,
+                          color: black,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _useridController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(labelText: 'User ID'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'User ID is required';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  Stack(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: _selectedImageBytes != null
+                            ? Image.memory(
+                                _selectedImageBytes!,
+                                fit: BoxFit.cover,
+                              )
+                            : (_imageUrl != null && _imageUrl!.isNotEmpty)
+                                ? Image.network(
+                                    _imageUrl!,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Icon(
+                                    Icons.image,
+                                    color: Colors.grey[800],
+                                    size: 50,
+                                  ),
+                      ),
+                      Positioned(
+                        right: 10,
+                        bottom: 10,
+                        child: GestureDetector(
+                          onTap: _pickFile,
+                          child: Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(50),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  blurRadius: 4,
+                                  offset: Offset(2, 2),
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              Icons.camera_alt,
+                              color: Colors.grey[800],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _titleController,
+                    decoration: InputDecoration(labelText: 'Title'),
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _categoryController,
+                    decoration: InputDecoration(labelText: 'Category'),
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _descriptionController,
+                    decoration: InputDecoration(labelText: 'Description'),
+                    maxLines: null,
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _aboutCourseController,
+                    decoration: InputDecoration(labelText: 'About Course'),
+                    maxLines: null,
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            FormData formData = _buildFormData();
+
+                            try {
+                              final response = await CourseService.instance
+                                  .editCourse(formData, widget.course_id);
+
+                              if (response != null &&
+                                  response.containsKey('id')) {
+                                _showSuccessDialog(response['id']);
+                              } else {
+                                _showErrorDialog('Course editing failed.');
+                              }
+                            } catch (e) {
+                              _showErrorDialog(e.toString());
+                            }
+                          }
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(blue),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                          ),
+                          padding: MaterialStateProperty.all(
+                            EdgeInsets.all(15.0),
+                          ),
+                        ),
+                        child: Text(
+                          'SAVE',
+                          style: GoogleFonts.openSans(
+                            color: white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

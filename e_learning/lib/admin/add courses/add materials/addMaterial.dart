@@ -117,7 +117,7 @@ class _AddmaterialState extends State<AddMaterial> {
               ],
             ),
             SizedBox(height: 20),
-            CustomSearchBar(),
+            // CustomSearchBar(),
             SizedBox(
               height: 20,
             ),

@@ -89,11 +89,11 @@ class _AdminDashStudentsState extends State<AdminDashStudents> {
               Column(
                 children: _students.take(3).map((student) {
                   return AdminDashStudentsDisplayCard(
-                    user_name: student['user_name'] ?? 'N/A',
-                    email: student['email'] ?? 'N/A',
-                    first_name: student['first_name'] ?? 'N/A',
-                    last_name: student['last_name'] ?? 'N/A',
-                  );
+                      user_name: student['user_name'] ?? 'N/A',
+                      email: student['email'] ?? 'N/A',
+                      first_name: student['first_name'] ?? 'N/A',
+                      last_name: student['last_name'] ?? 'N/A',
+                      picture: student['picture'] ?? 'N/A');
                 }).toList(),
               )
             ],
@@ -107,12 +107,14 @@ class AdminDashStudentsDisplayCard extends StatelessWidget {
   final String first_name;
   final String last_name;
   final String user_name;
+  final String picture;
 
   const AdminDashStudentsDisplayCard({
     required this.user_name,
     required this.email,
     required this.first_name,
     required this.last_name,
+    required this.picture,
     Key? key,
   }) : super(key: key);
 
@@ -136,7 +138,7 @@ class AdminDashStudentsDisplayCard extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 30,
-                      backgroundImage: AssetImage('/images/user1.jpg'),
+                      backgroundImage: NetworkImage(picture),
                     ),
                     SizedBox(
                       width: 20,

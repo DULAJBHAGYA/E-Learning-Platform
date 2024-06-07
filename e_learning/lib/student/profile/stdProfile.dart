@@ -75,404 +75,411 @@ class _StudentProfileState extends State<StudentProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Container(
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(0),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: SizedBox(
-                                height: 30,
-                                width: 30,
-                                child: Image.asset(
-                                  '/logos/logo.png',
-                                  fit: BoxFit.cover,
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Container(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(0),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: SizedBox(
+                                      height: 30,
+                                      width: 30,
+                                      child: Image.asset(
+                                        '/logos/logo.png',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                SizedBox(width: 10),
+                                Text(
+                                  'My Profile',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
+                                    color: black,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            'My Profile',
-                            style: GoogleFonts.poppins(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                              color: black,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: CircleAvatar(
-                          radius: 120,
-                          backgroundImage: NetworkImage(picture),
+                          ],
                         ),
-                      ),
-                      SizedBox(width: 20),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('$user_name',
-                              style: GoogleFonts.poppins(
-                                  fontSize: 20,
-                                  color: black,
-                                  fontWeight: FontWeight.w600)),
-                          SizedBox(width: 20),
-                          SizedBox(
-                            width: 200,
-                            child: Text(
-                              '$email',
-                              overflow: TextOverflow.clip,
-                              style: GoogleFonts.poppins(
-                                fontSize: 15,
-                                color: lightgrey,
-                                fontWeight: FontWeight.w600,
+                      ],
+                    ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: 100,
+                              height: 100,
+                              child: CircleAvatar(
+                                radius: 120,
+                                backgroundImage: NetworkImage('$picture'),
                               ),
                             ),
-                          )
-                        ],
-                      ),
-                    ],
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '$first_name',
-                    style: GoogleFonts.poppins(
-                      fontSize: 30,
-                      color: black,
-                      fontWeight: FontWeight.w900,
+                            SizedBox(width: 20),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('$user_name',
+                                    style: GoogleFonts.poppins(
+                                        fontSize: 20,
+                                        color: black,
+                                        fontWeight: FontWeight.w600)),
+                                SizedBox(width: 20),
+                                SizedBox(
+                                  width: 200,
+                                  child: Text(
+                                    '$email',
+                                    overflow: TextOverflow.clip,
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 15,
+                                      color: lightgrey,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        )
+                      ],
                     ),
-                  ),
-                  SizedBox(
-                    height: 2,
-                  ),
-                  Text(
-                    '$last_name',
-                    style: GoogleFonts.poppins(
-                      fontSize: 28,
-                      color: lightgrey,
-                      fontWeight: FontWeight.w600,
+                    SizedBox(
+                      height: 30,
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Text(
-                'Profile',
-                style: GoogleFonts.poppins(
-                    fontSize: 18, color: black, fontWeight: FontWeight.w700),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              GestureDetector(
-                onTap: () async {
-                  final prefs = await SharedPreferences.getInstance();
-                  final user_id = prefs.getInt('user_id');
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '$first_name',
+                          style: GoogleFonts.poppins(
+                            fontSize: 30,
+                            color: black,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 2,
+                        ),
+                        Text(
+                          '$last_name',
+                          style: GoogleFonts.poppins(
+                            fontSize: 28,
+                            color: lightgrey,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Text(
+                      'Profile',
+                      style: GoogleFonts.poppins(
+                          fontSize: 18,
+                          color: black,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        final prefs = await SharedPreferences.getInstance();
+                        final user_id = prefs.getInt('user_id');
 
-                  if (user_id != null) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditProfile(
-                          username: widget.username,
-                          accessToken: widget.accessToken,
-                          refreshToken: widget.refreshToken,
-                          user_id: user_id,
-                        ),
-                      ),
-                    );
-                  } else {
-                    // Handle the case where user_id is null
-                    print('User ID not found in SharedPreferences');
-                  }
-                },
-                child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: background,
+                        if (user_id != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditProfile(
+                                username: widget.username,
+                                accessToken: widget.accessToken,
+                                refreshToken: widget.refreshToken,
+                                user_id: user_id,
+                              ),
+                            ),
+                          );
+                        } else {
+                          // Handle the case where user_id is null
+                          print('User ID not found in SharedPreferences');
+                        }
+                      },
+                      child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: background,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: background2,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          padding: EdgeInsets.all(
+                                              5), // Adjust padding to your needs
+                                          child: Icon(
+                                            Iconsax.user,
+                                            color: black,
+                                            size: 20,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      'Manage Profile',
+                                      style: GoogleFonts.poppins(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w700,
+                                          color: black),
+                                    ),
+                                    Spacer(),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: white,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Align(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: Icon(
+                                            Iconsax.arrow_right_3,
+                                            size: 20,
+                                            color: black,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Text(
+                      'Settings',
+                      style: GoogleFonts.poppins(
+                          fontSize: 18,
+                          color: black,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: background,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: background2,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        padding: EdgeInsets.all(5),
+                                        child: Icon(
+                                          Iconsax.notification_status4,
+                                          color: black,
+                                          size: 20,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    'Notifications',
+                                    style: GoogleFonts.poppins(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w700,
+                                        color: black),
+                                  ),
+                                  Spacer(),
                                   Container(
                                     decoration: BoxDecoration(
-                                      color: background2,
-                                      shape: BoxShape.circle,
+                                      color: white,
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
-                                    padding: EdgeInsets.all(
-                                        5), // Adjust padding to your needs
-                                    child: Icon(
-                                      Iconsax.user,
-                                      color: black,
-                                      size: 20,
+                                    child: Align(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: Icon(
+                                          Iconsax.arrow_right_3,
+                                          size: 20,
+                                          color: black,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
-                              SizedBox(width: 10),
-                              Text(
-                                'Manage Profile',
-                                style: GoogleFonts.poppins(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w700,
-                                    color: black),
+                            ],
+                          ),
+                        )),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        final prefs = await SharedPreferences.getInstance();
+                        final user_id = prefs.getInt('user_id');
+
+                        if (user_id != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Studentchangepassword(
+                                username: widget.username,
+                                accessToken: widget.accessToken,
+                                refreshToken: widget.refreshToken,
+                                user_id: user_id,
                               ),
-                              Spacer(),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: white,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Align(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Icon(
-                                      Iconsax.arrow_right_3,
-                                      size: 20,
+                            ),
+                          );
+                        } else {
+                          // Handle the case where user_id is null
+                          print('User ID not found in SharedPreferences');
+                        }
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: background,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: background2,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        padding: EdgeInsets.all(5),
+                                        child: Icon(
+                                          Iconsax.password_check,
+                                          color: black,
+                                          size: 20,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    'Change Password',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w700,
                                       color: black,
                                     ),
                                   ),
-                                ),
+                                  Spacer(),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: white,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Align(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: Icon(
+                                          Iconsax.arrow_right_3,
+                                          size: 20,
+                                          color: black,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
+                        ),
                       ),
-                    )),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Text(
-                'Settings',
-                style: GoogleFonts.poppins(
-                    fontSize: 18, color: black, fontWeight: FontWeight.w700),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: background,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: background2,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  padding: EdgeInsets.all(5),
-                                  child: Icon(
-                                    Iconsax.notification_status4,
-                                    color: black,
-                                    size: 20,
-                                  ),
-                                ),
-                              ],
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        await clearAccessToken();
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Login()));
+                      },
+                      child: Row(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: darkblue,
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            SizedBox(width: 10),
-                            Text(
-                              'Notifications',
+                            padding: EdgeInsets.only(
+                                top: 5, bottom: 5, right: 10, left: 10),
+                            child: Text(
+                              'SIGN OUT',
                               style: GoogleFonts.poppins(
                                   fontSize: 18,
-                                  fontWeight: FontWeight.w700,
-                                  color: black),
+                                  fontWeight: FontWeight.bold,
+                                  color: white),
                             ),
-                            Spacer(),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: white,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Align(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Icon(
-                                    Iconsax.arrow_right_3,
-                                    size: 20,
-                                    color: black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                          )
+                        ],
+                      ),
                     ),
-                  )),
-              SizedBox(
-                height: 20,
-              ),
-              GestureDetector(
-                onTap: () async {
-                  final prefs = await SharedPreferences.getInstance();
-                  final user_id = prefs.getInt('user_id');
-
-                  if (user_id != null) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Studentchangepassword(
-                          username: widget.username,
-                          accessToken: widget.accessToken,
-                          refreshToken: widget.refreshToken,
-                          user_id: user_id,
-                        ),
-                      ),
-                    );
-                  } else {
-                    // Handle the case where user_id is null
-                    print('User ID not found in SharedPreferences');
-                  }
-                },
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: background,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: background2,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  padding: EdgeInsets.all(5),
-                                  child: Icon(
-                                    Iconsax.password_check,
-                                    color: black,
-                                    size: 20,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              'Change Password',
-                              style: GoogleFonts.poppins(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                                color: black,
-                              ),
-                            ),
-                            Spacer(),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: white,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Align(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Icon(
-                                    Iconsax.arrow_right_3,
-                                    size: 20,
-                                    color: black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              GestureDetector(
-                onTap: () async {
-                  await clearAccessToken();
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Login()));
-                },
-                child: Row(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: darkblue,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      padding: EdgeInsets.only(
-                          top: 5, bottom: 5, right: 10, left: 10),
-                      child: Text(
-                        'SIGN OUT',
-                        style: GoogleFonts.poppins(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: white),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ]),
-          )),
-      bottomNavigationBar: BottomNavBar(),
+                  ]),
+            )),
+        bottomNavigationBar: BottomNavBar(),
+      ),
     );
   }
 }

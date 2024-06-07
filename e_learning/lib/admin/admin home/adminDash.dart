@@ -11,10 +11,12 @@ import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unicons/unicons.dart';
 
+import '../../services/countServices.dart';
 import '../add new admin/admins.dart';
 import '../admin courses/adminCourses.dart';
 import '../admin profile/adminProfile.dart';
 import '../admin students/adminStudents.dart';
+import '../delete requests/deleteRequests.dart';
 import '../enrollments/enrolments.dart';
 import '../submissions/submissions.dart';
 import 'adminDashCourses.dart';
@@ -43,11 +45,41 @@ class _AdminDashState extends State<AdminDash> {
   late String first_name = '';
   late String last_name = '';
   late String picture = '';
+  int deleteRequestCount = 0;
 
   @override
   void initState() {
     super.initState();
     fetchUserById();
+    fetchDeleteRequestCount();
+  }
+
+  Future<void> fetchDeleteRequestCount() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final userId = prefs.getInt('user_id');
+
+      if (userId != null) {
+        final response =
+            await CountService.instance.getDeleteRequestByUserId(userId);
+
+        if (response != null) {
+          if (response is int) {
+            setState(() {
+              deleteRequestCount = response;
+            });
+          } else {
+            throw Exception('Course count is not an integer');
+          }
+        } else {
+          throw Exception('Response is null');
+        }
+      } else {
+        throw Exception('User ID is null');
+      }
+    } catch (e) {
+      print('Error fetching ongoing course count: $e');
+    }
   }
 
   Future<void> fetchUserById() async {
@@ -112,44 +144,55 @@ class _AdminDashState extends State<AdminDash> {
                   borderRadius: BorderRadius.circular(10),
                   color: white,
                 ),
-                child: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: Stack(
-                    children: [
-                      Center(
-                        child: Icon(
-                          Iconsax.notification_status4,
-                          size: 30,
-                          color: black,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DeleteRequests(
+                                username: '',
+                                accessToken: '',
+                                refreshToken: '')));
+                  },
+                  child: SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: Icon(
+                            Iconsax.notification_status4,
+                            size: 30,
+                            color: black,
+                          ),
                         ),
-                      ),
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        child: Container(
-                          padding: EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            color: darkblue,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          constraints: BoxConstraints(
-                            minWidth: 16,
-                            minHeight: 16,
-                          ),
-                          child: Center(
-                            child: Text(
-                              '10',
-                              style: GoogleFonts.poppins(
-                                color: white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
+                        Positioned(
+                          right: 0,
+                          top: 0,
+                          child: Container(
+                            padding: EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: darkblue,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            constraints: BoxConstraints(
+                              minWidth: 16,
+                              minHeight: 16,
+                            ),
+                            child: Center(
+                              child: Text(
+                                deleteRequestCount.toString(),
+                                style: GoogleFonts.poppins(
+                                  color: white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -200,6 +243,8 @@ class _AdminDashState extends State<AdminDash> {
 }
 
 class NavDrawer extends StatefulWidget {
+  const NavDrawer({Key? key}) : super(key: key);
+
   @override
   _NavDrawerState createState() => _NavDrawerState();
 }
@@ -275,90 +320,143 @@ class _NavDrawerState extends State<NavDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: white,
-      child: ListView(
-        padding: EdgeInsets.all(20),
-        children: <Widget>[
+      child: Column(
+        children: [
           Container(
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10), color: white),
-            child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                '/logos/logo.png',
-                width: 100,
-                height: 80,
+              color: white,
+            ),
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: 100,
+              decoration: BoxDecoration(color: darkblue),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.asset(
+                            '/logos/logo.png',
+                            width: 50,
+                            height: 50,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        RichText(
+                          text: TextSpan(
+                            text: 'Edu',
+                            style: GoogleFonts.poppins(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w800,
+                              color: lightblue,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: 'App',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w800,
+                                  color: white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-          SizedBox(height: 20),
-          _buildListTile(
-            index: 0,
-            icon: Iconsax.home,
-            title: 'Dashboard',
-            destination:
-                AdminDash(username: '', accessToken: '', refreshToken: ''),
-          ),
-          SizedBox(height: 10),
-          _buildListTile(
-            index: 1,
-            icon: Iconsax.book,
-            title: 'Courses',
-            destination:
-                AdminCourses(username: '', accessToken: '', refreshToken: ''),
-          ),
-          SizedBox(height: 10),
-          _buildListTile(
-            index: 2,
-            icon: Iconsax.book_saved,
-            title: 'Add Courses',
-            destination:
-                AddCourses(username: '', accessToken: '', refreshToken: ''),
-          ),
-          SizedBox(height: 10),
-          _buildListTile(
-            index: 3,
-            icon: Iconsax.people,
-            title: 'Students',
-            destination:
-                AdminStudents(username: '', accessToken: '', refreshToken: ''),
-          ),
-          SizedBox(height: 10),
-          _buildListTile(
-            index: 4,
-            icon: Iconsax.add,
-            title: 'Enrollments',
-            destination:
-                Enrollments(username: '', accessToken: '', refreshToken: ''),
-          ),
-          SizedBox(height: 10),
-          _buildListTile(
-              index: 5,
-              icon: Iconsax.document,
-              title: 'Submissions',
-              destination:
-                  Submissions(username: '', accessToken: '', refreshToken: '')),
-          SizedBox(height: 10),
-          _buildListTile(
-            index: 6,
-            icon: Iconsax.people,
-            title: 'Admins',
-            destination:
-                Admins(username: '', accessToken: '', refreshToken: ''),
-          ),
-          SizedBox(height: 10),
-          _buildListTile(
-            index: 7,
-            icon: Iconsax.user,
-            title: 'Profile',
-            destination:
-                AdminProfile(username: '', accessToken: '', refreshToken: ''),
-          ),
-          SizedBox(height: 10),
-          _buildListTile(
-            index: 8,
-            icon: Iconsax.logout,
-            title: 'Logout',
-            destination: Login(),
+          Expanded(
+            child: ListView.builder(
+              padding: EdgeInsets.all(20),
+              itemCount: 9, // Number of items
+              itemBuilder: (context, index) {
+                switch (index) {
+                  case 0:
+                    return _buildListTile(
+                      index: 0,
+                      icon: Iconsax.home,
+                      title: 'Dashboard',
+                      destination: AdminDash(
+                          username: '', accessToken: '', refreshToken: ''),
+                    );
+                  case 1:
+                    return _buildListTile(
+                      index: 1,
+                      icon: Iconsax.book,
+                      title: 'Courses',
+                      destination: AdminCourses(
+                          username: '', accessToken: '', refreshToken: ''),
+                    );
+                  case 2:
+                    return _buildListTile(
+                      index: 2,
+                      icon: Iconsax.book_saved,
+                      title: 'Add Courses',
+                      destination: AddCourses(
+                          username: '', accessToken: '', refreshToken: ''),
+                    );
+                  case 3:
+                    return _buildListTile(
+                      index: 3,
+                      icon: Iconsax.people,
+                      title: 'Students',
+                      destination: AdminStudents(
+                          username: '', accessToken: '', refreshToken: ''),
+                    );
+                  case 4:
+                    return _buildListTile(
+                      index: 4,
+                      icon: Iconsax.add,
+                      title: 'Enrollments',
+                      destination: Enrollments(
+                          username: '', accessToken: '', refreshToken: ''),
+                    );
+                  case 5:
+                    return _buildListTile(
+                      index: 5,
+                      icon: Iconsax.document,
+                      title: 'Submissions',
+                      destination: Submissions(
+                          username: '', accessToken: '', refreshToken: ''),
+                    );
+                  case 6:
+                    return _buildListTile(
+                      index: 6,
+                      icon: Iconsax.people,
+                      title: 'Admins',
+                      destination: Admins(
+                          username: '', accessToken: '', refreshToken: ''),
+                    );
+                  case 7:
+                    return _buildListTile(
+                      index: 7,
+                      icon: Iconsax.user,
+                      title: 'Profile',
+                      destination: AdminProfile(
+                          username: '', accessToken: '', refreshToken: ''),
+                    );
+                  case 8:
+                    return _buildListTile(
+                      index: 8,
+                      icon: Iconsax.logout,
+                      title: 'Logout',
+                      destination: Login(),
+                    );
+                  default:
+                    return SizedBox.shrink();
+                }
+              },
+            ),
           ),
         ],
       ),

@@ -11,7 +11,7 @@ class RegisteredStudents extends StatefulWidget {
 }
 
 class _RegisteredStudentsState extends State<RegisteredStudents> {
-  List<dynamic> _students = []; 
+  List<dynamic> _students = [];
 
   @override
   void initState() {
@@ -33,17 +33,17 @@ class _RegisteredStudentsState extends State<RegisteredStudents> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-                      child: Column(
-                        children: _students.map((students) {
-                          return RegisterdStudentsCard(
-                            first_name: students['first_name'],
-                            last_name: students['last_name'],
-                            user_name: students['user_name'],
-                            email: students['email'], user_id: students['user_id'],
-                          );
-                        }).toList(),
-                      )
-                    );
+        child: Column(
+      children: _students.map((students) {
+        return RegisterdStudentsCard(
+          first_name: students['first_name'],
+          last_name: students['last_name'],
+          user_name: students['user_name'],
+          email: students['email'],
+          user_id: students['user_id'],
+          picture: students['picture'] ?? '',
+        );
+      }).toList(),
+    ));
   }
 }
-

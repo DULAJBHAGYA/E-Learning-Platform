@@ -6,6 +6,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../color.dart';
+import '../../services/userServices.dart';
 import '../../shared/searchBar.dart';
 import '../admin home/adminDash.dart';
 
@@ -104,7 +105,8 @@ class _AdminsState extends State<Admins> with SingleTickerProviderStateMixin {
               ],
             ),
             SizedBox(height: 20),
-            CustomSearchBar(), SizedBox(height: 20),
+            // CustomSearchBar(),
+            SizedBox(height: 20),
 
             //header
             Expanded(
@@ -149,6 +151,8 @@ class _AdminsState extends State<Admins> with SingleTickerProviderStateMixin {
                       child: Column(
                         children: _admins.map((admin) {
                           return AdminDisplayCard(
+                            user_id: admin['user_id'],
+                            picture: admin['picture'] ?? '',
                             user_name: admin['user_name'],
                             first_name: admin['first_name'],
                             last_name: admin['last_name'],
@@ -175,6 +179,8 @@ class AdminDisplayCard extends StatefulWidget {
   final String first_name;
   final String last_name;
   final String email;
+  final String picture; // Add imageUrl for the avatar
+  final int user_id;
   final VoidCallback onUpdate;
 
   const AdminDisplayCard({
@@ -182,6 +188,8 @@ class AdminDisplayCard extends StatefulWidget {
     required this.first_name,
     required this.last_name,
     required this.email,
+    required this.picture, // Add imageUrl for the avatar
+    required this.user_id,
     required this.onUpdate,
     Key? key,
   }) : super(key: key);
@@ -191,7 +199,7 @@ class AdminDisplayCard extends StatefulWidget {
 }
 
 class _AdminDisplayCardState extends State<AdminDisplayCard> {
-  //edit admin details
+  // Edit admin details
   void _showEditDialog() {
     showDialog(
       context: context,
@@ -209,41 +217,116 @@ class _AdminDisplayCardState extends State<AdminDisplayCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 180,
+      color: background,
+      height: 200,
       child: Card(
+        color: white,
         elevation: 1,
         margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: Padding(
-          padding: const EdgeInsets.all(0),
-          child: Column(
+          padding: const EdgeInsets.all(20),
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ListTile(
-                title: Text(widget.first_name + ' ' + widget.last_name,
-                    style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold, fontSize: 15)),
-                subtitle: Column(
+              CircleAvatar(
+                radius: 30,
+                backgroundImage: NetworkImage(widget.picture),
+              ),
+              SizedBox(width: 20),
+              Expanded(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('${widget.user_name}',
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(
+                        widget.first_name + ' ' + widget.last_name,
+                        overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
-                            fontSize: 15, fontWeight: FontWeight.w300)),
-                    Text('${widget.email}',
-                        style: GoogleFonts.poppins(
-                            fontSize: 15, fontWeight: FontWeight.w300)),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.user_name,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.poppins(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                          Text(
+                            widget.email,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.poppins(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text('Confirm Deletion'),
+                            content: Text(
+                                'Are you sure you want to delete this user?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context); // Close the dialog
+                                },
+                                child: Text('No'),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  try {
+                                    await UserService.instance
+                                        .deleteUser(widget.user_id);
+                                    // Optionally, you can show a success message or perform any other action after deletion
+                                  } catch (e) {
+                                    // Handle error if deletion fails
+                                    print('Error deleting user: $e');
+                                  }
+                                  Navigator.pop(context); // Close the dialog
+                                },
+                                child: Text('Yes'),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: red,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Text(
+                              'DELETE ADMIN',
+                              style: GoogleFonts.poppins(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
-              Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                IconButton(
-                  icon: Icon(
-                    Iconsax.trash,
-                    color: red,
-                    size: 20,
-                  ),
-                  onPressed: _showEditDialog,
-                ),
-              ]),
             ],
           ),
         ),

@@ -77,24 +77,28 @@ class _BottomNavBarState extends State<BottomNavBar> {
       height: 70,
       selectedIndex: _selectedIndex,
       onDestinationSelected: _onItemTapped,
-      destinations: const [
+      destinations: [
         NavigationDestination(
-          icon: Icon(Iconsax.home),
+          icon:
+              Icon(Iconsax.home, color: _selectedIndex == 0 ? darkblue : null),
           label: 'Home',
           selectedIcon: Icon(Iconsax.home, color: darkblue),
         ),
         NavigationDestination(
-          icon: Icon(Iconsax.book),
+          icon:
+              Icon(Iconsax.book, color: _selectedIndex == 1 ? darkblue : null),
           label: 'All Courses',
           selectedIcon: Icon(Iconsax.book, color: darkblue),
         ),
         NavigationDestination(
-          icon: Icon(Iconsax.book_1),
+          icon: Icon(Iconsax.book_1,
+              color: _selectedIndex == 2 ? darkblue : null),
           label: 'My Courses',
           selectedIcon: Icon(Iconsax.book_1, color: darkblue),
         ),
         NavigationDestination(
-          icon: Icon(Iconsax.user),
+          icon:
+              Icon(Iconsax.user, color: _selectedIndex == 3 ? darkblue : null),
           label: 'Profile',
           selectedIcon: Icon(Iconsax.user, color: darkblue),
         ),

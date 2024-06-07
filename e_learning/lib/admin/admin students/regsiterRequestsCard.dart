@@ -61,12 +61,6 @@ class RegisterRequestsCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Profile Image
-          CircleAvatar(
-            radius: 40,
-            backgroundImage: AssetImage('images/user1.jpg'),
-          ),
-          SizedBox(width: 20),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,8 +86,8 @@ class RegisterRequestsCard extends StatelessWidget {
                         padding: EdgeInsets.all(5),
                         backgroundColor: darkblue,
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                       child: Text('ACCEPT',
                           style: GoogleFonts.poppins(
@@ -108,8 +102,8 @@ class RegisterRequestsCard extends StatelessWidget {
                         padding: EdgeInsets.all(5),
                         backgroundColor: red,
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                       child: Text('DECLINE',
                           style: GoogleFonts.poppins(

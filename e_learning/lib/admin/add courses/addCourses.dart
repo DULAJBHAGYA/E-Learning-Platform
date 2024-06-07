@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:unicons/unicons.dart';
 
 import '../../services/courseServices.dart';
 import '../admin home/adminDash.dart';
@@ -113,7 +112,7 @@ class _AddCoursesState extends State<AddCourses> {
           SizedBox(
             height: 20,
           ),
-          CustomSearchBar(),
+          // CustomSearchBar(),
           SizedBox(
             height: 20,
           ),
@@ -196,187 +195,194 @@ class AdminAddedCourseViewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-      height: 130,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.white,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: Row(
-          children: [
-            // Image
-            Container(
-              height: 120,
-              width: 120,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(image),
-                  fit: BoxFit.cover,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Container(
+          margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+          height: 130,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: white,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              children: [
+                // Image
+                Container(
+                  height: 120,
+                  width: 120,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(image),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                 ),
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-            SizedBox(width: 20),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+                SizedBox(width: 20),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(3),
+                                  decoration: BoxDecoration(
+                                    color: background2,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Text(
+                                    catagory.toUpperCase(),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: lightgrey,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Spacer(),
+                          PopupMenuButton<String>(
+                            icon: Icon(Icons.more_vert),
+                            onSelected: (value) async {
+                              switch (value) {
+                                case 'Edit Course':
+                                  // Handle Edit Course action
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EditCourse(
+                                        username: '',
+                                        accessToken: '',
+                                        refreshToken: '',
+                                        course_id: course_id,
+                                      ),
+                                    ),
+                                  );
+                                  break;
+                                case 'Delete Course':
+                                  // Handle Delete Course action
+                                  bool confirmed = await showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: Text('Confirm Deletion'),
+                                        content: Text(
+                                            'Are you sure you want to delete this course?'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.of(context)
+                                                    .pop(false),
+                                            child: Text('No'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.of(context).pop(true),
+                                            child: Text('Yes'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                  if (confirmed) {
+                                    try {
+                                      await CourseService.instance
+                                          .deleteCourseById(course_id);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                                'Course deleted successfully')),
+                                      );
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                                'Failed to delete course: $e')),
+                                      );
+                                    }
+                                  }
+                                  break;
+                              }
+                            },
+                            itemBuilder: (BuildContext context) {
+                              return {'Edit Course', 'Delete Course'}
+                                  .map((String choice) {
+                                return PopupMenuItem<String>(
+                                  value: choice,
+                                  child: Text(choice),
+                                );
+                              }).toList();
+                            },
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        '$title',
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: black,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddMaterial(
+                                  username: '',
+                                  accessToken: '',
+                                  refreshToken: '',
+                                  course_id: course_id,
+                                  title: title),
+                            ),
+                          );
+                        },
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Container(
+                              alignment: Alignment.center,
                               padding: EdgeInsets.all(3),
                               decoration: BoxDecoration(
-                                color: background2,
-                                borderRadius: BorderRadius.circular(20),
+                                color: darkblue,
+                                borderRadius: BorderRadius.circular(5),
                               ),
                               child: Text(
-                                catagory.toUpperCase(),
-                                overflow: TextOverflow.ellipsis,
+                                'Add Materials'.toUpperCase(),
                                 style: GoogleFonts.poppins(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
-                                  color: lightgrey,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
                           ],
                         ),
                       ),
-                      Spacer(),
-                      PopupMenuButton<String>(
-                        icon: Icon(Icons.more_vert),
-                        onSelected: (value) async {
-                          switch (value) {
-                            case 'Edit Course':
-                              // Handle Edit Course action
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => EditCourse(
-                                    username: '',
-                                    accessToken: '',
-                                    refreshToken: '',
-                                    course_id: course_id,
-                                  ),
-                                ),
-                              );
-                              break;
-                            case 'Delete Course':
-                              // Handle Delete Course action
-                              bool confirmed = await showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: Text('Confirm Deletion'),
-                                    content: Text(
-                                        'Are you sure you want to delete this course?'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(false),
-                                        child: Text('No'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(true),
-                                        child: Text('Yes'),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                              if (confirmed) {
-                                try {
-                                  await CourseService.instance
-                                      .deleteCourseById(course_id);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(
-                                            'Course deleted successfully')),
-                                  );
-                                } catch (e) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(
-                                            'Failed to delete course: $e')),
-                                  );
-                                }
-                              }
-                              break;
-                          }
-                        },
-                        itemBuilder: (BuildContext context) {
-                          return {'Edit Course', 'Delete Course'}
-                              .map((String choice) {
-                            return PopupMenuItem<String>(
-                              value: choice,
-                              child: Text(choice),
-                            );
-                          }).toList();
-                        },
-                      ),
                     ],
                   ),
-                  SizedBox(height: 5),
-                  Text(
-                    '$title',
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.poppins(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: black,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AddMaterial(
-                              username: '',
-                              accessToken: '',
-                              refreshToken: '',
-                              course_id: course_id,
-                              title: title),
-                        ),
-                      );
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.all(3),
-                          decoration: BoxDecoration(
-                            color: darkblue,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Text(
-                            'Add Materials'.toUpperCase(),
-                            style: GoogleFonts.poppins(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
