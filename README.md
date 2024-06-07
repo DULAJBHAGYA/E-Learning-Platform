@@ -6,31 +6,31 @@ This project is an E-Learning mobile application built using **Flutter** for the
 ## Features
 
 ### For Students:
-📝 **User Registration and Login**: Students can register and log in to the application. Upon registration, a request is sent to the Admin for approval.
-🎓 **Course Enrollment**: Students can browse available courses and send enrollment requests. Access to course resources is granted upon Admin approval.
+📝 **User Registration and Login**: Students can register and log in to the application. Upon registration, a request is sent to the Admin for approval.<br/>
+🎓 **Course Enrollment**: Students can browse available courses and send enrollment requests. Access to course resources is granted upon Admin approval.<br/>
 🛠️ **Profile Management**: Students can edit their personal details.
 
 ### For Admins:
-👥 **User Management**: Admins can accept or reject student registration requests and enrollment requests.
-📚 **Course Management**: Admins can add, edit, and delete courses, as well as manage course resources and assignments.
-🧑‍🎓 **Student Management**: Admins can manage student details and remove students if necessary.
+👥 **User Management**: Admins can accept or reject student registration requests and enrollment requests.<br/>
+📚 **Course Management**: Admins can add, edit, and delete courses, as well as manage course resources and assignments.<br/>
+🧑‍🎓 **Student Management**: Admins can manage student details and remove students if necessary.<br/>
 
 ### For Super Admin:
-🛡️ **Admin Management**: Super Admins can add new Admins and manage existing Admins.
+🛡️ **Admin Management**: Super Admins can add new Admins and manage existing Admins.<br/>
 👑 **System Oversight**: Super Admins have access to all functionalities available to Admins and can oversee the entire system.
 
 ## Tech Stack
-📱 **Frontend**: Flutter
+📱 **Frontend**: Flutter<br/>
 💻 **Backend**: Go
 
 ## Installation
 ### Prerequisites
-🚀 **Flutter SDK**: Flutter Installation Guide
+🚀 **Flutter SDK**: Flutter Installation Guide<br/>
 🛠️ **Go**: Go Installation Guide
 
 ### Backend Setup
 **Clone the repository**:
-git clone https://github.com/yourusername/elearning-app.git
+git clone https://github.com/yourusername/elearning-app.git<br/>
 cd elearning-app/backend
 
 **Install dependencies**:
@@ -52,23 +52,23 @@ flutter run
 ## Usage
 
 ### Student Registration and Enrollment:
-📝 Students register through the app.
-✔️ Admin reviews and approves the registration request.
-📚 Students can browse courses and send enrollment requests.
-✔️ Admin approves the enrollment request, granting access to course resources.
+📝 Students register through the app.<br/>
+✔️ Admin reviews and approves the registration request.<br/>
+📚 Students can browse courses and send enrollment requests.<br/>
+✔️ Admin approves the enrollment request, granting access to course resources.<br/>
 
 ### Admin Management:
-🔑 Admins can log in to the system.
-👥 Manage student requests and course content.
+🔑 Admins can log in to the system.<br/>
+👥 Manage student requests and course content.<br/>
 👑 Super Admins can add new Admins and manage existing ones.
 
 ## Contributing
 We welcome contributions to enhance the functionality and features of this E-Learning app. 
 
 **To contribute**:
-🍴 Fork the repository.
-🌿 Create a new branch.
-🔧 Make your changes.
+🍴 Fork the repository.<br/>
+🌿 Create a new branch.<br/>
+🔧 Make your changes.<br/>
 📨 Submit a pull request.
 
 
