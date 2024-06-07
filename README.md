@@ -1,1 +1,1 @@
-# E-Learning-Platform
+# EduApp - E-Learning-Platform 🧑‍🏫📚
