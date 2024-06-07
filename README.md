@@ -1,7 +1,8 @@
 # EduApp - E-Learning-Platform 🧑‍🏫📚
 
 ## Overview
-This project is an E-Learning mobile application built using **Flutter** for the front end and **Go** for the back end. The application provides distinct functionalities for two types of users: Admin and Student. It features a robust authentication system, course management, and user management, with Super Admin capabilities to oversee the entire system.
+<div style="text-align: justify">
+This project is an E-Learning mobile application built using **Flutter** for the front end and **Go** for the back end. The application provides distinct functionalities for two types of users: Admin and Student. It features a robust authentication system, course management, and user management, with Super Admin capabilities to oversee the entire system.</div>
 
 ## Features
 
