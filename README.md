@@ -65,7 +65,7 @@ flutter run
 ## Contributing
 We welcome contributions to enhance the functionality and features of this E-Learning app. 
 
-**To contribute**:
+**To contribute**:<br/>
 🍴 Fork the repository.<br/>
 🌿 Create a new branch.<br/>
 🔧 Make your changes.<br/>
