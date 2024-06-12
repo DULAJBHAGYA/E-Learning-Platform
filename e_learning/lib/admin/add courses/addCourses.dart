@@ -112,10 +112,6 @@ class _AddCoursesState extends State<AddCourses> {
           SizedBox(
             height: 20,
           ),
-          // CustomSearchBar(),
-          SizedBox(
-            height: 20,
-          ),
           GestureDetector(
             onTap: () {
               Navigator.push(
@@ -205,7 +201,7 @@ class AdminAddedCourseViewCard extends StatelessWidget {
             color: white,
           ),
           child: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(10.0),
             child: Row(
               children: [
                 // Image
@@ -220,7 +216,7 @@ class AdminAddedCourseViewCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
-                SizedBox(width: 20),
+                SizedBox(width: 10),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -228,35 +224,32 @@ class AdminAddedCourseViewCard extends StatelessWidget {
                       Row(
                         children: [
                           Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.all(3),
-                                  decoration: BoxDecoration(
-                                    color: background2,
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Text(
-                                    catagory.toUpperCase(),
-                                    overflow: TextOverflow.ellipsis,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: lightgrey,
-                                    ),
-                                  ),
+                            child: Container(
+                              padding: EdgeInsets.all(3),
+                              decoration: BoxDecoration(
+                                color: background,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                catagory.toUpperCase(),
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: lightgrey,
                                 ),
-                              ],
+                              ),
                             ),
                           ),
-                          Spacer(),
                           PopupMenuButton<String>(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            color: white,
                             icon: Icon(Icons.more_vert),
                             onSelected: (value) async {
                               switch (value) {
-                                case 'Edit Course':
-                                  // Handle Edit Course action
+                                case 'EDIT COURSE':
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -269,26 +262,46 @@ class AdminAddedCourseViewCard extends StatelessWidget {
                                     ),
                                   );
                                   break;
-                                case 'Delete Course':
-                                  // Handle Delete Course action
+                                case 'DELETE COURSE':
                                   bool confirmed = await showDialog(
                                     context: context,
                                     builder: (context) {
                                       return AlertDialog(
-                                        title: Text('Confirm Deletion'),
+                                        title: Text('Confirm Deletion',
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                                color: black)),
                                         content: Text(
-                                            'Are you sure you want to delete this course?'),
+                                          'Are you sure you want to delete this course?',
+                                          style: GoogleFonts.poppins(
+                                              fontSize: 15,
+                                              color: black,
+                                              fontWeight: FontWeight.w400),
+                                        ),
                                         actions: [
                                           TextButton(
                                             onPressed: () =>
                                                 Navigator.of(context)
                                                     .pop(false),
-                                            child: Text('No'),
+                                            child: Text(
+                                              'No',
+                                              style: GoogleFonts.poppins(
+                                                  fontSize: 15,
+                                                  color: black,
+                                                  fontWeight: FontWeight.w400),
+                                            ),
                                           ),
                                           TextButton(
                                             onPressed: () =>
                                                 Navigator.of(context).pop(true),
-                                            child: Text('Yes'),
+                                            child: Text(
+                                              'Yes',
+                                              style: GoogleFonts.poppins(
+                                                  fontSize: 15,
+                                                  color: black,
+                                                  fontWeight: FontWeight.w400),
+                                            ),
                                           ),
                                         ],
                                       );
@@ -302,14 +315,24 @@ class AdminAddedCourseViewCard extends StatelessWidget {
                                           .showSnackBar(
                                         SnackBar(
                                             content: Text(
-                                                'Course deleted successfully')),
+                                          'Course deleted successfully',
+                                          style: GoogleFonts.poppins(
+                                              fontSize: 15,
+                                              color: white,
+                                              fontWeight: FontWeight.w400),
+                                        )),
                                       );
                                     } catch (e) {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         SnackBar(
                                             content: Text(
-                                                'Failed to delete course: $e')),
+                                          'Failed to delete course: $e',
+                                          style: GoogleFonts.poppins(
+                                              fontSize: 15,
+                                              color: white,
+                                              fontWeight: FontWeight.w400),
+                                        )),
                                       );
                                     }
                                   }
@@ -317,12 +340,20 @@ class AdminAddedCourseViewCard extends StatelessWidget {
                               }
                             },
                             itemBuilder: (BuildContext context) {
-                              return {'Edit Course', 'Delete Course'}
-                                  .map((String choice) {
+                              return {
+                                'EDIT COURSE',
+                                'DELETE COURSE',
+                              }.map((String choice) {
                                 return PopupMenuItem<String>(
-                                  value: choice,
-                                  child: Text(choice),
-                                );
+                                    value: choice,
+                                    child: Text(
+                                      choice,
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 15,
+                                        color: black,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ));
                               }).toList();
                             },
                           ),
@@ -330,7 +361,7 @@ class AdminAddedCourseViewCard extends StatelessWidget {
                       ),
                       SizedBox(height: 5),
                       Text(
-                        '$title',
+                        title,
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                           fontSize: 15,
@@ -338,7 +369,7 @@ class AdminAddedCourseViewCard extends StatelessWidget {
                           color: black,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      Spacer(),
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -358,7 +389,8 @@ class AdminAddedCourseViewCard extends StatelessWidget {
                           children: [
                             Container(
                               alignment: Alignment.center,
-                              padding: EdgeInsets.all(3),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 10),
                               decoration: BoxDecoration(
                                 color: darkblue,
                                 borderRadius: BorderRadius.circular(5),
@@ -368,7 +400,7 @@ class AdminAddedCourseViewCard extends StatelessWidget {
                                 style: GoogleFonts.poppins(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color: white,
                                 ),
                               ),
                             ),

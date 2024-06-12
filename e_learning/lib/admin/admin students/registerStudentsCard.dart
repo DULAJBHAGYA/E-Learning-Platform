@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -67,8 +66,6 @@ class RegisterdStudentsCard extends StatelessWidget {
             color: white,
             onSelected: (value) {
               if (value == 'delete') {
-                // Handle delete action here
-                // You can show a confirmation dialog before deleting
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
@@ -77,7 +74,7 @@ class RegisterdStudentsCard extends StatelessWidget {
                     actions: [
                       TextButton(
                         onPressed: () {
-                          Navigator.pop(context); // Close the dialog
+                          Navigator.pop(context);
                         },
                         child: Text('No'),
                       ),
@@ -85,12 +82,10 @@ class RegisterdStudentsCard extends StatelessWidget {
                         onPressed: () async {
                           try {
                             await UserService.instance.deleteUser(user_id);
-                            // Optionally, you can show a success message or perform any other action after deletion
                           } catch (e) {
-                            // Handle error if deletion fails
                             print('Error deleting user: $e');
                           }
-                          Navigator.pop(context); // Close the dialog
+                          Navigator.pop(context);
                         },
                         child: Text('Yes'),
                       ),

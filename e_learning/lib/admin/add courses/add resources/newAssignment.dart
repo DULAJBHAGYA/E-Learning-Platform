@@ -209,7 +209,14 @@ class _NewAssignmentState extends State<NewAssignment> {
                 TextFormField(
                   controller: _courseidController,
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(labelText: 'Course ID'),
+                  decoration: InputDecoration(
+                    labelText: 'Course ID',
+                    labelStyle: GoogleFonts.poppins(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w300,
+                      color: black,
+                    ),
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Course ID is required';
@@ -221,7 +228,13 @@ class _NewAssignmentState extends State<NewAssignment> {
                 TextFormField(
                   controller: _materialidController,
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(labelText: 'Material ID'),
+                  decoration: InputDecoration(
+                      labelText: 'Material ID',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      )),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Material ID is required';
@@ -236,7 +249,7 @@ class _NewAssignmentState extends State<NewAssignment> {
                     width: double.infinity,
                     height: 200,
                     decoration: BoxDecoration(
-                      color: Colors.grey[300],
+                      color: white,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: _selectedFileBytes != null
@@ -251,7 +264,7 @@ class _NewAssignmentState extends State<NewAssignment> {
                           )
                         : Icon(
                             Icons.file_upload,
-                            color: Colors.grey[800],
+                            color: lightgrey,
                             size: 50,
                           ),
                   ),
@@ -259,17 +272,35 @@ class _NewAssignmentState extends State<NewAssignment> {
                 SizedBox(height: 20),
                 TextFormField(
                   controller: _titleController,
-                  decoration: InputDecoration(labelText: 'Title'),
+                  decoration: InputDecoration(
+                      labelText: 'Title',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      )),
                 ),
                 SizedBox(height: 20),
                 TextFormField(
                   controller: _duedateController,
-                  decoration: InputDecoration(labelText: 'Due Date'),
+                  decoration: InputDecoration(
+                      labelText: 'Due Date',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      )),
                 ),
                 SizedBox(height: 20),
                 TextFormField(
                   controller: _resourceController,
-                  decoration: InputDecoration(labelText: 'Resources'),
+                  decoration: InputDecoration(
+                      labelText: 'Resources',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      )),
                   maxLines: null,
                 ),
                 SizedBox(height: 20),

@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 import '../../../color.dart';
@@ -38,8 +39,8 @@ class _NewmaterialState extends State<Newmaterial> {
   TextEditingController _resourceController = TextEditingController();
 
   String? _fileName;
-  File? _selectedImage;
-  Uint8List? _selectedImageBytes;
+  File? _selectedFile;
+  Uint8List? _selectedFileBytes;
 
   @override
   void initState() {
@@ -51,24 +52,32 @@ class _NewmaterialState extends State<Newmaterial> {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['jpg', 'jpeg', 'png'], // Allow only image files
+        allowedExtensions: [
+          'jpg',
+          'jpeg',
+          'png',
+          'doc',
+          'pdf'
+        ], // Allow image, doc, and pdf files
       );
 
       if (result != null) {
         if (kIsWeb) {
           Uint8List bytes = await result.files.first.bytes!;
           setState(() {
-            _selectedImageBytes = bytes;
+            _selectedFileBytes = bytes;
+            _fileName = result.files.first.name;
           });
         } else {
           PlatformFile file = result.files.first;
           setState(() {
-            _selectedImage = File(file.path!);
+            _selectedFile = File(file.path!);
+            _fileName = file.name;
           });
         }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Selected image: ${result.files.first.name}'),
+            content: Text('Selected file: ${result.files.first.name}'),
             duration: Duration(seconds: 2),
           ),
         );
@@ -86,8 +95,8 @@ class _NewmaterialState extends State<Newmaterial> {
       'title': _titleController.text.trim(),
       'order_number': _ordernumberController.text.trim(),
       'resource': _resourceController.text.trim(),
-      'material': _selectedImageBytes != null
-          ? MultipartFile.fromBytes(_selectedImageBytes!, filename: 'image.jpg')
+      'material': _selectedFileBytes != null
+          ? MultipartFile.fromBytes(_selectedFileBytes!, filename: _fileName)
           : null,
     });
   }
@@ -101,14 +110,26 @@ class _NewmaterialState extends State<Newmaterial> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Success"),
+          title: Text(
+            "Success",
+            style: GoogleFonts.poppins(
+                fontSize: 15, color: black, fontWeight: FontWeight.bold),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Course material added successfully"),
+              Text(
+                "Course material added successfully",
+                style: GoogleFonts.poppins(
+                    fontSize: 15, color: black, fontWeight: FontWeight.w400),
+              ),
               SizedBox(height: 10),
-              Text("Material ID: $material_id"),
+              Text(
+                "Material ID: $material_id",
+                style: GoogleFonts.poppins(
+                    fontSize: 15, color: black, fontWeight: FontWeight.w400),
+              ),
             ],
           ),
           actions: <Widget>[
@@ -125,7 +146,11 @@ class _NewmaterialState extends State<Newmaterial> {
                               title: ' ',
                             )));
               },
-              child: Text('OK'),
+              child: Text(
+                'OK',
+                style: GoogleFonts.poppins(
+                    fontSize: 15, color: black, fontWeight: FontWeight.w400),
+              ),
             ),
           ],
         );
@@ -138,14 +163,26 @@ class _NewmaterialState extends State<Newmaterial> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Failed"),
-          content: Text("Course material adding failed: $errorMessage"),
+          title: Text(
+            "Failed",
+            style: GoogleFonts.poppins(
+                fontSize: 15, color: black, fontWeight: FontWeight.bold),
+          ),
+          content: Text(
+            "Course material adding failed: $errorMessage",
+            style: GoogleFonts.poppins(
+                fontSize: 15, color: black, fontWeight: FontWeight.w400),
+          ),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('OK'),
+              child: Text(
+                'OK',
+                style: GoogleFonts.poppins(
+                    fontSize: 15, color: black, fontWeight: FontWeight.w400),
+              ),
             ),
           ],
         );
@@ -198,7 +235,13 @@ class _NewmaterialState extends State<Newmaterial> {
                 TextFormField(
                   controller: _courseidController,
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(labelText: 'Course ID'),
+                  decoration: InputDecoration(
+                      labelText: 'Course ID',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      )),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Course ID is required';
@@ -213,31 +256,62 @@ class _NewmaterialState extends State<Newmaterial> {
                     width: double.infinity,
                     height: 200,
                     decoration: BoxDecoration(
-                      color: Colors.grey[300],
+                      color: white,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: _selectedImageBytes != null
-                        ? Image.memory(
-                            _selectedImageBytes!,
-                            fit: BoxFit.cover,
-                          )
-                        : Icon(
-                            Icons.file_upload,
-                            color: Colors.grey[800],
-                            size: 50,
-                          ),
+                    child: Center(
+                      child: _selectedFileBytes != null
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                _selectedFileBytes != null
+                                    ? Image.memory(
+                                        _selectedFileBytes!,
+                                        fit: BoxFit.cover,
+                                        height: 150,
+                                      )
+                                    : SizedBox(),
+                                SizedBox(height: 10),
+                                Text(
+                                  _fileName ?? 'No file selected',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w300,
+                                    color: black,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Icon(
+                              Iconsax.document_upload,
+                              color: lightgrey,
+                              size: 50,
+                            ),
+                    ),
                   ),
                 ),
                 SizedBox(height: 20),
                 TextFormField(
                   controller: _titleController,
-                  decoration: InputDecoration(labelText: 'Title'),
+                  decoration: InputDecoration(
+                      labelText: 'Title',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      )),
                 ),
                 SizedBox(height: 20),
                 TextFormField(
                   controller: _ordernumberController,
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(labelText: 'Order Number'),
+                  decoration: InputDecoration(
+                      labelText: 'Order Number',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      )),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Order Number is required';
@@ -248,7 +322,13 @@ class _NewmaterialState extends State<Newmaterial> {
                 SizedBox(height: 20),
                 TextFormField(
                   controller: _resourceController,
-                  decoration: InputDecoration(labelText: 'Resources'),
+                  decoration: InputDecoration(
+                      labelText: 'Resources',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      )),
                   maxLines: null,
                 ),
                 SizedBox(height: 20),
@@ -260,14 +340,14 @@ class _NewmaterialState extends State<Newmaterial> {
                         Navigator.pop(context);
                       },
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(blue),
+                        backgroundColor: MaterialStateProperty.all(darkblue),
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
                         ),
                         padding:
-                            MaterialStateProperty.all(EdgeInsets.all(15.0)),
+                            MaterialStateProperty.all(EdgeInsets.all(10.0)),
                       ),
                       child: Text(
                         'CANCEL',
@@ -304,14 +384,14 @@ class _NewmaterialState extends State<Newmaterial> {
                         }
                       },
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(blue),
+                        backgroundColor: MaterialStateProperty.all(darkblue),
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
                         ),
                         padding:
-                            MaterialStateProperty.all(EdgeInsets.all(15.0)),
+                            MaterialStateProperty.all(EdgeInsets.all(10.0)),
                       ),
                       child: Text(
                         'SAVE',

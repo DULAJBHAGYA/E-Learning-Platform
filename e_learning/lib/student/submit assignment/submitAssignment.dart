@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:e_learning/admin/add%20courses/addCourses.dart';
+import 'package:e_learning/student/submit%20assignment/viewAssignmentforStudent.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -77,14 +78,7 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: [
-          'jpg',
-          'jpeg',
-          'png',
-          'pdf',
-          'doc',
-          'docx'
-        ], // Allow images, PDFs, and DOC files
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'],
       );
 
       if (result != null) {
@@ -217,77 +211,73 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
     );
   }
 
-  Future<void> _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
+  void _launchFileViewer(String filePath) {}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: background,
-        elevation: 0,
-        leading: IconButton(
-          icon: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Icon(Iconsax.arrow_left_2, size: 30, color: black),
+        appBar: AppBar(
+          backgroundColor: background,
+          elevation: 0,
+          leading: IconButton(
+            icon: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Icon(Iconsax.arrow_left_2, size: 30, color: black),
+            ),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CourseContent(
+                            course_id: widget.course_id,
+                            progress: 0,
+                          )));
+            },
           ),
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => CourseContent(
-                          course_id: widget.course_id,
-                          progress: 0,
-                        )));
-          },
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(0),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: SizedBox(
-                      height: 30,
-                      width: 30,
-                      child: Image.asset(
-                        '/logos/logo.png',
-                        fit: BoxFit.cover,
-                      ),
+        body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Row(children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(0),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: SizedBox(
+                    height: 30,
+                    width: 30,
+                    child: Image.asset(
+                      '/logos/logo.png',
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
-                SizedBox(width: 10),
-                Text(
-                  'Submit Assignment',
-                  style: GoogleFonts.poppins(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: black,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Text('$title',
+              ),
+              SizedBox(width: 10),
+              Text(
+                'Submit Assignment',
                 style: GoogleFonts.poppins(
-                    color: black, fontSize: 18, fontWeight: FontWeight.w600)),
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: black,
+                ),
+              ),
+            ]),
+            SizedBox(height: 20),
+            Text(
+              '$title',
+              style: GoogleFonts.poppins(
+                color: black,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
             SizedBox(height: 10),
             GestureDetector(
-              onTap: () => _launchURL(assignment_file),
+              onTap: () => _launchFileViewer(assignment_file),
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
@@ -312,12 +302,20 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
             Text(
               'Due Date: $due_date',
               style: GoogleFonts.poppins(
-                  fontSize: 15, color: black, fontWeight: FontWeight.bold),
+                fontSize: 15,
+                color: black,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             SizedBox(height: 20),
-            Text('Upload Answers',
-                style: GoogleFonts.poppins(
-                    color: black, fontSize: 18, fontWeight: FontWeight.w800)),
+            Text(
+              'Upload Answers',
+              style: GoogleFonts.poppins(
+                color: black,
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
             SizedBox(height: 10),
             GestureDetector(
               onTap: _pickFile,
@@ -325,7 +323,7 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
                 width: double.infinity,
                 height: 200,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: white,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: _selectedFileBytes != null || _selectedFile != null
@@ -338,7 +336,7 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
                       )
                     : Icon(
                         Icons.file_upload,
-                        color: Colors.grey[800],
+                        color: lightgrey,
                         size: 50,
                       ),
               ),
@@ -405,9 +403,7 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-    );
+          ]),
+        ));
   }
 }

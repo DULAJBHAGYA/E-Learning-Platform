@@ -160,7 +160,7 @@ class AdminDashCoursessDisplayCard extends StatelessWidget {
                         alignment: Alignment.center,
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                          color: background2,
+                          color: background,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(

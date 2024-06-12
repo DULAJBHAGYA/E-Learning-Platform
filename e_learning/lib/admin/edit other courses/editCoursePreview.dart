@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:e_learning/admin/add%20courses/addCourses.dart';
+import 'package:e_learning/admin/admin%20courses/adminCourseDesc.dart';
 import 'package:e_learning/services/courseServices.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -8,27 +9,29 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
+import 'dart:convert'; // Import for JSON encoding/decoding
 import 'dart:io';
 import '../../color.dart';
-import '../../services/categoryServices.dart';
 
-class NewCourse extends StatefulWidget {
-  const NewCourse({
+class EditOtherCourse extends StatefulWidget {
+  const EditOtherCourse({
     Key? key,
     required this.username,
     required this.accessToken,
     required this.refreshToken,
+    required this.course_id,
   }) : super(key: key);
 
   final String username;
   final String accessToken;
   final String refreshToken;
+  final int course_id;
 
   @override
-  _NewCourseState createState() => _NewCourseState();
+  _EditOtherCourseState createState() => _EditOtherCourseState();
 }
 
-class _NewCourseState extends State<NewCourse> {
+class _EditOtherCourseState extends State<EditOtherCourse> {
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController _titleController = TextEditingController();
@@ -38,39 +41,55 @@ class _NewCourseState extends State<NewCourse> {
   TextEditingController _categoryController = TextEditingController();
 
   int? user_id;
-  File? _selectedImage;
+  String? _imageUrl;
   Uint8List? _selectedImageBytes;
+  List<String> _typeOptions = ['Science', 'Math', 'IT', 'Language', 'Other'];
+  String? _selectedType;
 
   @override
   void initState() {
     super.initState();
-    _fetchUserId();
+    _loadCourseDetails();
   }
 
-  void _fetchUserId() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      user_id = prefs.getInt('user_id');
-    });
+  Future<void> _loadCourseDetails() async {
+    try {
+      final courseDetails =
+          await CourseService.instance.fetchCourseById(widget.course_id);
+
+      setState(() {
+        _titleController.text = courseDetails['title'] ?? '';
+        _descriptionController.text = courseDetails['description'] ?? '';
+        _useridController.text = courseDetails['user_id'].toString();
+        _categoryController.text = courseDetails['catagory'] ?? '';
+        _aboutCourseController.text =
+            jsonEncode(courseDetails['what_will'] ?? {});
+        _imageUrl = courseDetails['image'] ?? '';
+      });
+    } catch (e) {
+      print('Error loading course details: $e');
+    }
   }
 
   Future<void> _pickFile() async {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['jpg', 'jpeg', 'png'],
+        allowedExtensions: ['jpg', 'jpeg', 'png'], // Allow only image files
       );
 
       if (result != null) {
         if (kIsWeb) {
-          Uint8List bytes = result.files.first.bytes!;
+          // For web, get the bytes and create a Uint8List
+          Uint8List bytes = await result.files.first.bytes!;
           setState(() {
             _selectedImageBytes = bytes;
           });
         } else {
+          // For mobile, get the file directly
           PlatformFile file = result.files.first;
-          setState(() {
-            _selectedImage = File(file.path!);
+          setState(() async {
+            _selectedImageBytes = await File(file.path!).readAsBytes();
           });
         }
 
@@ -94,7 +113,7 @@ class _NewCourseState extends State<NewCourse> {
       'title': _titleController.text.trim(),
       'description': _descriptionController.text.trim(),
       'what_will': _aboutCourseController.text.trim(),
-      'category': _categoryController.text.trim(),
+      'catagory': _categoryController.text.trim(),
       'image': _selectedImageBytes != null
           ? MultipartFile.fromBytes(_selectedImageBytes!, filename: 'image.jpg')
           : null,
@@ -110,26 +129,14 @@ class _NewCourseState extends State<NewCourse> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(
-            "Success",
-            style: GoogleFonts.poppins(
-                fontSize: 15, color: black, fontWeight: FontWeight.bold),
-          ),
+          title: Text("Success"),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Course preview added successfully",
-                style: GoogleFonts.poppins(
-                    fontSize: 15, color: black, fontWeight: FontWeight.w400),
-              ),
+              Text("Course preview added successfully"),
               SizedBox(height: 10),
-              Text(
-                "Course ID: $courseId",
-                style: GoogleFonts.poppins(
-                    fontSize: 15, color: black, fontWeight: FontWeight.w400),
-              ),
+              Text("Course ID: $courseId"),
             ],
           ),
           actions: <Widget>[
@@ -146,11 +153,7 @@ class _NewCourseState extends State<NewCourse> {
                   ),
                 );
               },
-              child: Text(
-                'OK',
-                style: GoogleFonts.poppins(
-                    fontSize: 15, color: black, fontWeight: FontWeight.w400),
-              ),
+              child: Text('OK'),
             ),
           ],
         );
@@ -163,26 +166,14 @@ class _NewCourseState extends State<NewCourse> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(
-            "Failed",
-            style: GoogleFonts.poppins(
-                fontSize: 15, color: black, fontWeight: FontWeight.bold),
-          ),
-          content: Text(
-            "Course preview adding failed {$errorMessage}",
-            style: GoogleFonts.poppins(
-                fontSize: 15, color: black, fontWeight: FontWeight.w400),
-          ),
+          title: Text("Failed"),
+          content: Text("Course preview adding failed {$errorMessage}"),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text(
-                'OK',
-                style: GoogleFonts.poppins(
-                    fontSize: 15, color: black, fontWeight: FontWeight.w400),
-              ),
+              child: Text('OK'),
             ),
           ],
         );
@@ -190,39 +181,33 @@ class _NewCourseState extends State<NewCourse> {
     );
   }
 
-  Future<void> _saveCategoryAndCourse() async {
-    try {
-      // First, post the category
-      final categoryResponse = await CategoryServices.instance
-          .postCatagory(_categoryController.text.trim());
-
-      // If the category is successfully posted, post the course
-      if (categoryResponse != null) {
-        final FormData formData = _buildFormData();
-
-        final response =
-            await CourseService.instance.postCourse(formData, user_id!);
-
-        if (response.containsKey('course_id') &&
-            response['course_id'] != null) {
-          final courseId = int.parse(response['course_id'].toString());
-          _showSuccessDialog(courseId);
-        } else {
-          _showErrorDialog("Course ID not found in the response");
-        }
-      } else {
-        _showErrorDialog("Failed to post category");
-      }
-    } catch (e) {
-      print('Error: $e');
-      _showErrorDialog(e.toString());
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: background,
+          elevation: 0,
+          leading: IconButton(
+            icon: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Icon(Iconsax.arrow_left_2, size: 30, color: black),
+            ),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AdminCourseDescription(
+                            description: '',
+                            course_id: widget.course_id,
+                            title: '',
+                            image: '',
+                            catagory: '',
+                            what_will: {},
+                          )));
+            },
+          ),
+        ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(
@@ -252,7 +237,7 @@ class _NewCourseState extends State<NewCourse> {
                       ),
                       SizedBox(width: 10),
                       Text(
-                        'Add New Course',
+                        'Edit Course',
                         style: GoogleFonts.poppins(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
@@ -265,13 +250,7 @@ class _NewCourseState extends State<NewCourse> {
                   TextFormField(
                     controller: _useridController,
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        labelText: 'User ID',
-                        labelStyle: GoogleFonts.poppins(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w300,
-                          color: black,
-                        )),
+                    decoration: InputDecoration(labelText: 'User ID'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'User ID is required';
@@ -280,79 +259,78 @@ class _NewCourseState extends State<NewCourse> {
                     },
                   ),
                   SizedBox(height: 20),
-                  GestureDetector(
-                    onTap: _pickFile,
-                    child: Container(
-                      width: double.infinity,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        color: white,
-                        borderRadius: BorderRadius.circular(10),
+                  Stack(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: _selectedImageBytes != null
+                            ? Image.memory(
+                                _selectedImageBytes!,
+                                fit: BoxFit.cover,
+                              )
+                            : (_imageUrl != null && _imageUrl!.isNotEmpty)
+                                ? Image.network(
+                                    _imageUrl!,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Icon(
+                                    Icons.image,
+                                    color: Colors.grey[800],
+                                    size: 50,
+                                  ),
                       ),
-                      child: _selectedImageBytes != null
-                          ? Image.memory(
-                              _selectedImageBytes!,
-                              fit: BoxFit.cover,
-                            )
-                          : Icon(
-                              Iconsax.camera,
-                              color: lightgrey,
-                              size: 50,
+                      Positioned(
+                        right: 10,
+                        bottom: 10,
+                        child: GestureDetector(
+                          onTap: _pickFile,
+                          child: Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(50),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  blurRadius: 4,
+                                  offset: Offset(2, 2),
+                                ),
+                              ],
                             ),
-                    ),
+                            child: Icon(
+                              Icons.camera_alt,
+                              color: Colors.grey[800],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(height: 20),
                   TextFormField(
                     controller: _titleController,
-                    decoration: InputDecoration(
-                        labelText: 'Title',
-                        labelStyle: GoogleFonts.poppins(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w300,
-                          color: black,
-                        )),
+                    decoration: InputDecoration(labelText: 'Title'),
                   ),
                   SizedBox(height: 20),
                   TextFormField(
                     controller: _categoryController,
-                    decoration: InputDecoration(
-                        labelText: 'Category',
-                        labelStyle: GoogleFonts.poppins(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w300,
-                          color: black,
-                        )),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Category is required';
-                      }
-                      return null;
-                    },
+                    decoration: InputDecoration(labelText: 'Category'),
                   ),
                   SizedBox(height: 20),
                   TextFormField(
                     controller: _descriptionController,
-                    decoration: InputDecoration(
-                      labelText: 'Description',
-                      labelStyle: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w300,
-                        color: black,
-                      ),
-                    ),
+                    decoration: InputDecoration(labelText: 'Description'),
                     maxLines: null,
                   ),
                   SizedBox(height: 20),
                   TextFormField(
                     controller: _aboutCourseController,
-                    decoration: InputDecoration(
-                      labelText: 'About Course',
-                      labelStyle: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w300,
-                        color: black,
-                      ),
-                    ),
+                    decoration: InputDecoration(labelText: 'About Course'),
                     maxLines: null,
                   ),
                   SizedBox(height: 20),
@@ -360,42 +338,43 @@ class _NewCourseState extends State<NewCourse> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            _saveCategoryAndCourse();
+                            FormData formData = _buildFormData();
+
+                            try {
+                              final response = await CourseService.instance
+                                  .editCourse(formData, widget.course_id);
+
+                              if (response != null &&
+                                  response.containsKey('id')) {
+                                _showSuccessDialog(response['id']);
+                              } else {
+                                _showErrorDialog('Course editing failed.');
+                              }
+                            } catch (e) {
+                              _showErrorDialog(e.toString());
+                            }
                           }
                         },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(blue),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                          ),
+                          padding: MaterialStateProperty.all(
+                            EdgeInsets.all(15.0),
+                          ),
+                        ),
                         child: Text(
                           'SAVE',
-                          style: GoogleFonts.poppins(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
+                          style: GoogleFonts.openSans(
                             color: white,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: darkblue,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 10),
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          'CANCEL',
-                          style: GoogleFonts.poppins(
-                            fontSize: 15,
                             fontWeight: FontWeight.bold,
-                            color: white,
+                            fontSize: 15,
                           ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: darkblue,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 10),
                         ),
                       ),
                     ],
