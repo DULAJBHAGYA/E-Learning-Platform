@@ -54,7 +54,7 @@ class _AddAdminState extends State<AddAdmin> {
                     ),
                     SizedBox(width: 10),
                     Text(
-                      'Add New Admin',
+                      'Add New Admin'.toUpperCase(),
                       style: GoogleFonts.poppins(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -221,12 +221,12 @@ class _AddAdminState extends State<AddAdmin> {
                         if (_formKey.currentState!.validate()) {
                           try {
                             await AdminService.instance.postAdmin(
-                              selectedRole!, // role
-                              emailController.text, // email
+                              selectedRole!,
+                              emailController.text,
                               firstnameController.text,
-                              lastnameController.text, // full_name
-                              passwordController.text, // hashed_password
-                              usernameController.text, // user_name
+                              lastnameController.text,
+                              passwordController.text,
+                              usernameController.text,
                             );
 
                             // Show success alert

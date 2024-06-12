@@ -3,58 +3,35 @@ import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 
 class VideoDisplay extends StatefulWidget {
+  const VideoDisplay({
+    Key? key,
+    required this.url,
+  }) : super(key: key);
+
   final String url;
 
-  const VideoDisplay({required this.url, Key? key}) : super(key: key);
-
   @override
-  _VideoDisplayState createState() => _VideoDisplayState();
+  _VideoAppState createState() => _VideoAppState();
 }
 
-class _VideoDisplayState extends State<VideoDisplay> {
-  ChewieController? _chewieController;
+class _VideoAppState extends State<VideoDisplay> {
   late VideoPlayerController _videoPlayerController;
-  bool _isError = false;
-  String _errorMessage = '';
+  ChewieController? _chewieController;
 
   @override
   void initState() {
     super.initState();
-    _initializeVideoPlayer();
-  }
-
-  Future<void> _initializeVideoPlayer() async {
-    try {
-      _videoPlayerController = VideoPlayerController.network(widget.url)
-        ..initialize().then((_) {
-          setState(() {
-            _chewieController = ChewieController(
-              videoPlayerController: _videoPlayerController,
-              autoPlay: true,
-              looping: false,
-            );
-          });
-        }).catchError((error) {
-          _handleError(error);
+    _videoPlayerController = VideoPlayerController.networkUrl(widget.url as Uri)
+      ..initialize().then((_) {
+        setState(() {
+          _chewieController = ChewieController(
+            videoPlayerController: _videoPlayerController,
+            aspectRatio: _videoPlayerController.value.aspectRatio,
+            autoPlay: true,
+            looping: true,
+          );
         });
-    } catch (error) {
-      _handleError(error);
-    }
-  }
-
-  void _handleError(dynamic error) {
-    print('Error initializing video player: $error');
-    setState(() {
-      _isError = true;
-      _errorMessage = 'Error initializing video player: ${error.toString()}';
-    });
-  }
-
-  @override
-  void dispose() {
-    _chewieController?.dispose();
-    _videoPlayerController.dispose();
-    super.dispose();
+      });
   }
 
   @override
@@ -64,35 +41,27 @@ class _VideoDisplayState extends State<VideoDisplay> {
         title: Text('Video Player'),
       ),
       body: Center(
-        child: _isError
-            ? Column(
+        child: _chewieController != null &&
+                _chewieController!.videoPlayerController.value.isInitialized
+            ? Chewie(
+                controller: _chewieController!,
+              )
+            : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.error,
-                    color: Colors.red,
-                    size: 40,
-                  ),
-                  SizedBox(height: 10),
-                  Flexible(
-                    child: Text(
-                      _errorMessage,
-                      style: TextStyle(color: Colors.red, fontSize: 18),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+                  CircularProgressIndicator(),
+                  SizedBox(height: 20),
+                  Text('Loading'),
                 ],
-              )
-            : _chewieController != null &&
-                    _videoPlayerController.value.isInitialized
-                ? AspectRatio(
-                    aspectRatio: _videoPlayerController.value.aspectRatio,
-                    child: Chewie(
-                      controller: _chewieController!,
-                    ),
-                  )
-                : CircularProgressIndicator(),
+              ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _videoPlayerController.dispose();
+    _chewieController?.dispose();
+    super.dispose();
   }
 }

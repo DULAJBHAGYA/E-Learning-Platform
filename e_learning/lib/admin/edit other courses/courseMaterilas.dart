@@ -14,11 +14,10 @@ import 'package:unicons/unicons.dart';
 
 import '../../../services/courseServices.dart';
 import '../../../services/materialServices.dart';
-import '../add resources/addAssignment.dart';
-import 'editMaterials.dart';
+import '../add courses/add materials/editMaterials.dart';
 
-class AddMaterial extends StatefulWidget {
-  const AddMaterial({
+class Materials extends StatefulWidget {
+  const Materials({
     Key? key,
     required this.username,
     required this.accessToken,
@@ -34,10 +33,10 @@ class AddMaterial extends StatefulWidget {
   final String title;
 
   @override
-  _AddmaterialState createState() => _AddmaterialState();
+  _MaterialsState createState() => _MaterialsState();
 }
 
-class _AddmaterialState extends State<AddMaterial> {
+class _MaterialsState extends State<Materials> {
   List<dynamic> _addedmaterials = [];
 
   @override
@@ -117,47 +116,16 @@ class _AddmaterialState extends State<AddMaterial> {
               ],
             ),
             SizedBox(height: 20),
+            // CustomSearchBar(),
+            SizedBox(
+              height: 20,
+            ),
             Text(
-              widget.title.toUpperCase(),
+              '$widget.title',
               style: GoogleFonts.poppins(
                   fontSize: 18, fontWeight: FontWeight.bold, color: black),
             ),
-            SizedBox(height: 10),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Newmaterial(
-                      course_id: widget.course_id,
-                      username: widget.username,
-                      accessToken: widget.accessToken,
-                      refreshToken: widget.refreshToken,
-                    ),
-                  ),
-                );
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: darkblue,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Text(
-                      'ADD NEW MATERIAL',
-                      style: GoogleFonts.poppins(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: white),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+
             SizedBox(height: 20),
             Expanded(
               child: SingleChildScrollView(
@@ -203,7 +171,7 @@ class AdminAddedMaterialViewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-      height: 120,
+      height: 130,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: white,
@@ -212,6 +180,19 @@ class AdminAddedMaterialViewCard extends StatelessWidget {
         padding: const EdgeInsets.all(10.0),
         child: Row(
           children: [
+            // Image
+            Container(
+              height: 120,
+              width: 120,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(material_file),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            SizedBox(width: 20),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,17 +204,13 @@ class AdminAddedMaterialViewCard extends StatelessWidget {
                           '$title',
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.poppins(
-                            fontSize: 18,
+                            fontSize: 15,
                             fontWeight: FontWeight.bold,
                             color: black,
                           ),
                         ),
                       ),
                       PopupMenuButton<String>(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        color: white,
                         icon: Icon(Icons.more_vert),
                         onSelected: (value) async {
                           switch (value) {
@@ -253,42 +230,19 @@ class AdminAddedMaterialViewCard extends StatelessWidget {
                                 context: context,
                                 builder: (context) {
                                   return AlertDialog(
-                                    title: Text(
-                                      'Confirm Deletion',
-                                      style: GoogleFonts.poppins(
-                                          fontSize: 15,
-                                          color: black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                    title: Text('Confirm Deletion'),
                                     content: Text(
-                                      'Are you sure you want to delete this material?',
-                                      style: GoogleFonts.poppins(
-                                          fontSize: 15,
-                                          color: black,
-                                          fontWeight: FontWeight.w400),
-                                    ),
+                                        'Are you sure you want to delete this material?'),
                                     actions: [
                                       TextButton(
                                         onPressed: () =>
                                             Navigator.of(context).pop(false),
-                                        child: Text(
-                                          'No',
-                                          style: GoogleFonts.poppins(
-                                              fontSize: 15,
-                                              color: black,
-                                              fontWeight: FontWeight.w400),
-                                        ),
+                                        child: Text('No'),
                                       ),
                                       TextButton(
                                         onPressed: () =>
                                             Navigator.of(context).pop(true),
-                                        child: Text(
-                                          'Yes',
-                                          style: GoogleFonts.poppins(
-                                              fontSize: 15,
-                                              color: black,
-                                              fontWeight: FontWeight.w400),
-                                        ),
+                                        child: Text('Yes'),
                                       ),
                                     ],
                                   );
@@ -301,23 +255,13 @@ class AdminAddedMaterialViewCard extends StatelessWidget {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                         content: Text(
-                                      'Material deleted successfully',
-                                      style: GoogleFonts.poppins(
-                                          fontSize: 15,
-                                          color: white,
-                                          fontWeight: FontWeight.w400),
-                                    )),
+                                            'Material deleted successfully')),
                                   );
                                 } catch (e) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                         content: Text(
-                                      'Failed to delete material: $e',
-                                      style: GoogleFonts.poppins(
-                                          fontSize: 15,
-                                          color: black,
-                                          fontWeight: FontWeight.w400),
-                                    )),
+                                            'Failed to delete material: $e')),
                                   );
                                 }
                               }
@@ -335,48 +279,6 @@ class AdminAddedMaterialViewCard extends StatelessWidget {
                         },
                       ),
                     ],
-                  ),
-                  Spacer(),
-                  SizedBox(height: 10),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AddAssignment(
-                            username: '',
-                            accessToken: '',
-                            refreshToken: '',
-                            material_id: material_id,
-                            course_id: course_id,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: Container(
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.all(3),
-                            decoration: BoxDecoration(
-                              color: darkblue,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Text(
-                              'Add Assignments'.toUpperCase(),
-                              style: GoogleFonts.poppins(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
                 ],
               ),

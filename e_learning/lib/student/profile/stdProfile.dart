@@ -223,7 +223,6 @@ class _StudentProfileState extends State<StudentProfile> {
                             ),
                           );
                         } else {
-                          // Handle the case where user_id is null
                           print('User ID not found in SharedPreferences');
                         }
                       },
@@ -247,8 +246,7 @@ class _StudentProfileState extends State<StudentProfile> {
                                             color: background2,
                                             shape: BoxShape.circle,
                                           ),
-                                          padding: EdgeInsets.all(
-                                              5), // Adjust padding to your needs
+                                          padding: EdgeInsets.all(5),
                                           child: Icon(
                                             Iconsax.user,
                                             color: black,

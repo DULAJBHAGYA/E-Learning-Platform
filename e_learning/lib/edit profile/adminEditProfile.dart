@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'package:e_learning/admin/admin%20profile/adminProfile.dart';
 import 'package:e_learning/services/requestServices.dart';
 import 'package:e_learning/services/userServices.dart';
 import 'package:file_picker/file_picker.dart';
@@ -11,7 +12,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../admin/admin profile/adminProfile.dart';
 import '../color.dart';
 import '../login/login.dart';
 import '../services/profilePictureServices.dart';
@@ -65,24 +65,23 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
   void initState() {
     super.initState();
     fetchUserById();
+    _submitForm();
   }
 
   Future<void> _pickFile() async {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['jpg', 'jpeg', 'png'], // Allow only image files
+        allowedExtensions: ['jpg', 'jpeg', 'png'],
       );
 
       if (result != null) {
         if (kIsWeb) {
-          // For web, get the bytes and create a Uint8List
           Uint8List bytes = await result.files.first.bytes!;
           setState(() {
             _selectedImageBytes = bytes;
           });
         } else {
-          // For mobile, get the file directly
           PlatformFile file = result.files.first;
           setState(() {
             _selectedImage = File(file.path!);
@@ -173,6 +172,7 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
           last_name = response['GetUserIDRow']['last_name'];
           user_name = response['GetUserIDRow']['user_name'];
           email = response['GetUserIDRow']['email'];
+          picture = response['GetUserIDRow']['picture'];
 
           firstNameController.text = first_name;
           lastNameController.text = last_name;
@@ -364,21 +364,41 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
                                       child: GestureDetector(
                                         onTap: () {
                                           showMenu(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            color: white,
                                             context: context,
                                             position: RelativeRect.fromLTRB(
                                                 100, 100, 0, 0),
                                             items: [
                                               PopupMenuItem(
                                                 value: 'upload',
-                                                child: Text('Upload'),
+                                                child: Text('Upload picture',
+                                                    style: GoogleFonts.poppins(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: black)),
                                               ),
                                               PopupMenuItem(
                                                 value: 'update',
-                                                child: Text('Update'),
+                                                child: Text('Update picture',
+                                                    style: GoogleFonts.poppins(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: black)),
                                               ),
                                               PopupMenuItem(
                                                 value: 'delete',
-                                                child: Text('Delete'),
+                                                child: Text('Delete picture',
+                                                    style: GoogleFonts.poppins(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: black)),
                                               ),
                                             ],
                                           ).then((value) {
@@ -389,42 +409,17 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
                                           });
                                         },
                                         child: CircleAvatar(
-                                          backgroundColor: Colors.blue,
+                                          backgroundColor: white,
                                           radius: 25,
                                           child: Icon(
                                             Icons.camera_alt,
-                                            color: Colors.white,
+                                            color: black,
                                           ),
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        color: white,
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(
-                                            color: background2, width: 1)),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: Text(
-                                        'UPLOAD PHOTO',
-                                        style: GoogleFonts.poppins(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold,
-                                            color: lightgrey),
-                                      ),
-                                    ),
-                                  )
-                                ],
                               ),
                             ])),
                             SizedBox(

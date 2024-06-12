@@ -3,11 +3,9 @@ import 'package:e_learning/services/adminServices.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:unicons/unicons.dart';
-
+import 'package:e_learning/shared/searchBar.dart';
 import '../../color.dart';
 import '../../services/userServices.dart';
-import '../../shared/searchBar.dart';
 import '../admin home/adminDash.dart';
 
 class Admins extends StatefulWidget {
@@ -28,13 +26,33 @@ class Admins extends StatefulWidget {
 
 class _AdminsState extends State<Admins> with SingleTickerProviderStateMixin {
   List<dynamic> _admins = [];
-
+  List<dynamic> _filteredAdmins = [];
+  final TextEditingController _searchController = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
     fetchAdmins();
+    _searchController.addListener(_filterAdmins);
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_filterAdmins);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _filterAdmins() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      _filteredAdmins = _admins.where((course) {
+        final first_name = course['first_name'].toLowerCase();
+        final last_name = course['last_name'].toLowerCase();
+        return first_name.startsWith(query) || last_name.startsWith(query);
+      }).toList();
+    });
   }
 
   Future<void> fetchAdmins() async {
@@ -42,6 +60,7 @@ class _AdminsState extends State<Admins> with SingleTickerProviderStateMixin {
       final adminsData = await AdminService.instance.fetchAllAdmins();
       setState(() {
         _admins = adminsData ?? [];
+        _filterAdmins();
       });
     } catch (e) {
       print('Error fetching admins: $e');
@@ -52,8 +71,8 @@ class _AdminsState extends State<Admins> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
-      key: _scaffoldKey, // Assign the GlobalKey to the Scaffold
-      drawer: NavDrawer(), // Adding the NavDrawer
+      key: _scaffoldKey,
+      drawer: NavDrawer(),
       appBar: AppBar(
         backgroundColor: background,
         elevation: 0,
@@ -63,8 +82,7 @@ class _AdminsState extends State<Admins> with SingleTickerProviderStateMixin {
             child: Icon(Iconsax.menu_1, size: 30, color: black),
           ),
           onPressed: () {
-            _scaffoldKey.currentState
-                ?.openDrawer(); // Opens the drawer using the GlobalKey
+            _scaffoldKey.currentState?.openDrawer();
           },
         ),
       ),
@@ -105,10 +123,6 @@ class _AdminsState extends State<Admins> with SingleTickerProviderStateMixin {
               ],
             ),
             SizedBox(height: 20),
-            // CustomSearchBar(),
-            SizedBox(height: 20),
-
-            //header
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,7 +131,6 @@ class _AdminsState extends State<Admins> with SingleTickerProviderStateMixin {
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: TextButton(
                       onPressed: () {
-                        //navigating to new admin page to add new admin
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => AddAdmin()),
@@ -144,12 +157,16 @@ class _AdminsState extends State<Admins> with SingleTickerProviderStateMixin {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
+                  CustomSearchBar(
+                    controller: _searchController,
+                    onChanged: (value) => _filterAdmins(),
+                  ),
+                  SizedBox(height: 20),
                   Expanded(
                     child: SingleChildScrollView(
-                      //inside scroll view it display all the admins
                       child: Column(
-                        children: _admins.map((admin) {
+                        children: _filteredAdmins.map((admin) {
                           return AdminDisplayCard(
                             user_id: admin['user_id'],
                             picture: admin['picture'] ?? '',
@@ -173,13 +190,12 @@ class _AdminsState extends State<Admins> with SingleTickerProviderStateMixin {
   }
 }
 
-//admin display card widget
 class AdminDisplayCard extends StatefulWidget {
   final String user_name;
   final String first_name;
   final String last_name;
   final String email;
-  final String picture; // Add imageUrl for the avatar
+  final String picture;
   final int user_id;
   final VoidCallback onUpdate;
 
@@ -188,7 +204,7 @@ class AdminDisplayCard extends StatefulWidget {
     required this.first_name,
     required this.last_name,
     required this.email,
-    required this.picture, // Add imageUrl for the avatar
+    required this.picture,
     required this.user_id,
     required this.onUpdate,
     Key? key,
@@ -199,7 +215,6 @@ class AdminDisplayCard extends StatefulWidget {
 }
 
 class _AdminDisplayCardState extends State<AdminDisplayCard> {
-  // Edit admin details
   void _showEditDialog() {
     showDialog(
       context: context,

@@ -44,11 +44,21 @@ class _EnrollmentsState extends State<Enrollments>
     try {
       final enrollData = await EnrollService.instance.fetchAllEnrollments();
       setState(() {
-        _enrollments = enrollData ?? [];
+        _enrollments = enrollData
+            .where((enrollment) => enrollment['pending'] == true)
+            .toList();
       });
     } catch (e) {
-      print('Error fetching courses: $e');
+      print('Error fetching enrollments: $e');
     }
+  }
+
+  void _removeEnrollment(int userId, int courseId) {
+    setState(() {
+      _enrollments.removeWhere((enrollment) =>
+          enrollment['user_id'] == userId &&
+          enrollment['course_id'] == courseId);
+    });
   }
 
   @override
@@ -105,8 +115,6 @@ class _EnrollmentsState extends State<Enrollments>
               ],
             ),
             SizedBox(height: 20),
-            // CustomSearchBar(),
-            SizedBox(height: 20),
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
@@ -119,6 +127,7 @@ class _EnrollmentsState extends State<Enrollments>
                       first_name: enrollment['first_name'] ?? '',
                       last_name: enrollment['last_name'] ?? '',
                       image: enrollment['image'] ?? '',
+                      onRemove: _removeEnrollment,
                     );
                   }).toList(),
                 ),
@@ -138,6 +147,7 @@ class EnrollmentCard extends StatelessWidget {
   final String last_name;
   final String image;
   final int user_id;
+  final Function(int, int) onRemove;
 
   const EnrollmentCard({
     required this.course_id,
@@ -146,6 +156,7 @@ class EnrollmentCard extends StatelessWidget {
     required this.first_name,
     required this.last_name,
     required this.user_id,
+    required this.onRemove,
     Key? key,
   }) : super(key: key);
 
@@ -160,9 +171,24 @@ class EnrollmentCard extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Enrollment request accepted')),
       );
+      onRemove(user_id, course_id);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to accept request: $e')),
+      );
+    }
+  }
+
+  Future<void> _declineEnrollRequest(BuildContext context) async {
+    try {
+      await EnrollService.instance.deleteSubscriptionRequest(user_id);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Enrollment request declined')),
+      );
+      onRemove(user_id, course_id);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to decline request: $e')),
       );
     }
   }
@@ -217,7 +243,9 @@ class EnrollmentCard extends StatelessWidget {
                     ),
                     SizedBox(width: 10),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _declineEnrollRequest(context);
+                      },
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.all(3),
                         backgroundColor: red,

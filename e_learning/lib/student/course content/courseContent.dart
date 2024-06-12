@@ -41,6 +41,7 @@ class _CourseContentState extends State<CourseContent> {
     fetchMaterials();
     fetchCourseDetails();
     fetchProgress();
+    updateProgress(false);
   }
 
   Future<void> fetchMaterials() async {

@@ -13,6 +13,7 @@ import '../../services/countServices.dart';
 import '../../services/enrollServices.dart';
 import '../../services/materialServices.dart';
 import '../../services/requestServices.dart';
+import '../edit other courses/editCoursePreview.dart';
 import 'adminCourses.dart';
 
 class AdminCourseDescription extends StatefulWidget {
@@ -436,7 +437,17 @@ class _AdminCourseDescriptionState extends State<AdminCourseDescription>
               borderRadius: BorderRadius.circular(10),
             ),
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => EditOtherCourse(
+                          course_id: widget.course_id,
+                          username: '',
+                          accessToken: '',
+                          refreshToken: '',
+                        )));
+          },
           child: Text(
             'Edit Course'.toUpperCase(),
             style: GoogleFonts.poppins(

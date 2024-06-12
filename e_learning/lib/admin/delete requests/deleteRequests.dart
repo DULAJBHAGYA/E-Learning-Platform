@@ -138,7 +138,7 @@ class _DeleteRequestsState extends State<DeleteRequests>
   }
 }
 
-class DeleteRequestCard extends StatelessWidget {
+class DeleteRequestCard extends StatefulWidget {
   final int course_id;
   final String user_name;
   final String first_name;
@@ -154,23 +154,33 @@ class DeleteRequestCard extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  // Future<void> _acceptEnrollRequest(BuildContext context) async {
-  //   try {
-  //     await EnrollService.instance.editEnrollment(
-  //       request_id: request_id,
-  //       active: true,
-  //       pending: false,
-  //       course_id: course_id,
-  //     );
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Enrollment request accepted')),
-  //     );
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Failed to accept request: $e')),
-  //     );
-  //   }
-  // }
+  @override
+  State<DeleteRequestCard> createState() => _DeleteRequestCardState();
+}
+
+class _DeleteRequestCardState extends State<DeleteRequestCard> {
+  String? courseTitle;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCourseDetails();
+  }
+
+  Future<void> fetchCourseDetails() async {
+    try {
+      final details =
+          await CourseService.instance.fetchCourseById(widget.course_id);
+      setState(() {
+        courseTitle = details['title'];
+      });
+    } catch (e) {
+      print('Error fetching course details: $e');
+      setState(() {
+        courseTitle = 'Unknown Course';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -184,16 +194,21 @@ class DeleteRequestCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            '$user_name ask to delete course name?',
-            style: GoogleFonts.poppins(
-                fontSize: 18, fontWeight: FontWeight.w400, color: black),
-          ),
+          if (courseTitle != null)
+            Text(
+              '${widget.user_name} asks to delete $courseTitle?',
+              style: GoogleFonts.poppins(
+                  fontSize: 18, fontWeight: FontWeight.w400, color: black),
+            )
+          else
+            CircularProgressIndicator(), 
           Row(
             children: [
               Spacer(),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  // Add your accept logic here
+                },
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.all(3),
                   backgroundColor: darkblue,
@@ -209,7 +224,9 @@ class DeleteRequestCard extends StatelessWidget {
               ),
               SizedBox(width: 10),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  // Add your decline logic here
+                },
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.all(3),
                   backgroundColor: red,
