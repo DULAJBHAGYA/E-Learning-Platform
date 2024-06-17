@@ -122,6 +122,8 @@ class _SubmissionsState extends State<Submissions>
                     return AdminSubmissionView(
                       submission_id: submission['submission_id'] ?? {},
                       assignment_id: submission['assignment_id'] ?? 0,
+                      grade: submission['grade'] ?? 0,
+                      resource: submission['resource'] ?? '',
                     );
                   }).toList(),
                 ),
@@ -137,10 +139,14 @@ class _SubmissionsState extends State<Submissions>
 class AdminSubmissionView extends StatelessWidget {
   final int submission_id;
   final int assignment_id;
+  final int grade;
+  final String resource;
 
   const AdminSubmissionView({
     required this.submission_id,
     required this.assignment_id,
+    required this.grade,
+    required this.resource,
     Key? key,
   }) : super(key: key);
 
@@ -155,7 +161,8 @@ class AdminSubmissionView extends StatelessWidget {
                     username: '',
                     accessToken: '',
                     refreshToken: '',
-                    )));
+                    grade: grade,
+                    resource: resource,)));
       },
       child: Container(
         margin: EdgeInsets.all(5),

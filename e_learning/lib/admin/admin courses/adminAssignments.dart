@@ -4,16 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../color.dart';
 import '../../../services/assignmentServices.dart';
 import '../../../shared/searchBar.dart';
-import '../add materials/newMaterial.dart';
-import 'newAssignment.dart';
 
-class AddAssignment extends StatefulWidget {
-  const AddAssignment({
+class AdminAssignments extends StatefulWidget {
+  const AdminAssignments({
     Key? key,
     required this.username,
     required this.accessToken,
@@ -29,10 +26,10 @@ class AddAssignment extends StatefulWidget {
   final int course_id;
 
   @override
-  _AddAssignmentState createState() => _AddAssignmentState();
+  _AdminAssignmentsState createState() => _AdminAssignmentsState();
 }
 
-class _AddAssignmentState extends State<AddAssignment> {
+class _AdminAssignmentsState extends State<AdminAssignments> {
   List<dynamic> _assignments = [];
   late int assignment_id;
 
@@ -77,16 +74,9 @@ class _AddAssignmentState extends State<AddAssignment> {
             child: Icon(Iconsax.arrow_left_2, size: 30, color: black),
           ),
           onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AddMaterial(
-                          course_id: widget.course_id,
-                          username: '',
-                          accessToken: '',
-                          refreshToken: '',
-                          title: '',
-                        )));
+            Navigator.pop(
+              context,
+            );
           },
         ),
       ),
@@ -125,45 +115,6 @@ class _AddAssignmentState extends State<AddAssignment> {
               ],
             ),
             SizedBox(height: 20),
-            // CustomSearchBar(),
-            SizedBox(height: 20),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => NewAssignment(
-                      material_id: widget.material_id,
-                      course_id: widget.course_id,
-                      username: widget.username,
-                      accessToken: widget.accessToken,
-                      refreshToken: widget.refreshToken,
-                    ),
-                  ),
-                );
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: darkblue,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Text(
-                      'ADD NEW ASSIGNMENT',
-                      style: GoogleFonts.poppins(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: white),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
@@ -188,7 +139,7 @@ class _AddAssignmentState extends State<AddAssignment> {
   }
 }
 
-class AdminAddedAssingmentViewCard extends StatefulWidget {
+class AdminAddedAssingmentViewCard extends StatelessWidget {
   final int course_id;
   final int material_id;
   final String assignment_file;
@@ -205,17 +156,6 @@ class AdminAddedAssingmentViewCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<AdminAddedAssingmentViewCard> createState() =>
-      _AdminAddedAssingmentViewCardState();
-}
-
-void _launchFileViewer(String filePath) {
-  launch(filePath);
-}
-
-class _AdminAddedAssingmentViewCardState
-    extends State<AdminAddedAssingmentViewCard> {
-  @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
@@ -225,29 +165,24 @@ class _AdminAddedAssingmentViewCardState
         borderRadius: BorderRadius.circular(20),
         color: white,
       ),
-      child: GestureDetector(
-        onTap: () => _launchFileViewer(widget.assignment_file),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            children: [
-              SizedBox(width: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${widget.assignment_id}) ${widget.title}',
-                    overflow: TextOverflow.clip,
-                    style: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: black),
-                  ),
-                  SizedBox(height: 10),
-                ],
-              ),
-            ],
-          ),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          children: [
+            SizedBox(width: 20),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '$assignment_id) $title',
+                  overflow: TextOverflow.clip,
+                  style: GoogleFonts.poppins(
+                      fontSize: 15, fontWeight: FontWeight.bold, color: black),
+                ),
+                SizedBox(height: 10),
+              ],
+            ),
+          ],
         ),
       ),
     );

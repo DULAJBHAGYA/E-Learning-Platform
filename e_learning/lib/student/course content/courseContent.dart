@@ -128,6 +128,7 @@ class _CourseContentState extends State<CourseContent> {
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
                     children: _contents.map((content) {
+                      final material_file = content['material_file'];
                       final resource = content['resource'];
                       final resourseLink = resource['resourse_link'];
                       final urls = [
@@ -148,6 +149,7 @@ class _CourseContentState extends State<CourseContent> {
                         urls: urls,
                         assignments: assignments,
                         course_id: widget.course_id,
+                        material_file: material_file,
                       );
                     }).toList(),
                   ),
@@ -227,12 +229,14 @@ class LessonDisplayWidget extends StatefulWidget {
   final List<String> urls;
   final List<dynamic> assignments;
   final int course_id;
+  final String material_file;
 
   const LessonDisplayWidget({
     required this.title,
     required this.urls,
     required this.assignments,
     required this.course_id,
+    required this.material_file,
     Key? key,
   }) : super(key: key);
 
@@ -248,6 +252,10 @@ class _LessonDisplayWidgetState extends State<LessonDisplayWidget> {
   void initState() {
     super.initState();
     _loadProgress();
+  }
+
+  void _launchFileViewer(String filePath) {
+    launch(filePath);
   }
 
   Future<void> _loadProgress() async {
@@ -317,6 +325,26 @@ class _LessonDisplayWidgetState extends State<LessonDisplayWidget> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  GestureDetector(
+                    onTap: () => _launchFileViewer(widget.material_file),
+                    child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            color: darkblue,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Center(
+                            child: Text(
+                              'VIEW MATERIAL',
+                              style: GoogleFonts.poppins(
+                                  color: white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15),
+                            ),
+                          ),
+                        )),
+                  ),
                   for (var url in widget.urls)
                     if (url.isNotEmpty)
                       Padding(
@@ -573,7 +601,7 @@ class CourseContentHeader extends StatelessWidget {
                 CircularPercentIndicator(
                   radius: 45.0,
                   lineWidth: 8.0,
-                  progressColor: blue,
+                  progressColor: darkblue,
                   animation: true,
                   percent: progress / 100,
                   center: Text(

@@ -94,7 +94,7 @@ class _NewCourseState extends State<NewCourse> {
       'title': _titleController.text.trim(),
       'description': _descriptionController.text.trim(),
       'what_will': _aboutCourseController.text.trim(),
-      'category': _categoryController.text.trim(),
+      'catagory': _categoryController.text.trim(),
       'image': _selectedImageBytes != null
           ? MultipartFile.fromBytes(_selectedImageBytes!, filename: 'image.jpg')
           : null,
@@ -192,26 +192,18 @@ class _NewCourseState extends State<NewCourse> {
 
   Future<void> _saveCategoryAndCourse() async {
     try {
-      // First, post the category
-      final categoryResponse = await CategoryServices.instance
-          .postCatagory(_categoryController.text.trim());
+      final FormData formData = _buildFormData();
 
-      // If the category is successfully posted, post the course
-      if (categoryResponse != null) {
-        final FormData formData = _buildFormData();
+      final response =
+          await CourseService.instance.postCourse(formData, user_id!);
 
-        final response =
-            await CourseService.instance.postCourse(formData, user_id!);
-
-        if (response.containsKey('course_id') &&
-            response['course_id'] != null) {
-          final courseId = int.parse(response['course_id'].toString());
-          _showSuccessDialog(courseId);
-        } else {
-          _showErrorDialog("Course ID not found in the response");
-        }
+      if (response != null &&
+          response.containsKey('course_id') &&
+          response['course_id'] != null) {
+        final courseId = int.parse(response['course_id'].toString());
+        _showSuccessDialog(courseId);
       } else {
-        _showErrorDialog("Failed to post category");
+        _showErrorDialog("Course ID not found in the response");
       }
     } catch (e) {
       print('Error: $e');

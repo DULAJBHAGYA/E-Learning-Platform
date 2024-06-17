@@ -51,11 +51,11 @@ class SubmissionService {
         return redirectedResponse.data;
       } else {
         throw Exception(
-            'Failed to post course. Status code: ${response.statusCode}');
+            'Failed to post submission. Status code: ${response.statusCode}');
       }
     } on DioError catch (e) {
       if (e.response != null && e.response!.statusCode == 404) {
-        throw Exception('Course not found. Please check your request.');
+        throw Exception('Submission not found. Please check your request.');
       } else {
         print("Dio Error: $e");
         print("Response Data: ${e.response?.data}");
@@ -67,7 +67,91 @@ class SubmissionService {
     }
   }
 
-  Future<dynamic> fetchAssignmentDetails(
+  Future<dynamic> deleteSubmission(int user_id, int assignment_id) async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? accessToken = prefs.getString('access_token');
+
+      if (accessToken == null || accessToken.isEmpty) {
+        throw Exception('Access token not found');
+      }
+
+      _dio.options.headers['Authorization'] = 'Bearer $accessToken';
+
+      final response = await _dio.delete(
+          '/api/v4/del/submission?assignment_id=$assignment_id&user_id=$user_id');
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        return response.data;
+      } else if (response.statusCode == 307) {
+        String redirectUrl = response.headers['location']?.first ?? '';
+        final redirectedResponse = await _dio.delete(redirectUrl);
+
+        return redirectedResponse.data;
+      } else {
+        throw Exception(
+            'Failed to delete submission. Status code: ${response.statusCode}');
+      }
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.statusCode == 404) {
+        throw Exception('Submission not found. Please check your request.');
+      } else {
+        print("Dio Error: $e");
+        print("Response Data: ${e.response?.data}");
+        throw Exception(e.response?.data['detail'] ?? e.toString());
+      }
+    } catch (e) {
+      print("Unexpected Error: $e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> editSubmission(
+      FormData file, int user_id, int assignment_id) async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? accessToken = prefs.getString('access_token');
+
+      if (accessToken == null || accessToken.isEmpty) {
+        throw Exception('Access token not found');
+      }
+
+      _dio.options.headers['Authorization'] = 'Bearer $accessToken';
+
+      final response = await _dio.patch(
+        '/api/v4/edit/submission/byuser/$assignment_id/$user_id',
+        data: file,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        return response.data;
+      } else if (response.statusCode == 307) {
+        String redirectUrl = response.headers['location']?.first ?? '';
+        final redirectedResponse = await _dio.patch(
+          redirectUrl,
+          data: file,
+        );
+
+        return redirectedResponse.data;
+      } else {
+        throw Exception(
+            'Failed to edit submission. Status code: ${response.statusCode}');
+      }
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.statusCode == 404) {
+        throw Exception('Submission not found. Please check your request.');
+      } else {
+        print("Dio Error: $e");
+        print("Response Data: ${e.response?.data}");
+        throw Exception(e.response?.data['detail'] ?? e.toString());
+      }
+    } catch (e) {
+      print("Unexpected Error: $e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> fetchSubmissionDetails(
       int course_id, int assignment_id) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? accessToken = prefs.getString('access_token');
@@ -79,45 +163,7 @@ class SubmissionService {
     _dio.options.headers['Authorization'] = 'Bearer $accessToken';
     try {
       final response = await _dio.get(
-          '/api/v4/get/assignment/bycourse?assignment_id=$assignment_id&course_id=$course_id');
-
-      return response.data;
-    } on DioError catch (e) {
-      print("Dio Error: $e");
-      print("Response Data: ${e.response?.data}");
-      throw Exception(e.response?.data['detail'] ?? e.toString());
-    } catch (e) {
-      print("Unexpected Error: $e");
-      rethrow;
-    }
-  }
-
-  Future<dynamic> deleteCourseById(int course_id) async {
-    try {
-      final response = await _dio.delete('/course/$course_id');
-
-      return response.data;
-    } on DioError catch (e) {
-      print("Dio Error: $e");
-      print("Response Data: ${e.response?.data}");
-      throw Exception(e.response?.data['detail'] ?? e.toString());
-    } catch (e) {
-      print("Unexpected Error: $e");
-      rethrow;
-    }
-  }
-
-  Future<dynamic> updateCourseById(
-      int course_id, String title, String description, String type) async {
-    try {
-      final response = await _dio.put(
-        '/course/$course_id',
-        data: jsonEncode({
-          'title': title,
-          'description': description,
-          'type': type,
-        }),
-      );
+          '/api/v3/get/submission?assignment_id=$assignment_id&user_id=$course_id');
 
       return response.data;
     } on DioError catch (e) {
