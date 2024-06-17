@@ -31,7 +31,7 @@ This project is an E-Learning mobile application built using Flutter for the fro
 
 ### Backend Setup
 **Clone the repository**:
-git clone https://github.com/yourusername/elearning-app.git<br/>
+git clone https://github.com/yourusername/elearning-app.git](https://github.com/DULAJBHAGYA/E-Learning-Platform.git<br/>
 cd elearning-app/backend
 
 **Install dependencies**:
