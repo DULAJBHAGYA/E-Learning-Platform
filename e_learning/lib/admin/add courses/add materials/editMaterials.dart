@@ -60,11 +60,12 @@ class _EditMaterialState extends State<EditMaterial> {
         setState(() {
           _titleController.text = materialData['title'];
           _ordernumberController.text = materialData['order_number'].toString();
-          _resourceController.text = materialData['resource'];
+          _resourceController.text = jsonEncode(materialData['resource'] ?? {});
 
-          if (materialData['material'] != null) {
-            _selectedImageBytes =
-                Uint8List.fromList(materialData['material'].cast<int>());
+          // Extract file name from material_file URL
+          final materialFileUrl = materialData['material_file'];
+          if (materialFileUrl != null) {
+            _fileName = materialFileUrl.split('/').last;
           }
 
           _isLoading = false;
@@ -82,7 +83,7 @@ class _EditMaterialState extends State<EditMaterial> {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['jpg', 'jpeg', 'png'], // Allow only image files
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'],
       );
 
       if (result != null) {
@@ -90,11 +91,13 @@ class _EditMaterialState extends State<EditMaterial> {
           Uint8List bytes = await result.files.first.bytes!;
           setState(() {
             _selectedImageBytes = bytes;
+            _fileName = result.files.first.name;
           });
         } else {
           PlatformFile file = result.files.first;
           setState(() async {
             _selectedImageBytes = await File(file.path!).readAsBytes();
+            _fileName = file.name;
           });
         }
 
@@ -121,6 +124,7 @@ class _EditMaterialState extends State<EditMaterial> {
       'material': _selectedImageBytes != null
           ? MultipartFile.fromBytes(_selectedImageBytes!, filename: 'image.jpg')
           : null,
+      'material_file': _selectedImageBytes == null ? _fileName : null,
     });
   }
 
@@ -255,11 +259,22 @@ class _EditMaterialState extends State<EditMaterial> {
                                     _selectedImageBytes!,
                                     fit: BoxFit.cover,
                                   )
-                                : Icon(
-                                    Icons.image,
-                                    color: Colors.grey[800],
-                                    size: 50,
-                                  ),
+                                : _fileName != null
+                                    ? Center(
+                                        child: Text(
+                                          _fileName!,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      )
+                                    : Icon(
+                                        Icons.image,
+                                        color: Colors.grey[800],
+                                        size: 50,
+                                      ),
                           ),
                           Positioned(
                             right: 10,
@@ -320,19 +335,21 @@ class _EditMaterialState extends State<EditMaterial> {
                               Navigator.pop(context);
                             },
                             style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(blue),
+                              backgroundColor:
+                                  MaterialStateProperty.all(darkblue),
                               shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderRadius: BorderRadius.circular(10.0),
                                 ),
                               ),
                               padding: MaterialStateProperty.all(
-                                  EdgeInsets.all(15.0)),
+                                  EdgeInsets.all(10.0)),
                             ),
-                            child: Text(
-                              'Cancel',
-                              style: TextStyle(color: Colors.white),
-                            ),
+                            child: Text('CANCEL',
+                                style: GoogleFonts.poppins(
+                                    color: white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15)),
                           ),
                           SizedBox(width: 20),
                           ElevatedButton(
@@ -361,18 +378,22 @@ class _EditMaterialState extends State<EditMaterial> {
                               }
                             },
                             style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(blue),
+                              backgroundColor:
+                                  MaterialStateProperty.all(darkblue),
                               shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderRadius: BorderRadius.circular(10.0),
                                 ),
                               ),
                               padding: MaterialStateProperty.all(
-                                  EdgeInsets.all(15.0)),
+                                  EdgeInsets.all(10.0)),
                             ),
                             child: Text(
-                              'Update',
-                              style: TextStyle(color: Colors.white),
+                              'SAVE',
+                              style: TextStyle(
+                                  color: white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15),
                             ),
                           ),
                         ],

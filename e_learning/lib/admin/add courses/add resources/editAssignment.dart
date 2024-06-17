@@ -1,8 +1,6 @@
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
-import 'package:e_learning/admin/add%20courses/add%20materials/addMaterial.dart';
 import 'package:e_learning/services/assignmentServices.dart';
-import 'package:e_learning/services/materialServices.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +11,8 @@ import 'dart:io';
 import '../../../color.dart';
 import 'addAssignment.dart';
 
-class NewAssignment extends StatefulWidget {
-  const NewAssignment({
+class EditAssignment extends StatefulWidget {
+  const EditAssignment({
     Key? key,
     required this.username,
     required this.accessToken,
@@ -30,10 +28,10 @@ class NewAssignment extends StatefulWidget {
   final int material_id;
 
   @override
-  _NewAssignmentState createState() => _NewAssignmentState();
+  _EditAssignmentState createState() => _EditAssignmentState();
 }
 
-class _NewAssignmentState extends State<NewAssignment> {
+class _EditAssignmentState extends State<EditAssignment> {
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController _titleController = TextEditingController();

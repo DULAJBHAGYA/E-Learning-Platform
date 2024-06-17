@@ -1,3 +1,5 @@
+import 'package:e_learning/admin/add%20courses/editCourses.dart';
+import 'package:e_learning/admin/admin%20courses/adminMaterials.dart';
 import 'package:e_learning/services/courseServices.dart'; // Import the service for fetching course details
 import 'package:e_learning/student/all%20courses/allCourses.dart';
 import 'package:e_learning/student/my%20courses/myCourses.dart';
@@ -393,22 +395,67 @@ class _AdminCourseDescriptionState extends State<AdminCourseDescription>
                                   ),
                                   SingleChildScrollView(
                                     child: Column(
-                                      children:
-                                          _addedmaterials.map((addedmaterial) {
-                                        return Lessons(
-                                          course_id:
-                                              addedmaterial['course_id'] ?? 0,
-                                          material_id:
-                                              addedmaterial['material_id'] ?? 0,
-                                          order_number:
-                                              addedmaterial['order_number'] ??
+                                      children: [
+                                        Column(
+                                          children: _addedmaterials
+                                              .map((addedmaterial) {
+                                            return Lessons(
+                                              course_id:
+                                                  addedmaterial['course_id'] ??
+                                                      0,
+                                              material_id: addedmaterial[
+                                                      'material_id'] ??
                                                   0,
-                                          material_file:
-                                              addedmaterial['material_file'] ??
+                                              order_number: addedmaterial[
+                                                      'order_number'] ??
+                                                  0,
+                                              material_file: addedmaterial[
+                                                      'material_file'] ??
                                                   '',
-                                          title: addedmaterial['title'] ?? '',
-                                        );
-                                      }).toList(),
+                                              title:
+                                                  addedmaterial['title'] ?? '',
+                                            );
+                                          }).toList(),
+                                        ),
+                                        SizedBox(height: 20),
+                                        Align(
+                                            alignment: Alignment.bottomRight,
+                                            child: TextButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              AdminMaterials(
+                                                                username: '',
+                                                                accessToken: '',
+                                                                refreshToken:
+                                                                    '',
+                                                                course_id: widget
+                                                                    .course_id,
+                                                                title: widget
+                                                                    .title,
+                                                              )));
+                                                },
+                                                style: TextButton.styleFrom(
+                                                  backgroundColor: darkblue,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10)),
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 5,
+                                                      horizontal: 5),
+                                                ),
+                                                child: Text(
+                                                  'SEE ALL LESSONS',
+                                                  style: GoogleFonts.poppins(
+                                                      color: white,
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ))),
+                                      ],
                                     ),
                                   ),
                                 ],
@@ -441,7 +488,7 @@ class _AdminCourseDescriptionState extends State<AdminCourseDescription>
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => EditOtherCourse(
+                    builder: (context) => EditCourse(
                           course_id: widget.course_id,
                           username: '',
                           accessToken: '',

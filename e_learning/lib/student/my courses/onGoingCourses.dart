@@ -99,7 +99,10 @@ class OnGoingCourseCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CourseContent(course_id: course_id,progress: progress,),
+            builder: (context) => CourseContent(
+              course_id: course_id,
+              progress: progress,
+            ),
           ),
         );
       },
@@ -175,7 +178,7 @@ class OnGoingCourseCard extends StatelessWidget {
             CircularPercentIndicator(
               radius: 40.0,
               lineWidth: 8.0,
-              progressColor: Colors.blue,
+              progressColor: darkblue,
               animation: true,
               percent: progress / 100,
               center: Text(

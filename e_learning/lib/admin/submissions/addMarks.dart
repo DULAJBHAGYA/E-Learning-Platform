@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../color.dart';
 import '../../login/login.dart';
@@ -17,14 +18,22 @@ class AddMarks extends StatefulWidget {
     required this.username,
     required this.accessToken,
     required this.refreshToken,
+    required this.grade,
+    required this.resource,
   }) : super(key: key);
 
   final String username;
   final String accessToken;
   final String refreshToken;
+  final int grade;
+  final String resource;
 
   @override
   _AddMarksState createState() => _AddMarksState();
+}
+
+void _launchFileViewer(String filePath) {
+  launch(filePath);
 }
 
 class _AddMarksState extends State<AddMarks> {
@@ -116,33 +125,27 @@ class _AddMarksState extends State<AddMarks> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Assignment Title',
-                              style: GoogleFonts.poppins(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
-                                  color: black),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: white,
-                                      border: Border.all(
-                                          color: darkblue, width: 2)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'View Submission',
-                                      style: GoogleFonts.poppins(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w600,
-                                          color: darkblue),
+                                GestureDetector(
+                                  onTap: () =>
+                                      _launchFileViewer(widget.resource),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: darkblue,
+                                        border: Border.all(
+                                            color: darkblue, width: 2)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'View Submission'.toUpperCase(),
+                                        style: GoogleFonts.poppins(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                            color: white),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -166,7 +169,7 @@ class _AddMarksState extends State<AddMarks> {
                               'Submit Marks',
                               style: GoogleFonts.poppins(
                                   fontSize: 20,
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.bold,
                                   color: black),
                             ),
                             SizedBox(
@@ -206,17 +209,17 @@ class _AddMarksState extends State<AddMarks> {
                                 Container(
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-                                      color: white,
+                                      color: darkblue,
                                       border: Border.all(
                                           color: darkblue, width: 2)),
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      'Submit',
+                                      'Submit'.toUpperCase(),
                                       style: GoogleFonts.poppins(
                                           fontSize: 15,
-                                          fontWeight: FontWeight.w600,
-                                          color: darkblue),
+                                          fontWeight: FontWeight.bold,
+                                          color: white),
                                     ),
                                   ),
                                 ),

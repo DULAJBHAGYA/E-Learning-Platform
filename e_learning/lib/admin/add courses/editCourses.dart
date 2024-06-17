@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
-import 'dart:convert'; // Import for JSON encoding/decoding
+import 'dart:convert';
 import 'dart:io';
 import '../../color.dart';
 
@@ -106,16 +106,20 @@ class _EditCourseState extends State<EditCourse> {
   }
 
   FormData _buildFormData() {
-    return FormData.fromMap({
+    Map<String, dynamic> formDataMap = {
       'user_id': _useridController.text.trim(),
       'title': _titleController.text.trim(),
       'description': _descriptionController.text.trim(),
       'what_will': _aboutCourseController.text.trim(),
       'catagory': _categoryController.text.trim(),
-      'image': _selectedImageBytes != null
-          ? MultipartFile.fromBytes(_selectedImageBytes!, filename: 'image.jpg')
-          : null,
-    });
+    };
+
+    if (_selectedImageBytes != null) {
+      formDataMap['image'] =
+          MultipartFile.fromBytes(_selectedImageBytes!, filename: 'image.jpg');
+    }
+
+    return FormData.fromMap(formDataMap);
   }
 
   void _showSuccessDialog(int courseId) {
@@ -164,8 +168,12 @@ class _EditCourseState extends State<EditCourse> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Failed"),
-          content: Text("Course preview adding failed {$errorMessage}"),
+          title: Text("Failed",
+              style: GoogleFonts.poppins(
+                  color: black, fontSize: 15, fontWeight: FontWeight.bold)),
+          content: Text("Course preview adding failed {$errorMessage}",
+              style: GoogleFonts.poppins(
+                  color: black, fontSize: 15, fontWeight: FontWeight.w400)),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -177,6 +185,34 @@ class _EditCourseState extends State<EditCourse> {
         );
       },
     );
+  }
+
+  Future<void> _saveCourse() async {
+    if (_formKey.currentState!.validate()) {
+      FormData formData = _buildFormData();
+
+      try {
+        final response =
+            await CourseService.instance.editCourse(formData, widget.course_id);
+
+        if (response.status == 200) {
+          print('Response data: ${response.data}');
+          final responseData = response.data;
+
+          if (responseData is Map<String, dynamic> &&
+              responseData['success'] == true) {
+            _showSuccessDialog(widget.course_id);
+          } else {
+            final errorMessage = responseData['message'] ?? 'Unknown error';
+            _showErrorDialog('Course editing failed');
+          }
+        } else {
+          _showErrorDialog('Course editing failed');
+        }
+      } catch (e) {
+        _showErrorDialog(e.toString());
+      }
+    }
   }
 
   @override
@@ -313,25 +349,7 @@ class _EditCourseState extends State<EditCourse> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       ElevatedButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            FormData formData = _buildFormData();
-
-                            try {
-                              final response = await CourseService.instance
-                                  .editCourse(formData, widget.course_id);
-
-                              if (response != null &&
-                                  response.containsKey('id')) {
-                                _showSuccessDialog(response['id']);
-                              } else {
-                                _showErrorDialog('Course editing failed.');
-                              }
-                            } catch (e) {
-                              _showErrorDialog(e.toString());
-                            }
-                          }
-                        },
+                        onPressed: _saveCourse,
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(blue),
                           shape: MaterialStateProperty.all(
@@ -345,6 +363,31 @@ class _EditCourseState extends State<EditCourse> {
                         ),
                         child: Text(
                           'SAVE',
+                          style: GoogleFonts.openSans(
+                            color: white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: () async {
+                          Navigator.pop(context);
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(blue),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                          ),
+                          padding: MaterialStateProperty.all(
+                            EdgeInsets.all(15.0),
+                          ),
+                        ),
+                        child: Text(
+                          'CANCEL',
                           style: GoogleFonts.openSans(
                             color: white,
                             fontWeight: FontWeight.bold,

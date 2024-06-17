@@ -1,6 +1,4 @@
 import 'dart:typed_data';
-import 'package:e_learning/admin/add%20courses/addCourses.dart';
-import 'package:e_learning/student/submit%20assignment/viewAssignmentforStudent.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +11,6 @@ import 'dart:io';
 import '../../color.dart';
 import '../../services/assignmentServices.dart';
 import '../../services/submissionServices.dart';
-import '../course content/cc.dart';
 
 class SubmitAssignment extends StatefulWidget {
   const SubmitAssignment({
@@ -40,6 +37,9 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
   late String title = '';
   late String assignment_file = '';
   late String due_date = '';
+  late String resource = '';
+  late int submission_id = 0;
+  late int grade = 0;
 
   File? _selectedFile;
   Uint8List? _selectedFileBytes;
@@ -49,7 +49,7 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
   void initState() {
     super.initState();
     fetchAssignmentDetails();
-    _submitAssignment();
+    fetchSubmissionDetails();
   }
 
   Future<void> fetchAssignmentDetails() async {
@@ -74,6 +74,28 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
     }
   }
 
+  Future<void> fetchSubmissionDetails() async {
+    try {
+      if (widget.course_id != null && widget.assignment_id != null) {
+        final response =
+            await SubmissionService.instance.fetchSubmissionDetails(
+          widget.course_id,
+          widget.assignment_id,
+        );
+
+        setState(() {
+          submission_id = response['submission_id'];
+          resource = response['resource'];
+          grade = response['grade'];
+        });
+      } else {
+        print('Access Token not found in SharedPreferences');
+      }
+    } catch (e) {
+      print('Error fetching assignment info: $e');
+    }
+  }
+
   Future<void> _pickFile() async {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -83,7 +105,7 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
 
       if (result != null) {
         if (kIsWeb) {
-          Uint8List bytes = await result.files.first.bytes!;
+          Uint8List bytes = result.files.first.bytes!;
           setState(() {
             _selectedFileBytes = bytes;
             _selectedFileName = result.files.first.name;
@@ -113,13 +135,17 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
   FormData _buildFormData() {
     if (_selectedFileBytes != null) {
       return FormData.fromMap({
-        'file': MultipartFile.fromBytes(_selectedFileBytes!,
-            filename: _selectedFileName),
+        'file': MultipartFile.fromBytes(
+          _selectedFileBytes!,
+          filename: _selectedFileName,
+        ),
       });
     } else if (_selectedFile != null) {
       return FormData.fromMap({
-        'file': MultipartFile.fromFileSync(_selectedFile!.path,
-            filename: _selectedFileName),
+        'file': MultipartFile.fromFileSync(
+          _selectedFile!.path,
+          filename: _selectedFileName,
+        ),
       });
     } else {
       return FormData();
@@ -150,7 +176,58 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
     }
   }
 
-  void _showSuccessDialog(int courseId) {
+  Future<void> _editSubmission() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      int? user_id = prefs.getInt('user_id');
+
+      if (user_id == null) {
+        throw Exception('User ID not found');
+      }
+
+      FormData file = _buildFormData();
+
+      final response = await SubmissionService.instance.editSubmission(
+        file,
+        user_id,
+        widget.assignment_id,
+      );
+
+      _showSuccessDialog(widget.course_id);
+    } catch (e) {
+      print('Error editing submission: $e');
+      _showErrorDialog(e.toString());
+    }
+  }
+
+  Future<void> _deleteSubmission() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      int? user_id = prefs.getInt('user_id');
+
+      if (user_id == null) {
+        throw Exception('User ID not found');
+      }
+
+      await SubmissionService.instance.deleteSubmission(
+        user_id,
+        widget.assignment_id,
+      );
+
+      setState(() {
+        _selectedFile = null;
+        _selectedFileBytes = null;
+        _selectedFileName = null;
+      });
+
+      _showSuccessDialog(widget.course_id, isDelete: true);
+    } catch (e) {
+      print('Error deleting submission: $e');
+      _showErrorDialog(e.toString());
+    }
+  }
+
+  void _showSuccessDialog(int courseId, {bool isDelete = false}) {
     SharedPreferences.getInstance().then((prefs) {
       prefs.setInt('course_id', courseId);
     });
@@ -164,7 +241,9 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Assignment submitted successfully"),
+              Text(isDelete
+                  ? "Assignment deleted successfully"
+                  : "Assignment submitted successfully"),
               SizedBox(height: 10),
               Text("Course ID: $courseId"),
             ],
@@ -172,16 +251,7 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddCourses(
-                      accessToken: '',
-                      refreshToken: '',
-                      username: '',
-                    ),
-                  ),
-                );
+                Navigator.pop(context);
               },
               child: Text('OK'),
             ),
@@ -211,34 +281,31 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
     );
   }
 
-  void _launchFileViewer(String filePath) {}
+  void _launchFileViewer(String filePath) {
+    launch(filePath);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: background,
-          elevation: 0,
-          leading: IconButton(
-            icon: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Icon(Iconsax.arrow_left_2, size: 30, color: black),
-            ),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CourseContent(
-                            course_id: widget.course_id,
-                            progress: 0,
-                          )));
-            },
+      appBar: AppBar(
+        backgroundColor: background,
+        elevation: 0,
+        leading: IconButton(
+          icon: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Icon(Iconsax.arrow_left_2, size: 30, color: black),
           ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             Row(children: [
               Container(
                 decoration: BoxDecoration(
@@ -272,7 +339,7 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
               style: GoogleFonts.poppins(
                 color: black,
                 fontSize: 18,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.bold,
               ),
             ),
             SizedBox(height: 10),
@@ -281,7 +348,7 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                  color: blue,
+                  color: darkblue,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Padding(
@@ -308,13 +375,45 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
               ),
             ),
             SizedBox(height: 20),
-            Text(
-              'Upload Answers',
-              style: GoogleFonts.poppins(
-                color: black,
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-              ),
+            Row(
+              children: [
+                Text(
+                  'Upload Answers',
+                  style: GoogleFonts.poppins(
+                    color: black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                Spacer(),
+                PopupMenuButton<String>(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  color: white,
+                  icon: Icon(Icons.more_horiz, color: black, size: 20),
+                  onSelected: (value) {
+                    if (value == 'Edit Submission') {
+                      _pickFile();
+                    } else if (value == 'Delete Submission') {
+                      _deleteSubmission();
+                    }
+                  },
+                  itemBuilder: (BuildContext context) {
+                    return {'Edit Submission', 'Delete Submission'}
+                        .map((String choice) {
+                      return PopupMenuItem<String>(
+                        value: choice,
+                        child: Text(choice,
+                            style: GoogleFonts.poppins(
+                                color: black,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400)),
+                      );
+                    }).toList();
+                  },
+                ),
+              ],
             ),
             SizedBox(height: 10),
             GestureDetector(
@@ -331,7 +430,7 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
                         child: Text(
                           _selectedFileName ?? 'File selected',
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(color: black),
                         ),
                       )
                     : Icon(
@@ -346,16 +445,18 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton(
-                  onPressed: _submitAssignment,
+                  onPressed: _selectedFileBytes != null || _selectedFile != null
+                      ? _submitAssignment
+                      : _editSubmission,
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(blue),
+                    backgroundColor: MaterialStateProperty.all(darkblue),
                     shape: MaterialStateProperty.all(
                       RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
                     padding: MaterialStateProperty.all(
-                      EdgeInsets.all(15.0),
+                      EdgeInsets.all(10.0),
                     ),
                   ),
                   child: Text(
@@ -392,7 +493,7 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
                     ),
                     SizedBox(width: 40),
                     Text(
-                      '10',
+                      '$grade'.toString(),
                       style: GoogleFonts.openSans(
                         fontSize: 40,
                         fontWeight: FontWeight.w900,
@@ -403,7 +504,9 @@ class _SubmitAssignmentState extends State<SubmitAssignment> {
                 ),
               ),
             ),
-          ]),
-        ));
+          ],
+        ),
+      ),
+    );
   }
 }
