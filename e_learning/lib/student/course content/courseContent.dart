@@ -12,6 +12,7 @@ import '../../services/materialServices.dart';
 import '../../services/progressServices.dart';
 import '../submit assignment/submitAssignment.dart';
 import '../videos display/videoDisplay.dart';
+import '../videos display/ytVideoPlayer.dart';
 
 class CourseContent extends StatefulWidget {
   const CourseContent({
@@ -354,7 +355,8 @@ class _LessonDisplayWidgetState extends State<LessonDisplayWidget> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => VideoDisplay(url: url),
+                                builder: (context) =>
+                                    YoutubePlayerScreen(url: url),
                               ),
                             );
                           },

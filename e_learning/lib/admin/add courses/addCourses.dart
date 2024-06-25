@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/courseServices.dart';
 import '../admin home/adminDash.dart';
 import 'editCourses.dart';
+import 'editcourse.dart';
 
 class AddCourses extends StatefulWidget {
   const AddCourses({
@@ -253,7 +254,7 @@ class AdminAddedCourseViewCard extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => EditCourse(
+                                      builder: (context) => EditCoursePreview(
                                         username: '',
                                         accessToken: '',
                                         refreshToken: '',
