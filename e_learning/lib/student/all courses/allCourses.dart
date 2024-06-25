@@ -90,23 +90,6 @@ class _StdAllCoursesState extends State<StdAllCourses> {
             children: [
               Row(
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(0),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: SizedBox(
-                        height: 30,
-                        width: 30,
-                        child: Image.asset(
-                          '/logos/logo.png',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10),
                   Text(
                     'All Courses',
                     style: GoogleFonts.poppins(

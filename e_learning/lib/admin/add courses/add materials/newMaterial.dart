@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:e_learning/admin/add%20courses/add%20materials/addMaterial.dart';
@@ -36,7 +37,11 @@ class _NewmaterialState extends State<Newmaterial> {
   TextEditingController _titleController = TextEditingController();
   TextEditingController _ordernumberController = TextEditingController();
   TextEditingController _courseidController = TextEditingController();
-  TextEditingController _resourceController = TextEditingController();
+  TextEditingController _resourceController1 = TextEditingController();
+  TextEditingController _resourceController2 = TextEditingController();
+  TextEditingController _urlController1 = TextEditingController();
+  TextEditingController _urlController2 = TextEditingController();
+  TextEditingController _urlController3 = TextEditingController();
 
   String? _fileName;
   File? _selectedFile;
@@ -52,13 +57,7 @@ class _NewmaterialState extends State<Newmaterial> {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: [
-          'jpg',
-          'jpeg',
-          'png',
-          'doc',
-          'pdf'
-        ], // Allow image, doc, and pdf files
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'doc', 'pdf'],
       );
 
       if (result != null) {
@@ -90,13 +89,29 @@ class _NewmaterialState extends State<Newmaterial> {
   }
 
   FormData _buildFormData() {
+    Map<String, dynamic> resource = {
+      "title": _resourceController1.text.trim(),
+      "description": _resourceController2.text.trim(),
+      "resourse_link": {
+        "url1": _urlController1.text.trim(),
+        "url2": _urlController2.text.trim(),
+        "url3": _urlController3.text.trim(),
+      }
+    };
+
+    String resourceJson = jsonEncode(resource);
+
     return FormData.fromMap({
-      'course_id': _courseidController.text.trim(),
+      'course_id': widget.course_id.toString(),
       'title': _titleController.text.trim(),
       'order_number': _ordernumberController.text.trim(),
-      'resource': _resourceController.text.trim(),
+      'resource': resourceJson,
       'material': _selectedFileBytes != null
-          ? MultipartFile.fromBytes(_selectedFileBytes!, filename: _fileName)
+          ? MultipartFile.fromBytes(
+              _selectedFileBytes!,
+              filename: _fileName ?? 'file',
+              contentType: MediaType('application', 'octet-stream'),
+            )
           : null,
     });
   }
@@ -320,10 +335,74 @@ class _NewmaterialState extends State<Newmaterial> {
                   },
                 ),
                 SizedBox(height: 20),
+                Text('Resources',
+                    style: GoogleFonts.poppins(
+                        color: black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18)),
+                SizedBox(
+                  height: 20,
+                ),
                 TextFormField(
-                  controller: _resourceController,
+                  controller: _resourceController1,
                   decoration: InputDecoration(
-                      labelText: 'Resources',
+                      labelText: 'Title',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      )),
+                  maxLines: null,
+                ),
+                SizedBox(height: 20),
+                TextFormField(
+                  controller: _resourceController2,
+                  decoration: InputDecoration(
+                      labelText: 'Description',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      )),
+                  maxLines: null,
+                ),
+                SizedBox(height: 20),
+                Text('Resource Links',
+                    style: GoogleFonts.poppins(
+                        color: black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15)),
+                SizedBox(
+                  height: 20,
+                ),
+                TextFormField(
+                  controller: _urlController1,
+                  decoration: InputDecoration(
+                      labelText: 'url1',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      )),
+                  maxLines: null,
+                ),
+                SizedBox(height: 20),
+                TextFormField(
+                  controller: _urlController2,
+                  decoration: InputDecoration(
+                      labelText: 'url2',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      )),
+                  maxLines: null,
+                ),
+                SizedBox(height: 20),
+                TextFormField(
+                  controller: _urlController3,
+                  decoration: InputDecoration(
+                      labelText: 'url3',
                       labelStyle: GoogleFonts.poppins(
                         fontSize: 15,
                         fontWeight: FontWeight.w300,

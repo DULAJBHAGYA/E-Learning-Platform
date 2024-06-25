@@ -12,8 +12,7 @@ class ImageSlider extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
             image: DecorationImage(
-              image: NetworkImage(
-                  'https://eduapp-v2.s3.eu-north-1.amazonaws.com/resources/goCourse.png'),
+              image: AssetImage('/images/goCourse.png'),
               fit: BoxFit.cover,
             ),
           ),
@@ -25,8 +24,7 @@ class ImageSlider extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
             image: DecorationImage(
-              image: NetworkImage(
-                  "https://eduapp-v2.s3.eu-north-1.amazonaws.com/resources/belnderCourse.jpg"),
+              image: AssetImage("/images/belnderCourse.jpg"),
               fit: BoxFit.cover,
             ),
           ),
@@ -38,8 +36,7 @@ class ImageSlider extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
             image: DecorationImage(
-              image: NetworkImage(
-                  "https://eduapp-v2.s3.eu-north-1.amazonaws.com/resources/psCourse.jpg"),
+              image: AssetImage("/images/psCourse.jpg"),
               fit: BoxFit.cover,
             ),
           ),
@@ -51,8 +48,7 @@ class ImageSlider extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
             image: DecorationImage(
-              image: NetworkImage(
-                  "https://eduapp-v2.s3.eu-north-1.amazonaws.com/resources/reactCourse.jpg"),
+              image: AssetImage("/images/reactCourse.jpg"),
               fit: BoxFit.cover,
             ),
           ),
@@ -64,8 +60,7 @@ class ImageSlider extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
             image: DecorationImage(
-              image: NetworkImage(
-                  "https://eduapp-v2.s3.eu-north-1.amazonaws.com/resources/awsCourse.jpg"),
+              image: AssetImage("/images/awsCourse.jpg"),
               fit: BoxFit.cover,
             ),
           ),

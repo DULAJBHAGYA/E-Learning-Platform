@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../color.dart';
-import '../on board screens/onBoardingScreens.dart';
+import '../register/register.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -21,19 +21,21 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(Duration(seconds: 5), () {});
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => OnBoardScreens()), // Replace with your target screen
+      MaterialPageRoute(
+          builder: (context) =>
+              RegisterScreen()), 
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: darkblue, 
+      backgroundColor: darkblue,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('/logos/logo.png'), 
+            Image.asset('/logos/logo.png'),
             SizedBox(height: 10),
             RichText(
               text: TextSpan(

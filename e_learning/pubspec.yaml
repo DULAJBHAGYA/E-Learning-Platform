@@ -66,6 +66,7 @@ dependencies:
   flick_video_player: ^0.8.0
   youtube_player_iframe: ^5.1.2
   syncfusion_flutter_pdfviewer: ^26.1.35
+  youtube_player_flutter: ^8.1.2
 
 dev_dependencies:
   flutter_test:

@@ -11,8 +11,8 @@ import 'dart:convert';
 import 'dart:io';
 import '../../color.dart';
 
-class EditCourse extends StatefulWidget {
-  const EditCourse({
+class EditCoursePreview extends StatefulWidget {
+  const EditCoursePreview({
     Key? key,
     required this.username,
     required this.accessToken,
@@ -26,17 +26,25 @@ class EditCourse extends StatefulWidget {
   final int course_id;
 
   @override
-  _EditCourseState createState() => _EditCourseState();
+  _EditCoursePreviewState createState() => _EditCoursePreviewState();
 }
 
-class _EditCourseState extends State<EditCourse> {
+class _EditCoursePreviewState extends State<EditCoursePreview> {
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController _titleController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
   TextEditingController _useridController = TextEditingController();
-  TextEditingController _aboutCourseController = TextEditingController();
   TextEditingController _categoryController = TextEditingController();
+  TextEditingController _aboutCourseLearnController1 = TextEditingController();
+  TextEditingController _aboutCourseLearnController2 = TextEditingController();
+  TextEditingController _aboutCourseLearnController3 = TextEditingController();
+  TextEditingController _aboutCourseSkillController1 = TextEditingController();
+  TextEditingController _aboutCourseSkillController2 = TextEditingController();
+  TextEditingController _aboutCourseSkillController3 = TextEditingController();
+  TextEditingController _aboutCourseWhoController1 = TextEditingController();
+  TextEditingController _aboutCourseWhoController2 = TextEditingController();
+  TextEditingController _aboutCourseWhoController3 = TextEditingController();
 
   int? user_id;
   String? _imageUrl;
@@ -60,9 +68,25 @@ class _EditCourseState extends State<EditCourse> {
         _descriptionController.text = courseDetails['description'] ?? '';
         _useridController.text = courseDetails['user_id'].toString();
         _categoryController.text = courseDetails['catagory'] ?? '';
-        _aboutCourseController.text =
-            jsonEncode(courseDetails['what_will'] ?? {});
         _imageUrl = courseDetails['image'] ?? '';
+        _aboutCourseLearnController1.text =
+            courseDetails['what_will']['what_will_you_learn']['subject1'] ?? '';
+        _aboutCourseLearnController2.text =
+            courseDetails['what_will']['what_will_you_learn']['subject2'] ?? '';
+        _aboutCourseLearnController3.text =
+            courseDetails['what_will']['what_will_you_learn']['subject3'] ?? '';
+        _aboutCourseSkillController1.text =
+            courseDetails['what_will']['what_skil_you_gain']['skil1'] ?? '';
+        _aboutCourseSkillController2.text =
+            courseDetails['what_will']['what_skil_you_gain']['skil2'] ?? '';
+        _aboutCourseSkillController3.text =
+            courseDetails['what_will']['what_skil_you_gain']['skil3'] ?? '';
+        _aboutCourseWhoController1.text =
+            courseDetails['what_will']['who_should_learn']['person1'] ?? '';
+        _aboutCourseWhoController2.text =
+            courseDetails['what_will']['who_should_learn']['person2'] ?? '';
+        _aboutCourseWhoController3.text =
+            courseDetails['what_will']['who_should_learn']['person3'] ?? '';
       });
     } catch (e) {
       print('Error loading course details: $e');
@@ -108,7 +132,23 @@ class _EditCourseState extends State<EditCourse> {
       'user_id': _useridController.text.trim(),
       'title': _titleController.text.trim(),
       'description': _descriptionController.text.trim(),
-      'what_will': _aboutCourseController.text.trim(),
+      'what_will': jsonEncode({
+        'what_will_you_learn': {
+          'subject1': _aboutCourseLearnController1.text.trim(),
+          'subject2': _aboutCourseLearnController2.text.trim(),
+          'subject3': _aboutCourseLearnController3.text.trim(),
+        },
+        'what_skil_you_gain': {
+          'skil1': _aboutCourseSkillController1.text.trim(),
+          'skil2': _aboutCourseSkillController2.text.trim(),
+          'skil3': _aboutCourseSkillController3.text.trim(),
+        },
+        'who_should_learn': {
+          'person1': _aboutCourseWhoController1.text.trim(),
+          'person2': _aboutCourseWhoController2.text.trim(),
+          'person3': _aboutCourseWhoController3.text.trim(),
+        }
+      }),
       'catagory': _categoryController.text.trim(),
     };
 
@@ -333,13 +373,155 @@ class _EditCourseState extends State<EditCourse> {
                   SizedBox(height: 20),
                   TextFormField(
                     controller: _descriptionController,
-                    decoration: InputDecoration(labelText: 'Description'),
+                    decoration: InputDecoration(
+                      labelText: 'Description',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      ),
+                    ),
+                    maxLines: null,
+                  ),
+                  SizedBox(height: 20),
+                  Text('About Course',
+                      style: GoogleFonts.poppins(
+                          color: black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18)),
+                  SizedBox(height: 20),
+                  Text('What will you learn',
+                      style: GoogleFonts.poppins(
+                          color: black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15)),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _aboutCourseLearnController1,
+                    decoration: InputDecoration(
+                      labelText: 'What will you learn 1',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      ),
+                    ),
                     maxLines: null,
                   ),
                   SizedBox(height: 20),
                   TextFormField(
-                    controller: _aboutCourseController,
-                    decoration: InputDecoration(labelText: 'About Course'),
+                    controller: _aboutCourseLearnController2,
+                    decoration: InputDecoration(
+                      labelText: 'What will you learn 2',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      ),
+                    ),
+                    maxLines: null,
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _aboutCourseLearnController3,
+                    decoration: InputDecoration(
+                      labelText: 'What will you learn 3',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      ),
+                    ),
+                    maxLines: null,
+                  ),
+                  SizedBox(height: 20),
+                  Text('Skills Gained',
+                      style: GoogleFonts.poppins(
+                          color: black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15)),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _aboutCourseSkillController1,
+                    decoration: InputDecoration(
+                      labelText: 'Skills Gained 1',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      ),
+                    ),
+                    maxLines: null,
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _aboutCourseSkillController2,
+                    decoration: InputDecoration(
+                      labelText: 'Skills Gained 2',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      ),
+                    ),
+                    maxLines: null,
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _aboutCourseSkillController3,
+                    decoration: InputDecoration(
+                      labelText: 'Skills Gained 3',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      ),
+                    ),
+                    maxLines: null,
+                  ),
+                  SizedBox(height: 20),
+                  Text('Who should learn this course',
+                      style: GoogleFonts.poppins(
+                          color: black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15)),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _aboutCourseWhoController1,
+                    decoration: InputDecoration(
+                      labelText: 'Who should learn this course 1',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      ),
+                    ),
+                    maxLines: null,
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _aboutCourseWhoController2,
+                    decoration: InputDecoration(
+                      labelText: 'Who should learn this course 2',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      ),
+                    ),
+                    maxLines: null,
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _aboutCourseWhoController3,
+                    decoration: InputDecoration(
+                      labelText: 'Who should learn this course 3',
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        color: black,
+                      ),
+                    ),
                     maxLines: null,
                   ),
                   SizedBox(height: 20),
