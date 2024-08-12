@@ -1,18 +1,10 @@
-import 'package:e_learning/admin/add%20courses/add%20materials/addMaterial.dart';
-import 'package:e_learning/admin/add%20courses/add%20materials/newMaterial.dart';
-import 'package:e_learning/admin/add%20courses/add%20resources/newAssignment.dart';
 import 'package:e_learning/admin/add%20courses/addCourses.dart';
-import 'package:e_learning/admin/add%20courses/newCourse.dart';
 import 'package:e_learning/color.dart';
-import 'package:e_learning/shared/searchBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:unicons/unicons.dart';
 
-import '../../../services/courseServices.dart';
 import '../../../services/materialServices.dart';
 import '../add courses/add materials/editMaterials.dart';
 

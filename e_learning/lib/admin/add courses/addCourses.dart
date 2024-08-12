@@ -1,7 +1,6 @@
 import 'package:e_learning/admin/add%20courses/add%20materials/addMaterial.dart';
 import 'package:e_learning/admin/add%20courses/newCourse.dart';
 import 'package:e_learning/color.dart';
-import 'package:e_learning/shared/searchBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../services/courseServices.dart';
 import '../admin home/adminDash.dart';
-import 'editCourses.dart';
 import 'editcourse.dart';
 
 class AddCourses extends StatefulWidget {

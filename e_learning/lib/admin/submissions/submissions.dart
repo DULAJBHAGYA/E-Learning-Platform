@@ -1,15 +1,12 @@
-import 'package:e_learning/shared/searchBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:unicons/unicons.dart';
 
 import '../../color.dart';
 import '../../services/submissionServices.dart';
-import '../../student/course display/courseDescription.dart';
 import '../admin home/adminDash.dart';
 import 'addMarks.dart';
 

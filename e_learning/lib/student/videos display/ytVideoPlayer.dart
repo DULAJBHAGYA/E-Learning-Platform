@@ -54,11 +54,58 @@ class _YoutubePlayerScreenState extends State<YoutubePlayerScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: YoutubePlayer(
-            controller: _controller,
-            aspectRatio: 16 / 9,
-          ),
+        child: Column(
+          children: [
+            YoutubePlayer(
+              controller: _controller,
+              aspectRatio: 16 / 9,
+            ),
+            SizedBox(
+                height: 20), // Add some space between the video and the content
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Video Title',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: black,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Here is some description about the video. You can add more details as needed. This section can include information such as the video\'s content, its purpose, and any other relevant details.',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: black,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      'Additional Information',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: black,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'You can add more content here, such as additional descriptions, links, or any other relevant information related to the video.',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: black,
+                      ),
+                    ),
+                    // Add more widgets as needed
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -24,8 +24,11 @@ class _VideoDisplayState extends State<VideoDisplay> {
   void initState() {
     super.initState();
     flickManager = FlickManager(
-      videoPlayerController:
-          VideoPlayerController.networkUrl(Uri.parse(widget.url)),
+      videoPlayerController: VideoPlayerController.networkUrl(
+        Uri.parse(
+          'https://drive.google.com/uc?export=download&id=1rz8dgxcloRkvDSLC-_4UG7Ag34rO-oJ3',
+        ),
+      ),
     );
   }
 

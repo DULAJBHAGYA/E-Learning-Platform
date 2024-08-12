@@ -1,5 +1,3 @@
-import 'package:e_learning/change%20password/studentChangePassword.dart';
-import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
@@ -8,13 +6,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../change password/adminChangePassword.dart';
 import '../../color.dart';
 import '../../edit profile/adminEditProfile.dart';
-import '../../edit profile/editProfile.dart';
 import '../../login/login.dart';
 import '../../services/userServices.dart';
-import '../../shared/bottomNavBar.dart';
 import '../admin home/adminDash.dart';
 import '../delete requests/deleteRequests.dart';
-import '../requests/requests.dart';
 
 class AdminProfile extends StatefulWidget {
   const AdminProfile({

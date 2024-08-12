@@ -69,7 +69,8 @@ class _NewmaterialState extends State<Newmaterial> {
           });
         } else {
           PlatformFile file = result.files.first;
-          setState(() {
+          setState(() {});
+          (() {
             _selectedFile = File(file.path!);
             _fileName = file.name;
           });

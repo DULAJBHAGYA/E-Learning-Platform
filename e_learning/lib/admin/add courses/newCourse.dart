@@ -11,7 +11,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 import 'dart:io';
 import '../../color.dart';
-import '../../services/categoryServices.dart';
 
 class NewCourse extends StatefulWidget {
   const NewCourse({

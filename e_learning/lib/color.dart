@@ -7,8 +7,8 @@ const Color lightblue = Color(0xFF9FADDE);
 const Color black = Color(0xFF313235);
 const Color grey = Color(0xFF5D5A5A);
 const Color lightgrey = Color(0xFF8F8D8D);
-const Color background = Color(0xFFf8f8f8);
-const Color background2 = Color(0xFFD7D1D1);
+const Color background = Color.fromARGB(255, 248, 248, 248);
+const Color background2 = Color.fromRGBO(215, 209, 209, 1);
 const Color red = Color(0xFFC34E4E);
 
 //percentage indicator colors
@@ -17,8 +17,8 @@ const Color maths = Color(0xFFfbd330); //math
 const Color language = Color(0xFFff637a); //language
 const Color other = Color(0xFFfc9708); //other
 const Color it = Color(0xFF819af9); //information technology
-
 const Color pendingColor = Color(0xFFDBD10C);
+
 
 
 

@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
-import 'package:e_learning/services/requestServices.dart';
 import 'package:e_learning/services/userServices.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -207,10 +206,7 @@ class _EditProfileState extends State<EditProfile> {
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Login()),
-                      );
+                      Navigator.of(context).pop();
                     },
                     child: Text('OK'),
                   ),
@@ -230,7 +226,7 @@ class _EditProfileState extends State<EditProfile> {
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).pop(); // Close the dialog
+                      Navigator.of(context).pop();
                     },
                     child: Text('OK'),
                   ),

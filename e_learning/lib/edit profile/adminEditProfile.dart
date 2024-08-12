@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:e_learning/admin/admin%20profile/adminProfile.dart';
-import 'package:e_learning/services/requestServices.dart';
 import 'package:e_learning/services/userServices.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -15,7 +14,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../color.dart';
 import '../login/login.dart';
 import '../services/profilePictureServices.dart';
-import '../student/profile/stdProfile.dart';
 
 class AdminEditProfile extends StatefulWidget {
   const AdminEditProfile({

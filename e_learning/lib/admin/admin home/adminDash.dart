@@ -3,14 +3,11 @@ import 'package:e_learning/admin/requests/requests.dart';
 import 'package:e_learning/color.dart';
 import 'package:e_learning/login/login.dart';
 import 'package:e_learning/services/userServices.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:unicons/unicons.dart';
-
 import '../../services/countServices.dart';
 import '../add new admin/admins.dart';
 import '../admin courses/adminCourses.dart';
@@ -21,7 +18,6 @@ import '../enrollments/enrolments.dart';
 import '../submissions/submissions.dart';
 import 'adminDashCourses.dart';
 import 'adminDashStudents.dart';
-import 'adminInfo.dart';
 import 'adminStats.dart';
 
 class AdminDash extends StatefulWidget {
@@ -128,17 +124,7 @@ class _AdminDashState extends State<AdminDash> {
         actions: [
           Padding(
             padding: const EdgeInsets.all(10.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Requests(
-                              username: '',
-                              accessToken: '',
-                              refreshToken: '',
-                            )));
-              },
+           
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -197,7 +183,6 @@ class _AdminDashState extends State<AdminDash> {
                 ),
               ),
             ),
-          ),
         ],
       ),
       body: Padding(

@@ -3,7 +3,6 @@ import 'package:e_learning/color.dart';
 import 'package:e_learning/services/adminServices.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iconsax/iconsax.dart';
 
 class AddAdmin extends StatefulWidget {
   const AddAdmin({Key? key}) : super(key: key);

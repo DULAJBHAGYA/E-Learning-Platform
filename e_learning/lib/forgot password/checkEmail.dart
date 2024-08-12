@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import '../color.dart';
-import '../login/login.dart';
 import '../services/emailServices.dart';
 import 'resetPassword.dart';
 
@@ -33,14 +32,7 @@ class _CheckEmailState extends State<CheckEmail> {
       try {
         Map<String, dynamic> response =
             await EmailService.instance.checkEmail(email);
-        // Handle the response here, for example:
-        // if (response['success']) {
-        //   // Email exists, handle accordingly
-        // } else {
-        //   // Email does not exist, handle accordingly
-        // }
       } catch (e) {
-        // Handle any errors or exceptions
         print('Error: $e');
       }
     }
@@ -52,7 +44,7 @@ class _CheckEmailState extends State<CheckEmail> {
       backgroundColor: background,
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Iconsax.arrow_left_2, color: black), // Changed the icon
+          icon: Icon(Iconsax.arrow_left_2, color: black),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -137,7 +129,9 @@ class _CheckEmailState extends State<CheckEmail> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => ResetPassword(email: emailController.text,),
+                                    builder: (context) => ResetPassword(
+                                      email: emailController.text,
+                                    ),
                                   ),
                                 );
                               },

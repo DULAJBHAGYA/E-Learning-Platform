@@ -68,7 +68,10 @@ class RegisterRequestsCard extends StatelessWidget {
                 Text(
                   '$first_name $last_name',
                   style: GoogleFonts.poppins(
-                      fontSize: 15, fontWeight: FontWeight.w500, color: black),
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: black,
+                  ),
                 ),
                 SizedBox(height: 5),
                 Text(
@@ -76,40 +79,45 @@ class RegisterRequestsCard extends StatelessWidget {
                   style: GoogleFonts.poppins(
                       fontSize: 12, fontWeight: FontWeight.w400, color: black),
                 ),
-                SizedBox(height: 5),
                 Row(
                   children: [
                     Spacer(),
                     ElevatedButton(
                       onPressed: () => _acceptRequest(context),
                       style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.all(5),
-                        backgroundColor: darkblue,
+                        padding: EdgeInsets.all(3),
+                        backgroundColor: white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                            borderRadius: BorderRadius.circular(10),
+                            side: BorderSide(
+                              color: darkblue,
+                              width: 1,
+                            )),
                       ),
                       child: Text('ACCEPT',
                           style: GoogleFonts.poppins(
                               fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: white)),
+                              fontWeight: FontWeight.w600,
+                              color: darkblue)),
                     ),
                     SizedBox(width: 10),
                     ElevatedButton(
                       onPressed: () => _deleteRequest(context),
                       style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.all(5),
-                        backgroundColor: red,
+                        padding: EdgeInsets.all(3),
+                        backgroundColor: white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                            borderRadius: BorderRadius.circular(10),
+                            side: BorderSide(
+                              color: darkblue,
+                              width: 1,
+                            )),
                       ),
                       child: Text('DECLINE',
                           style: GoogleFonts.poppins(
                               fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: white)),
+                              fontWeight: FontWeight.w600,
+                              color: darkblue)),
                     ),
                   ],
                 ),

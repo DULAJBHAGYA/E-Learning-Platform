@@ -1,3 +1,4 @@
+import 'package:e_learning/student/videos%20display/videoDisplay.dart';
 import 'package:flutter/material.dart';
 
 import 'login/login.dart';
@@ -15,7 +16,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'U-Learn',
       initialRoute: '/',
-      routes: {'/': (context) => Login()},
+      routes: {
+        '/': (context) => Login(),
+      },
     );
   }
 }

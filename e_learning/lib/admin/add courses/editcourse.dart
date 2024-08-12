@@ -49,8 +49,6 @@ class _EditCoursePreviewState extends State<EditCoursePreview> {
   int? user_id;
   String? _imageUrl;
   Uint8List? _selectedImageBytes;
-  List<String> _typeOptions = ['Science', 'Math', 'IT', 'Language', 'Other'];
-  String? _selectedType;
 
   @override
   void initState() {

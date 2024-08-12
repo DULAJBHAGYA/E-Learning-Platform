@@ -1,18 +1,16 @@
 import 'package:e_learning/student/my%20courses/myCourses.dart';
+import 'package:e_learning/student/videos%20display/videoDisplay.dart';
 import 'package:flutter/material.dart';
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../color.dart';
 import '../../services/courseServices.dart';
 import '../../services/materialServices.dart';
 import '../../services/progressServices.dart';
 import '../submit assignment/submitAssignment.dart';
-import '../videos display/videoDisplay.dart';
-import '../videos display/ytVideoPlayer.dart';
 
 class CourseContent extends StatefulWidget {
   const CourseContent({
@@ -329,22 +327,23 @@ class _LessonDisplayWidgetState extends State<LessonDisplayWidget> {
                   GestureDetector(
                     onTap: () => _launchFileViewer(widget.material_file),
                     child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                            color: darkblue,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Center(
-                            child: Text(
-                              'VIEW MATERIAL',
-                              style: GoogleFonts.poppins(
-                                  color: white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15),
-                            ),
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          color: darkblue,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Center(
+                          child: Text(
+                            'VIEW MATERIAL',
+                            style: GoogleFonts.poppins(
+                                color: white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15),
                           ),
-                        )),
+                        ),
+                      ),
+                    ),
                   ),
                   for (var url in widget.urls)
                     if (url.isNotEmpty)
@@ -355,8 +354,9 @@ class _LessonDisplayWidgetState extends State<LessonDisplayWidget> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    YoutubePlayerScreen(url: url),
+                                builder: (context) => VideoDisplay(
+                                  url: url,
+                                ),
                               ),
                             );
                           },

@@ -1,5 +1,3 @@
-import 'package:e_learning/admin/add%20courses/add%20materials/addMaterial.dart';
-import 'package:e_learning/admin/add%20courses/addCourses.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
@@ -7,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../color.dart';
 import '../../../services/assignmentServices.dart';
-import '../../../shared/searchBar.dart';
 
 class AdminAssignments extends StatefulWidget {
   const AdminAssignments({

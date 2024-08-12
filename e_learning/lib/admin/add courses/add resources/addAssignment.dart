@@ -1,5 +1,4 @@
 import 'package:e_learning/admin/add%20courses/add%20materials/addMaterial.dart';
-import 'package:e_learning/admin/add%20courses/addCourses.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
@@ -8,8 +7,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../color.dart';
 import '../../../services/assignmentServices.dart';
-import '../../../shared/searchBar.dart';
-import '../add materials/newMaterial.dart';
 import 'newAssignment.dart';
 
 class AddAssignment extends StatefulWidget {

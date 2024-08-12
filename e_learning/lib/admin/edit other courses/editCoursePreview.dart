@@ -9,7 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
-import 'dart:convert'; // Import for JSON encoding/decoding
+import 'dart:convert';
 import 'dart:io';
 import '../../color.dart';
 
@@ -43,8 +43,6 @@ class _EditOtherCourseState extends State<EditOtherCourse> {
   int? user_id;
   String? _imageUrl;
   Uint8List? _selectedImageBytes;
-  List<String> _typeOptions = ['Science', 'Math', 'IT', 'Language', 'Other'];
-  String? _selectedType;
 
   @override
   void initState() {
