@@ -43,7 +43,7 @@ dependencies:
   feather_icons_svg: ^0.4.0
   iconsax: ^0.0.8
   unicons: ^2.1.1
-  carousel_slider: ^4.2.1
+  carousel_slider: ^5.1.1
   lucide_icons_flutter: ^1.0.9
   enefty_icons: ^1.0.7
   pie_chart: ^5.4.0
