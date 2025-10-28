@@ -12,7 +12,7 @@ class ImageSlider extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
             image: DecorationImage(
-              image: AssetImage('/images/goCourse.png'),
+              image: AssetImage('assets/images/goCourse.png'),
               fit: BoxFit.cover,
             ),
           ),
@@ -24,7 +24,7 @@ class ImageSlider extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
             image: DecorationImage(
-              image: AssetImage("/images/belnderCourse.jpg"),
+              image: AssetImage("assets/images/belnderCourse.jpg"),
               fit: BoxFit.cover,
             ),
           ),
@@ -36,7 +36,7 @@ class ImageSlider extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
             image: DecorationImage(
-              image: AssetImage("/images/psCourse.jpg"),
+              image: AssetImage("assets/images/psCourse.jpg"),
               fit: BoxFit.cover,
             ),
           ),
@@ -48,7 +48,7 @@ class ImageSlider extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
             image: DecorationImage(
-              image: AssetImage("/images/reactCourse.jpg"),
+              image: AssetImage("assets/images/reactCourse.jpg"),
               fit: BoxFit.cover,
             ),
           ),
@@ -60,7 +60,7 @@ class ImageSlider extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
             image: DecorationImage(
-              image: AssetImage("/images/awsCourse.jpg"),
+              image: AssetImage("assets/images/awsCourse.jpg"),
               fit: BoxFit.cover,
             ),
           ),

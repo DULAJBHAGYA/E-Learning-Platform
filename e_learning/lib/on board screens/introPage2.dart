@@ -14,7 +14,7 @@ class IntroPage2 extends StatelessWidget {
           alignment: Alignment.center,
           child: Column(
             children: [
-              Image.asset('/images/intro2.png'),
+              Image.asset('assets/images/intro2.png'),
               SizedBox(height: 20,),
               Text("Grow Your Skills", textAlign: TextAlign.center, style: GoogleFonts.nunito(fontSize: 25, fontWeight: FontWeight.w800),),
               SizedBox(height: 20,),

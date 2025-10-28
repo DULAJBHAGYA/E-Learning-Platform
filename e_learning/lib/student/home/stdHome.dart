@@ -1,13 +1,11 @@
-import 'package:e_learning/student/home/horizontalList.dart';
-import 'package:e_learning/student/home/topCategories.dart';
 import 'package:flutter/material.dart';
 
 import '../../color.dart';
 import '../../shared/bottomNavBar.dart';
-import 'courseList.dart';
-import 'imageSlider.dart';
+import '../../shared/searchBar.dart';
+import 'heroCard.dart';
 import 'userInfo.dart';
-import 'userStats.dart';
+import 'topArticles.dart';
 
 class StudentHome extends StatefulWidget {
   const StudentHome({
@@ -26,51 +24,59 @@ class StudentHome extends StatefulWidget {
 }
 
 class _StudentHomeState extends State<StudentHome> {
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged(String query) {
+    // Handle search functionality
+    print('Search query: $query');
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: background,
-        body: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-          child: Container(
-            child: Column(
-              children: [
-                //user info
-                UserInfo(),
-
-                SizedBox(height: 10),
-
-                //count details
-                UserStats(),
-                SizedBox(height: 0),
-
-                //image slider
-                ImageSlider(),
-                SizedBox(height: 5),
-
-                // SizedBox(height: 10),
-                //topcategories
-                Topcategories(
-                    username: widget.username,
-                    accessToken: widget.accessToken,
-                    refreshToken: widget.refreshToken),
-                SizedBox(height: 30),
-
-                //course filter
-                HorizontalListview(),
-
-                SizedBox(height: 10),
-
-                CourseList(
-                    username: widget.username,
-                    accessToken: widget.accessToken,
-                    refreshToken: widget.refreshToken),
-              ],
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 244, 243, 246),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.05,
+                vertical: 20,
+              ),
+              child: Column(
+                children: [
+                  //user info
+                  UserInfo(),
+                  SizedBox(height: 20),
+                  //search bar
+                  CustomSearchBar(controller: _searchController, onChanged: _onSearchChanged),
+                  SizedBox(height: 20),
+                  // Hero Card
+                  HeroCard(),
+                  SizedBox(height: 20),
+                  // Top Articles
+                  TopArticles(),
+                  SizedBox(height: 10),
+                  // Spacer to push content to top
+                  Spacer(),
+                ],
+              ),
             ),
-          ),
+            // Floated Bottom Navigation Bar
+            Positioned(
+              bottom: 10,
+              left: MediaQuery.of(context).size.width * 0.05,
+              right: MediaQuery.of(context).size.width * 0.05,
+              child: BottomNavBar(), // Removed the wrapper Container
+            ),
+          ],
         ),
-        bottomNavigationBar: BottomNavBar(),
       ),
     );
   }

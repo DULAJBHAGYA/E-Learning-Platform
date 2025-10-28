@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
+// import 'package:shared_preferences/shared_preferences.dart'; // Comment out real service
+// import 'package:url_launcher/url_launcher.dart'; // Comment out real service
 
 import '../../color.dart';
-import '../../services/courseServices.dart';
-import '../../services/materialServices.dart';
-import '../../services/progressServices.dart';
+// import '../../services/courseServices.dart'; // Comment out real service
+// import '../../services/materialServices.dart'; // Comment out real service
+// import '../../services/progressServices.dart'; // Comment out real service
 import '../submit assignment/submitAssignment.dart';
 import '../videos display/videoDisplay.dart';
 import '../videos display/ytVideoPlayer.dart';
@@ -29,22 +29,87 @@ class CourseContent extends StatefulWidget {
 }
 
 class _CourseContentState extends State<CourseContent> {
+  // Mock data for course contents
+  List<Map<String, dynamic>> _mockContents = [
+    {
+      'title': 'Introduction to Flutter',
+      'material_file': 'assets/pdfs/intro_flutter.pdf',
+      'resource': {
+        'resourse_link': {
+          'url1': 'https://example.com/flutter_intro',
+          'url2': 'https://example.com/flutter_setup',
+          'url3': 'https://example.com/flutter_basics',
+        }
+      },
+      'assignments': [
+        {
+          'title': 'Setup Flutter Environment',
+          'file': 'assets/pdfs/flutter_setup_assignment.pdf',
+          'assignment_id': 1
+        }
+      ]
+    },
+    {
+      'title': 'Widgets and Layouts',
+      'material_file': 'assets/pdfs/widgets_layouts.pdf',
+      'resource': {
+        'resourse_link': {
+          'url1': 'https://example.com/widgets_overview',
+          'url2': 'https://example.com/layout_basics',
+          'url3': 'https://example.com/flutter_layouts',
+        }
+      },
+      'assignments': [
+        {
+          'title': 'Create Basic Layout',
+          'file': 'assets/pdfs/layout_assignment.pdf',
+          'assignment_id': 2
+        }
+      ]
+    },
+    {
+      'title': 'State Management',
+      'material_file': 'assets/pdfs/state_management.pdf',
+      'resource': {
+        'resourse_link': {
+          'url1': 'https://example.com/state_intro',
+          'url2': 'https://example.com/provider_pattern',
+          'url3': 'https://example.com/state_best_practices',
+        }
+      },
+      'assignments': [
+        {
+          'title': 'Implement State Management',
+          'file': 'assets/pdfs/state_assignment.pdf',
+          'assignment_id': 3
+        }
+      ]
+    },
+  ];
+
+  // Mock course details
+  late int course_id = 1;
+  late String title = 'Introduction to Flutter Development';
+  late String image = 'assets/images/flutter.png';
+  late String catagory = 'Mobile Development';
+  late int progress = 75;
+
   List<dynamic> _contents = [];
-  late int course_id;
-  late String title = '';
-  late String image = '';
-  late String catagory = '';
-  late int progress = widget.progress;
 
   @override
   void initState() {
     super.initState();
-    fetchMaterials();
-    fetchCourseDetails();
-    fetchProgress();
-    updateProgress(false);
+    // Use mock data instead of fetching from API
+    _contents = _mockContents;
+    course_id = widget.course_id;
+    // fetchMaterials();
+    // fetchCourseDetails();
+    // fetchProgress();
+    // updateProgress(false);
   }
 
+  // Comment out the real fetch functions
+  /*
   Future<void> fetchMaterials() async {
     try {
       final courseContentData = await MaterialService.instance
@@ -106,6 +171,7 @@ class _CourseContentState extends State<CourseContent> {
       print('Error updating progress: $e');
     }
   }
+  */
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +206,7 @@ class _CourseContentState extends State<CourseContent> {
                       final assignments = content['assignments']
                               ?.map((e) => {
                                     'title': e['title'],
-                                    'file': e['assignment_file'],
+                                    'file': e['file'],
                                     'assignment_id': e['assignment_id']
                                   })
                               .toList() ??
@@ -167,7 +233,7 @@ class _CourseContentState extends State<CourseContent> {
                     TextButton(
                       style: ButtonStyle(),
                       onPressed: () async {
-                        await updateProgress(true);
+                        // await updateProgress(true);
                       },
                       child: Text(
                         'COMPLETED',
@@ -188,47 +254,10 @@ class _CourseContentState extends State<CourseContent> {
   }
 }
 
-class QuizDisplayWidget extends StatelessWidget {
-  const QuizDisplayWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        width: MediaQuery.of(context).size.width,
-        height: 80,
-        decoration: BoxDecoration(
-          color: white,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                  child: Text(
-                'Quiz 1',
-                style: GoogleFonts.poppins(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: black,
-                ),
-              )),
-              Spacer(),
-              Icon(EneftyIcons.message_question_bold, color: it, size: 40),
-            ],
-          ),
-        ));
-  }
-}
-
 class LessonDisplayWidget extends StatefulWidget {
   final String title;
   final List<String> urls;
-  final List<dynamic> assignments;
+  final List assignments;
   final int course_id;
   final String material_file;
 
@@ -255,10 +284,21 @@ class _LessonDisplayWidgetState extends State<LessonDisplayWidget> {
     _loadProgress();
   }
 
+  // Comment out the real launch function
+  /*
   void _launchFileViewer(String filePath) {
     launch(filePath);
   }
+  */
 
+  // Mock function to simulate file viewing
+  void _launchFileViewer(String filePath) {
+    // In a real app, this would launch the file viewer
+    print('Launching file: $filePath');
+  }
+
+  // Comment out the real progress functions
+  /*
   Future<void> _loadProgress() async {
     final prefs = await SharedPreferences.getInstance();
     final progressKey = 'progress_${widget.title}';
@@ -286,6 +326,20 @@ class _LessonDisplayWidgetState extends State<LessonDisplayWidget> {
     } catch (e) {
       print('Error updating progress: $e');
     }
+  }
+  */
+
+  // Mock progress functions
+  Future<void> _loadProgress() async {
+    // Simulate loading progress from local storage
+    setState(() {
+      isChecked = false; // Default to not completed
+    });
+  }
+
+  Future<void> _updateProgress(bool completed) async {
+    // Simulate updating progress
+    print('Updating progress for ${widget.title} to $completed');
   }
 
   @override
@@ -474,35 +528,11 @@ class CourseContentHeader extends StatelessWidget {
                     bottomLeft: Radius.circular(20),
                     bottomRight: Radius.circular(20),
                   ),
-                  child: Image.network(
+                  child: Image.asset(
                     image,
                     fit: BoxFit.cover,
                     width: MediaQuery.of(context).size.width,
                     height: 300,
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) {
-                        return child;
-                      }
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  (loadingProgress.expectedTotalBytes ?? 1)
-                              : null,
-                        ),
-                      );
-                    },
-                    errorBuilder: (BuildContext context, Object exception,
-                        StackTrace? stackTrace) {
-                      return Center(
-                        child: Icon(
-                          Icons.error,
-                          color: Colors.red,
-                          size: 40,
-                        ),
-                      );
-                    },
                   ),
                 ),
               ),

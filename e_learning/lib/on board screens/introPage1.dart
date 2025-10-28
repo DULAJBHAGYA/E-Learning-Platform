@@ -14,7 +14,7 @@ class IntroPage1 extends StatelessWidget {
           alignment: Alignment.center,
           child: Column(
             children: [
-              Image.asset('/images/intro1.png'),
+              Image.asset('assets/images/intro1.png'),
               SizedBox(height: 20,),
               Text("Learn Anytime, Anywhere", textAlign: TextAlign.center, style: GoogleFonts.nunito(fontSize: 25, fontWeight: FontWeight.w800),),
               SizedBox(height: 20,),

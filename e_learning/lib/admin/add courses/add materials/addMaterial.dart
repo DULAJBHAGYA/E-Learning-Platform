@@ -100,7 +100,7 @@ class _AddmaterialState extends State<AddMaterial> {
                       height: 30,
                       width: 30,
                       child: Image.asset(
-                        '/logos/logo.png',
+                        'assets/logos/logo.png',
                         fit: BoxFit.cover,
                       ),
                     ),

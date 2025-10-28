@@ -20,7 +20,7 @@ class NavDrawer extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Colors.green,
                 image: DecorationImage(
-                    fit: BoxFit.fill, image: AssetImage('/images/p.jpg'))),
+                    fit: BoxFit.fill, image: AssetImage('assets/images/p.jpg'))),
           ),
           ListTile(
             leading: Icon(Icons.input),

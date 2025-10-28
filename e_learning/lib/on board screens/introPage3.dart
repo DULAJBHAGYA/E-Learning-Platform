@@ -14,7 +14,7 @@ class IntroPage3 extends StatelessWidget {
           alignment: Alignment.center,
           child: Column(
             children: [
-              Image.asset('/images/intro3.jpg'),
+              Image.asset('assets/images/intro3.jpg'),
               SizedBox(height: 20,),
               Text("Achieve Success", textAlign: TextAlign.center, style: GoogleFonts.nunito(fontSize: 25, fontWeight: FontWeight.w800),),
               SizedBox(height: 20,),

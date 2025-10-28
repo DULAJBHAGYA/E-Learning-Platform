@@ -278,7 +278,7 @@ class _EditCoursePreviewState extends State<EditCoursePreview> {
                             height: 30,
                             width: 30,
                             child: Image.asset(
-                              '/logos/logo.png',
+                              'assets/logos/logo.png',
                               fit: BoxFit.cover,
                             ),
                           ),

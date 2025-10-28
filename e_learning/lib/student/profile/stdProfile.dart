@@ -2,12 +2,12 @@ import 'package:e_learning/change%20password/studentChangePassword.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart'; // Comment out real service
 
 import '../../color.dart';
 import '../../edit profile/editProfile.dart';
 import '../../login/login.dart';
-import '../../services/userServices.dart';
+// import '../../services/userServices.dart'; // Comment out real service
 import '../../shared/bottomNavBar.dart';
 
 class StudentProfile extends StatefulWidget {
@@ -27,19 +27,23 @@ class StudentProfile extends StatefulWidget {
 }
 
 class _StudentProfileState extends State<StudentProfile> {
-  late String first_name = '';
-  late String last_name = '';
-  late String email = '';
-  late String user_name = '';
-  late int user_id;
-  late String picture = '';
+  // Mock user data
+  String first_name = 'John';
+  String last_name = 'Doe';
+  String email = 'john.doe@example.com';
+  String user_name = 'johndoe';
+  int user_id = 12345;
+  String picture = 'assets/images/user1.jpg';
 
   @override
   void initState() {
     super.initState();
-    fetchUserById();
+    // Use mock data instead of fetching from API
+    // fetchUserById();
   }
 
+  // Comment out the real fetch function
+  /*
   Future<void> fetchUserById() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -66,10 +70,12 @@ class _StudentProfileState extends State<StudentProfile> {
       print('Error fetching user info: $e');
     }
   }
+  */
 
   Future<void> clearAccessToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.remove('access_token');
+    // Comment out real implementation
+    // final prefs = await SharedPreferences.getInstance();
+    // prefs.remove('access_token');
   }
 
   @override
@@ -117,14 +123,15 @@ class _StudentProfileState extends State<StudentProfile> {
                               height: 100,
                               child: CircleAvatar(
                                 radius: 120,
-                                backgroundImage: NetworkImage('$picture'),
+                                // Use AssetImage for local assets instead of NetworkImage
+                                backgroundImage: AssetImage(picture),
                               ),
                             ),
                             SizedBox(width: 20),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('$user_name',
+                                Text(user_name,
                                     style: GoogleFonts.poppins(
                                         fontSize: 20,
                                         color: black,
@@ -133,7 +140,7 @@ class _StudentProfileState extends State<StudentProfile> {
                                 SizedBox(
                                   width: 200,
                                   child: Text(
-                                    '$email',
+                                    email,
                                     overflow: TextOverflow.clip,
                                     style: GoogleFonts.poppins(
                                       fontSize: 15,
@@ -155,7 +162,7 @@ class _StudentProfileState extends State<StudentProfile> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '$first_name',
+                          first_name,
                           style: GoogleFonts.poppins(
                             fontSize: 30,
                             color: black,
@@ -166,7 +173,7 @@ class _StudentProfileState extends State<StudentProfile> {
                           height: 2,
                         ),
                         Text(
-                          '$last_name',
+                          last_name,
                           style: GoogleFonts.poppins(
                             fontSize: 28,
                             color: lightgrey,
@@ -190,24 +197,18 @@ class _StudentProfileState extends State<StudentProfile> {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        final prefs = await SharedPreferences.getInstance();
-                        final user_id = prefs.getInt('user_id');
-
-                        if (user_id != null) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => EditProfile(
-                                username: widget.username,
-                                accessToken: widget.accessToken,
-                                refreshToken: widget.refreshToken,
-                                user_id: user_id,
-                              ),
+                        // Use mock user_id instead of fetching from SharedPreferences
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditProfile(
+                              username: widget.username,
+                              accessToken: widget.accessToken,
+                              refreshToken: widget.refreshToken,
+                              user_id: user_id, // Use mock user_id
                             ),
-                          );
-                        } else {
-                          print('User ID not found in SharedPreferences');
-                        }
+                          ),
+                        );
                       },
                       child: Container(
                           width: MediaQuery.of(context).size.width,
@@ -346,25 +347,18 @@ class _StudentProfileState extends State<StudentProfile> {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        final prefs = await SharedPreferences.getInstance();
-                        final user_id = prefs.getInt('user_id');
-
-                        if (user_id != null) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Studentchangepassword(
-                                username: widget.username,
-                                accessToken: widget.accessToken,
-                                refreshToken: widget.refreshToken,
-                                user_id: user_id,
-                              ),
+                        // Use mock user_id instead of fetching from SharedPreferences
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Studentchangepassword(
+                              username: widget.username,
+                              accessToken: widget.accessToken,
+                              refreshToken: widget.refreshToken,
+                              user_id: user_id, // Use mock user_id
                             ),
-                          );
-                        } else {
-                          // Handle the case where user_id is null
-                          print('User ID not found in SharedPreferences');
-                        }
+                          ),
+                        );
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,

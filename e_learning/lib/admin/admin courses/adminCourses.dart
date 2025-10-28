@@ -232,7 +232,7 @@ class _AdminCourseViewState extends State<AdminCourseView> {
                 image: DecorationImage(
                   image: widget.image.isNotEmpty
                       ? NetworkImage(widget.image)
-                      : AssetImage('/logos/logo.png') as ImageProvider,
+                      : AssetImage('assets/logos/logo.png') as ImageProvider,
                   fit: BoxFit.cover,
                 ),
               ),

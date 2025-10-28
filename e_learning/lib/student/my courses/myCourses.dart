@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:e_learning/shared/bottomNavBar.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart'; // Comment out real service
 
 import '../../color.dart';
-import '../../services/countServices.dart';
+// import '../../services/countServices.dart'; // Comment out real service
 import 'completedCourses.dart';
 import 'onGoingCourses.dart';
 
@@ -21,10 +21,12 @@ class _MyCoursesState extends State<MyCourses>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  int courseCount = 0;
-  int ongoingCourseCount = 0;
-  int completedCourseCount = 0;
+  // Mock data for course counts
+  int ongoingCourseCount = 5;
+  int completedCourseCount = 3;
 
+  // Comment out the real fetch functions
+  /*
   Future<void> fetchOngoingCourseCount() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -80,13 +82,15 @@ class _MyCoursesState extends State<MyCourses>
       print('Error fetching ongoing course count: $e');
     }
   }
+  */
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    fetchOngoingCourseCount();
-    fetchCompletedCourseCount();
+    // Use mock data instead of fetching from API
+    // fetchOngoingCourseCount();
+    // fetchCompletedCourseCount();
   }
 
   @override
@@ -206,14 +210,11 @@ class _MyCoursesState extends State<MyCourses>
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-                    // Content of the first tab ('Ongoing')
                     OnGoingCourses(
                       username: '',
                       accessToken: '',
                       refreshToken: '',
                     ),
-
-                    // Content of the second tab ('Completed')
                     CompletedCourses(
                       username: '',
                       accessToken: '',
@@ -228,11 +229,5 @@ class _MyCoursesState extends State<MyCourses>
         bottomNavigationBar: BottomNavBar(),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
   }
 }

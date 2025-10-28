@@ -18,9 +18,9 @@ class HorizontalListview extends StatelessWidget {
           Row(
             children: [
               Text(
-                'Recommended Courses',
+                'Courses',
                 style: GoogleFonts.poppins(
-                    fontSize: 18, fontWeight: FontWeight.w700, color: black),
+                    fontSize: 20, fontWeight: FontWeight.w600, color: black),
               ),
               Spacer(),
               GestureDetector(
@@ -36,9 +36,9 @@ class HorizontalListview extends StatelessWidget {
                 child: Text(
                   'See All',
                   style: GoogleFonts.poppins(
-                      fontSize: 15,
+                      fontSize: 12,
                       fontWeight: FontWeight.w400,
-                      color: darkblue),
+                      color: grey),
                 ),
               ),
             ],

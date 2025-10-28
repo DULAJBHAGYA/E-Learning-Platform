@@ -19,19 +19,19 @@ class CustomSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
+      height: 60,
       width: MediaQuery.of(context).size.width * 0.9,
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: white,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(30),
       ),
       child: Row(
         children: [
           Icon(
-            Iconsax.search_normal,
+            Iconsax.search_normal_1,
             size: 20,
-            color: lightgrey,
+            color: black,
           ),
           SizedBox(width: 10),
           Expanded(
@@ -39,7 +39,7 @@ class CustomSearchBar extends StatelessWidget {
               controller: controller,
               onChanged: onChanged,
               decoration: InputDecoration(
-                hintText: 'search courses here',
+                hintText: 'Search something',
                 hintStyle: GoogleFonts.poppins(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
