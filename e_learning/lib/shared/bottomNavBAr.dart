@@ -3,6 +3,7 @@ import 'package:e_learning/student/all%20courses/allCourses.dart';
 import 'package:e_learning/student/my%20courses/myCourses.dart';
 import 'package:e_learning/student/profile/stdProfile.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../student/home/stdHome.dart';
@@ -114,7 +115,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
               child: Icon(
                 Iconsax.home,
                 color: _selectedIndex == 0 ? darkblue : grey,
-                size: 24, // Increased from 18 to 24
+                size: 20, // Increased from 18 to 24
               ),
             ),
           ),
@@ -129,7 +130,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
               child: Icon(
                 Iconsax.book,
                 color: _selectedIndex == 1 ? darkblue : grey,
-                size: 24, // Increased from 18 to 24
+                size: 20, // Increased from 18 to 24
               ),
             ),
           ),
@@ -144,7 +145,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
               child: Icon(
                 Iconsax.book_1,
                 color: _selectedIndex == 2 ? darkblue : grey,
-                size: 24, // Increased from 18 to 24
+                size: 20, // Increased from 18 to 24
               ),
             ),
           ),
@@ -161,7 +162,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   child: Icon(
                     Iconsax.notification, // Notification icon
                     color: _selectedIndex == 3 ? darkblue : grey,
-                    size: 24, // Increased from 18 to 24
+                    size: 20, // Increased from 18 to 24
                   ),
                 ),
                 // Notification badge
@@ -181,7 +182,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                       ),
                       child: Text(
                         _notificationCount > 99 ? '99+' : _notificationCount.toString(),
-                        style: TextStyle(
+                        style: GoogleFonts.plusJakartaSans(
                           color: Colors.white,
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
@@ -204,7 +205,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
               child: Icon(
                 Iconsax.user, // User icon
                 color: _selectedIndex == 4 ? darkblue : grey,
-                size: 24, // Increased from 18 to 24
+                size: 20, // Increased from 18 to 24
               ),
             ),
           ),

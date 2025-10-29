@@ -11,10 +11,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../color.dart';
-import '../login/login.dart';
-import '../services/profilePictureServices.dart';
-import '../student/profile/stdProfile.dart';
+import '../../color.dart';
+import '../../login/login.dart';
+import '../../services/profilePictureServices.dart';
+import '../profile/stdProfile.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({
@@ -23,12 +23,22 @@ class EditProfile extends StatefulWidget {
     required this.accessToken,
     required this.refreshToken,
     required this.user_id,
+    this.first_name,
+    this.last_name,
+    this.email,
+    this.user_name,
+    this.picture,
   }) : super(key: key);
 
   final String username;
   final String accessToken;
   final String refreshToken;
   final int user_id;
+  final String? first_name;
+  final String? last_name;
+  final String? email;
+  final String? user_name;
+  final String? picture;
 
   _EditProfileState createState() => _EditProfileState();
 }
@@ -51,20 +61,31 @@ class _EditProfileState extends State<EditProfile> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
-  void dispose() {
-    firstNameController.dispose();
-    lastNameController.dispose();
-    userNameController.dispose();
-    emailController.dispose();
-
-    super.dispose();
-  }
-
-  @override
   void initState() {
     super.initState();
-    fetchUserById();
-    _submitForm();
+    user_id = widget.user_id;
+    
+    // Use passed data if available, otherwise fetch from API
+    if (widget.first_name != null && 
+        widget.last_name != null && 
+        widget.email != null && 
+        widget.user_name != null && 
+        widget.picture != null) {
+      setState(() {
+        first_name = widget.first_name!;
+        last_name = widget.last_name!;
+        email = widget.email!;
+        user_name = widget.user_name!;
+        picture = widget.picture!;
+
+        firstNameController.text = first_name;
+        lastNameController.text = last_name;
+        userNameController.text = user_name;
+        emailController.text = email;
+      });
+    } else {
+      fetchUserById();
+    }
   }
 
   Future<void> _pickFile() async {
@@ -267,13 +288,14 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: background, // Set the background color
       appBar: AppBar(
         backgroundColor: background,
         elevation: 0,
         leading: IconButton(
           icon: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Icon(Iconsax.arrow_left_2, size: 30, color: black),
+            child: Icon(Iconsax.arrow_left_2, size: 20, color: black),
           ),
           onPressed: () {
             Navigator.push(
@@ -286,6 +308,15 @@ class _EditProfileState extends State<EditProfile> {
                         )));
           },
         ),
+        title: Text(
+          'Edit Profile',
+          style: GoogleFonts.poppins(
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+            color: black,
+          ),
+        ),
+        centerTitle: false,
       ),
       body: SingleChildScrollView(
           child: Padding(
@@ -304,58 +335,29 @@ class _EditProfileState extends State<EditProfile> {
                       Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(0),
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            child: SizedBox(
-                                              height: 30,
-                                              width: 30,
-                                              child: Image.asset(
-                                                '/logos/logo.png',
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(width: 10),
-                                        Text(
-                                          'Manage Profile',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: 28,
-                                            fontWeight: FontWeight.bold,
-                                            color: black,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
+                            
                             Container(
                                 child: Column(children: [
                               Center(
                                 child: Stack(
                                   children: [
-                                    CircleAvatar(
-                                      radius: 80,
-                                      backgroundImage: NetworkImage(picture)
-                                          as ImageProvider,
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: darkblue,
+                                          width: 3,
+                                        ),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(5.0), // Space between border and image
+                                        child: CircleAvatar(
+                                          radius: 50,
+                                          backgroundImage: picture.startsWith('http') 
+                                            ? NetworkImage(picture) as ImageProvider
+                                            : AssetImage(picture),
+                                        ),
+                                      ),
                                     ),
                                     Positioned(
                                       bottom: 0,
@@ -408,11 +410,12 @@ class _EditProfileState extends State<EditProfile> {
                                           });
                                         },
                                         child: CircleAvatar(
-                                          backgroundColor: white,
-                                          radius: 25,
+                                          backgroundColor: darkblue,
+                                          radius: 18,
                                           child: Icon(
-                                            Icons.camera_alt,
-                                            color: black,
+                                            Iconsax.camera,
+                                            color: white,
+                                            size: 16,
                                           ),
                                         ),
                                       ),
@@ -434,22 +437,25 @@ class _EditProfileState extends State<EditProfile> {
                                   controller: firstNameController,
                                   validator: _validateFirstName,
                                   decoration: InputDecoration(
-                                    enabledBorder: OutlineInputBorder(
+                                    enabledBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                          width: 2, color: lightgrey),
-                                      borderRadius: BorderRadius.circular(10.0),
+                                          width: 1, color: lightgrey),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          width: 1, color: darkblue),
                                     ),
                                     prefixIcon: ColorFiltered(
                                       colorFilter: ColorFilter.mode(
                                         lightgrey,
                                         BlendMode.srcIn,
                                       ),
-                                      child: Icon(Iconsax.user),
+                                      child: Icon(Iconsax.user ,size: 16,),
                                     ),
                                     iconColor: lightgrey,
                                     labelText: 'First Name',
                                     labelStyle: GoogleFonts.poppins(
-                                      fontSize: 15,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.w400,
                                       color: lightgrey,
                                     ),
@@ -462,22 +468,25 @@ class _EditProfileState extends State<EditProfile> {
                                   controller: lastNameController,
                                   validator: _validateLastName,
                                   decoration: InputDecoration(
-                                    enabledBorder: OutlineInputBorder(
+                                    enabledBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                          width: 2, color: lightgrey),
-                                      borderRadius: BorderRadius.circular(10.0),
+                                          width: 1, color: lightgrey),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          width: 1, color: darkblue),
                                     ),
                                     prefixIcon: ColorFiltered(
                                       colorFilter: ColorFilter.mode(
                                         lightgrey,
                                         BlendMode.srcIn,
                                       ),
-                                      child: Icon(Iconsax.user),
+                                      child: Icon(Iconsax.user, size: 16,),
                                     ),
                                     iconColor: lightgrey,
                                     labelText: 'Last Name',
                                     labelStyle: GoogleFonts.poppins(
-                                      fontSize: 15,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.w400,
                                       color: lightgrey,
                                     ),
@@ -490,22 +499,25 @@ class _EditProfileState extends State<EditProfile> {
                                   controller: userNameController,
                                   validator: _validateUserName,
                                   decoration: InputDecoration(
-                                    enabledBorder: OutlineInputBorder(
+                                    enabledBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                          width: 2, color: lightgrey),
-                                      borderRadius: BorderRadius.circular(10.0),
+                                          width: 1, color: lightgrey),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          width: 1, color: darkblue),
                                     ),
                                     prefixIcon: ColorFiltered(
                                       colorFilter: ColorFilter.mode(
                                         lightgrey,
                                         BlendMode.srcIn,
                                       ),
-                                      child: Icon(Iconsax.direct_right),
+                                      child: Icon(Iconsax.direct_right, size: 16,),
                                     ),
                                     iconColor: lightgrey,
                                     labelText: 'User Name',
                                     labelStyle: GoogleFonts.poppins(
-                                      fontSize: 15,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.w400,
                                       color: lightgrey,
                                     ),
@@ -518,21 +530,24 @@ class _EditProfileState extends State<EditProfile> {
                                   controller: emailController,
                                   validator: _validateEmail,
                                   decoration: InputDecoration(
-                                    enabledBorder: OutlineInputBorder(
+                                    enabledBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                          width: 2, color: lightgrey),
-                                      borderRadius: BorderRadius.circular(10.0),
+                                          width: 1, color: lightgrey),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          width:  1, color: darkblue),
                                     ),
                                     prefixIcon: ColorFiltered(
                                       colorFilter: ColorFilter.mode(
                                         lightgrey,
                                         BlendMode.srcIn,
                                       ),
-                                      child: Icon(Iconsax.sms),
+                                      child: Icon(Iconsax.sms, size: 16,),
                                     ),
                                     labelText: 'Email',
                                     labelStyle: GoogleFonts.poppins(
-                                      fontSize: 15,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.w400,
                                       color: lightgrey,
                                     ),
@@ -540,16 +555,45 @@ class _EditProfileState extends State<EditProfile> {
                                 ),
                               ],
                             ),
+                            
                             SizedBox(
-                              height: 5,
+                              height: 20,
                             ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
+                                OutlinedButton(
+                                  onPressed: () {
+                                    // Navigate back to profile screen
+                                    Navigator.pop(context);
+                                  },
+                                  style: ButtonStyle(
+                                    side: MaterialStateProperty.all<BorderSide>(
+                                      BorderSide(
+                                        width: 1.0,
+                                        color: lightgrey,
+                                      ),
+                                    ),
+                                    padding: MaterialStateProperty.all<EdgeInsets>(
+                                      EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                    ),
+                                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(30.0),
+                                      ),
+                                    ),
+                                    backgroundColor: MaterialStateProperty.all<Color>(
+                                        Colors.transparent),
+                                  ),
+                                  child: Text(
+                                    'Cancel',
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                      color: lightgrey,
+                                    ),
+                                  ),
+                                ),
                                 OutlinedButton(
                                   onPressed: () {
                                     if (_formKey.currentState!.validate()) {
@@ -557,35 +601,28 @@ class _EditProfileState extends State<EditProfile> {
                                     }
                                   },
                                   style: ButtonStyle(
-                                    elevation:
-                                        MaterialStateProperty.all<double>(
-                                            100.0),
                                     side: MaterialStateProperty.all<BorderSide>(
                                       BorderSide(
-                                        width: 0.0,
+                                        width: 1.0,
                                         color: darkblue,
                                       ),
                                     ),
-                                    padding:
-                                        MaterialStateProperty.all<EdgeInsets>(
-                                      EdgeInsets.all(25.0),
+                                    padding: MaterialStateProperty.all<EdgeInsets>(
+                                      EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                     ),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
+                                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                       RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
+                                        borderRadius: BorderRadius.circular(30.0),
                                       ),
                                     ),
-                                    backgroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                            darkblue),
+                                    backgroundColor: MaterialStateProperty.all<Color>(
+                                        darkblue),
                                   ),
                                   child: Text(
-                                    'SUBMIT',
+                                    'Save',
                                     style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.w600,
-                                      fontSize: 20,
+                                      fontSize: 14,
                                       color: white,
                                     ),
                                   ),

@@ -46,7 +46,7 @@ class _StudentHomeState extends State<StudentHome> {
           children: [
             Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.05,
+                horizontal: MediaQuery.of(context).size.width * 0.04,
                 vertical: 20,
               ),
               child: Column(

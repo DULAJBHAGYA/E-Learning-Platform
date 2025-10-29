@@ -43,17 +43,18 @@ class HeroCard extends StatelessWidget {
                 children: [
                   Text(
                     'Learn New Skills',
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.plusJakartaSans(
                       fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                      color: black,
                     ),
                   ),
                   Text(
                     'Expand your knowledge with our courses',
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.plusJakartaSans(
                       fontSize: 12,
-                      color: Colors.black,
+                      color: black,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   SizedBox(height: 5),
@@ -72,10 +73,10 @@ class HeroCard extends StatelessWidget {
                     ),
                     child: Text(
                       'Get Started',
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.plusJakartaSans(
                         fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        color: white,
                       ),
                     ),
                   ),

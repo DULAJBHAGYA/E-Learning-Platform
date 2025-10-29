@@ -14,6 +14,11 @@ import '../../services/enrollServices.dart';
 import '../../services/materialServices.dart';
 import '../../services/requestServices.dart';
 import '../course content/courseContent.dart';
+import 'aboutCourse.dart'; // Import the AboutCourse widget
+import 'actionButton.dart'; // Import the ActionButton widget
+import 'lessons.dart'; // Import the Lessons widget
+import 'myClipper.dart'; // Import the MyClipper class
+import 'sharedPreferencesHelper.dart'; // Import the SharedPreferencesHelper class
 
 class CourseDescription extends StatefulWidget {
   final int course_id;
@@ -22,6 +27,7 @@ class CourseDescription extends StatefulWidget {
   final String title;
   final String catagory;
   final Map<String, dynamic> what_will;
+  final String level; // Add level parameter
 
   const CourseDescription({
     Key? key,
@@ -31,6 +37,7 @@ class CourseDescription extends StatefulWidget {
     required this.title,
     required this.catagory,
     required this.what_will,
+    this.level = 'Beginner', // Add level with default value
   }) : super(key: key);
 
   @override
@@ -164,172 +171,129 @@ class _CourseDescriptionState extends State<CourseDescription>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
-      body: SingleChildScrollView(
+      appBar: AppBar(
+        backgroundColor: background,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Iconsax.arrow_left_2, size: 20, color: black),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const StdAllCourses(
+                  username: '',
+                  accessToken: '',
+                  refreshToken: '',
+                ),
+              ),
+            );
+          },
+        ),
+       
+      ),
+      body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(0),
-          child: Container(
+          padding: EdgeInsets.only( left: 20, right: 20, bottom: 20), // Add padding for the entire screen
+          child: SingleChildScrollView(
             child: Column(
               children: [
                 Stack(
                   children: [
-                    ClipPath(
-                      clipper: MyClipper(),
-                      child: Container(
-                        height: 300,
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(widget.image),
-                            fit: BoxFit.cover,
-                          ),
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.15,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: widget.image.startsWith('http') 
+                              ? NetworkImage(widget.image) as ImageProvider<Object>
+                              : AssetImage(widget.image) as ImageProvider<Object>,
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(30)),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(30.0),
-                      child: Column(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const StdAllCourses(
-                                    username: '',
-                                    accessToken: '',
-                                    refreshToken: '',
-                                  ),
-                                ),
-                              );
-                            },
-                            child: Row(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: white,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Align(
-                                    alignment: Alignment.bottomLeft,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Icon(
-                                        Iconsax.arrow_left_2,
-                                        size: 20,
-                                        color: black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    
                   ],
                 ),
+                // Content after the image
                 Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: EdgeInsets.symmetric(
+                    vertical: 5,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      SizedBox(height: 5),
                       Text(
                         widget.title,
-                        style: GoogleFonts.poppins(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w800,
                           color: black,
                         ),
                       ),
-                      SizedBox(height: 5),
+                      SizedBox(height: 10),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: white,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: Text(
-                                widget.catagory.toUpperCase(),
-                                style: GoogleFonts.poppins(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: darkblue,
+                          Row(
+                            children: [
+                              // Teacher avatar
+                              CircleAvatar(
+                                radius: 16,
+                                backgroundImage: AssetImage('assets/images/dulaj.jpg'), // Replace with actual teacher image
+                                backgroundColor: background2,
+                              ),
+                              SizedBox(width: 10),
+                              // Teacher name
+                              Text(
+                                'John Doe', // Replace with actual teacher name
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: grey,
                                 ),
                               ),
-                            ),
+                            ],
+                          ),
+                          // Rating
+                          Row(
+                            children: [
+                              Icon(Iconsax.magic_star5, color: Colors.amber, size: 20),
+                              SizedBox(width: 5),
+                              Text(
+                                '4.8 (1.2K)', // Replace with actual rating
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: grey,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 20),
                       Text(
                         widget.description,
                         textAlign: TextAlign.justify,
-                        style: GoogleFonts.poppins(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                          color: black,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: grey,
                         ),
                       ),
                       SizedBox(height: 20),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(Iconsax.people, size: 15, color: darkblue),
-                                SizedBox(width: 2),
-                                Text('${subCount.toString()} Students',
-                                    style: GoogleFonts.poppins(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        color: black)),
-                              ],
-                            ),
-                            SizedBox(width: 15),
-                            Row(
-                              children: [
-                                Icon(Iconsax.video_play,
-                                    size: 15, color: darkblue),
-                                SizedBox(width: 2),
-                                Text('${materialCount.toString()} Lessons',
-                                    style: GoogleFonts.poppins(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        color: black)),
-                              ],
-                            ),
-                            SizedBox(width: 15),
-                            Row(
-                              children: [
-                                Icon(Iconsax.document,
-                                    size: 15, color: darkblue),
-                                SizedBox(width: 2),
-                                Text('Certificate',
-                                    style: GoogleFonts.poppins(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        color: black)),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 10),
+                     
                       TabBar(
                         controller: _tabController,
                         tabs: [
                           Tab(
                             child: Text(
                               'About',
-                              style: GoogleFonts.poppins(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
                                 color: _tabController.index == 0
                                     ? black
                                     : lightgrey,
@@ -339,9 +303,9 @@ class _CourseDescriptionState extends State<CourseDescription>
                           Tab(
                             child: Text(
                               'Lessons',
-                              style: GoogleFonts.poppins(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
                                 color: _tabController.index == 1
                                     ? black
                                     : lightgrey,
@@ -425,284 +389,10 @@ class _CourseDescriptionState extends State<CourseDescription>
   }
 
   Widget getActionButton() {
-    if (!active && !pending) {
-      return TextButton(
-        style: TextButton.styleFrom(
-          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-          backgroundColor: darkblue,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          side: BorderSide(
-            color: darkblue,
-            width: 2,
-          ),
-        ),
-        onPressed: () async {
-          try {
-            int? user_id = await SharedPreferencesHelper.getUserId();
-            if (user_id == null) {
-              print('User ID not found in SharedPreferences');
-              return;
-            }
-
-            await EnrollService.instance.postEnrollment(
-              user_id,
-              widget.course_id,
-            );
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Enroll request sent successfully!'),
-                duration: Duration(seconds: 2),
-              ),
-            );
-          } catch (e) {
-            print('Enrollment Error: $e');
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content:
-                    Text('Failed to send enroll request. Please try again.'),
-                duration: Duration(seconds: 2),
-              ),
-            );
-          }
-        },
-        child: Text(
-          'Enroll Now'.toUpperCase(),
-          style: GoogleFonts.poppins(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-            color: white,
-          ),
-        ),
-      );
-    } else if (!active && pending) {
-      return TextButton(
-        style: TextButton.styleFrom(
-          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-          backgroundColor: pendingColor,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          side: BorderSide(
-            color: pendingColor,
-            width: 2,
-          ),
-        ),
-        onPressed: null,
-        child: Text(
-          'Pending'.toUpperCase(),
-          style: GoogleFonts.poppins(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-            color: white,
-          ),
-        ),
-      );
-    } else if (active && !pending) {
-      return TextButton(
-        style: TextButton.styleFrom(
-          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-          backgroundColor: darkblue,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          side: BorderSide(
-            color: darkblue,
-            width: 2,
-          ),
-        ),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MyCourses()),
-          );
-        },
-        child: Text(
-          'Get Started'.toUpperCase(),
-          style: GoogleFonts.poppins(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-            color: white,
-          ),
-        ),
-      );
-    } else {
-      return SizedBox.shrink();
-    }
-  }
-}
-
-class SharedPreferencesHelper {
-  static Future<int?> getUserId() async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      return prefs.getInt('user_id');
-    } catch (e) {
-      print('Error fetching user ID from SharedPreferences: $e');
-      return null;
-    }
-  }
-}
-
-class MyClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    var path = Path();
-
-    path.lineTo(0, 0);
-
-    path.lineTo(0, size.height);
-
-    final firstCurve = Offset(0, size.height - 30);
-    final lastCurve = Offset(40, size.height - 30);
-    path.quadraticBezierTo(
-        firstCurve.dx, firstCurve.dy, lastCurve.dx, lastCurve.dy);
-
-    final secondCurve = Offset(size.width - 40, size.height - 30);
-    final thirdCurve = Offset(size.width - 40, size.height - 30);
-    path.quadraticBezierTo(
-        secondCurve.dx, secondCurve.dy, thirdCurve.dx, thirdCurve.dy);
-
-    final lastCurve2 = Offset(size.width, size.height - 30);
-    final firstCurve2 = Offset(size.width, size.height);
-    path.quadraticBezierTo(
-        lastCurve2.dx, lastCurve2.dy, firstCurve2.dx, firstCurve2.dy);
-    path.lineTo(size.width, 0);
-
-    path.close();
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
-    return false; // Return true if the new instance needs to repaint the path
-  }
-}
-
-class Lessons extends StatelessWidget {
-  final int course_id;
-  final int material_id;
-  final String material_file;
-  final String title;
-  final int order_number;
-
-  const Lessons({
-    required this.course_id,
-    required this.order_number,
-    required this.material_id,
-    required this.material_file,
-    required this.title,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-      height: 50,
-      width: MediaQuery.of(context).size.width * 0.9,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: white,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(
-          children: [
-            SizedBox(width: 20),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '$title',
-                  overflow: TextOverflow.clip,
-                  style: GoogleFonts.poppins(
-                      fontSize: 15, fontWeight: FontWeight.w500, color: black),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class AboutCourse extends StatelessWidget {
-  final Map<String, dynamic>? what_will;
-  final bool active;
-  final bool pending;
-
-  const AboutCourse({
-    required this.what_will,
-    required this.active,
-    required this.pending,
-    Key? key,
-  }) : super(key: key);
-
-  String _formatWhatWill(Map<String, dynamic> whatWill) {
-    String formattedString = '';
-
-    if (whatWill.containsKey('what_will_you_learn')) {
-      formattedString += 'What will you learn:\n';
-      whatWill['what_will_you_learn'].forEach((key, value) {
-        formattedString += ' - $value\n';
-      });
-    }
-
-    if (whatWill.containsKey('what_skil_you_gain')) {
-      formattedString += '\nWhat skills you will gain:\n';
-      whatWill['what_skil_you_gain'].forEach((key, value) {
-        formattedString += ' - $value\n';
-      });
-    }
-
-    if (whatWill.containsKey('who_should_learn')) {
-      formattedString += '\nWho should learn:\n';
-      whatWill['who_should_learn'].forEach((key, value) {
-        formattedString += ' - $value\n';
-      });
-    }
-
-    return formattedString;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.all(0.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'About Course',
-                    style: GoogleFonts.poppins(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      color: black,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  if (what_will != null)
-                    Text(
-                      _formatWhatWill(what_will!),
-                      style: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: black,
-                      ),
-                    ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+    return ActionButton(
+      active: active,
+      pending: pending,
+      course_id: widget.course_id,
     );
   }
 }

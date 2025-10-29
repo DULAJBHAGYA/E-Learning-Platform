@@ -17,12 +17,30 @@ class UserInfo extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            RichText(
+  text: TextSpan(
+    style: GoogleFonts.plusJakartaSans(
+      fontSize: 24,
+      color: black,
+    ),
+    children: [
+            TextSpan(
+              text: 'Hello, ',
+              style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w600), // lighter
+            ),
+            TextSpan(
+              text: 'Dulaj!',
+              style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w800), // bolder
+            ),
+          ],
+        ),
+      ),
             Text(
-              'Hello, Dulaj!',
-              style: GoogleFonts.poppins(
-                fontSize: 25,
-                fontWeight: FontWeight.w500,
-                color: black,
+              'Explore the best courses with us',
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: grey,
               ),
             ),
            
@@ -40,7 +58,7 @@ class UserInfo extends StatelessWidget {
               height: 50,
               child: CircleAvatar(
                 radius: 48,
-                backgroundImage: AssetImage('assets/images/user1.jpg'),
+                backgroundImage: AssetImage('assets/images/dulaj.jpg'),
                 backgroundColor: Colors.grey[300],
               ),
             ),

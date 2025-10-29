@@ -48,9 +48,9 @@ class _TopArticlesState extends State<TopArticles> {
         children: [
           Text(
             'Top Articles for You',
-            style: GoogleFonts.poppins(
-              fontSize: 22,
-              fontWeight: FontWeight.w500,
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 24,
+              fontWeight: FontWeight.w800,
               color: black,
             ),
           ),

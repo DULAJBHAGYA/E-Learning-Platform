@@ -75,19 +75,22 @@ class _CourseListState extends State<CourseList> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: SingleChildScrollView(
-        child: Column(
-          children: _courses.take(3).map((course) {
-            return CourseListCard(
-              what_will: course['what_will'] ?? {},
-              description: course['description'] ?? 'No Description',
-              course_id: course['course_id'] ?? 0,
-              image: course['image'] ?? 'assets/images/flutter.png', // Use mock image
-              title: course['title'] ?? 'No Title',
-              catagory: course['catagory'] ?? 'Uncategorized',
-            );
-          }).toList(),
+    return Scaffold(
+      backgroundColor: background,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: _courses.take(3).map((course) {
+              return CourseListCard(
+                what_will: course['what_will'] ?? {},
+                description: course['description'] ?? 'No Description',
+                course_id: course['course_id'] ?? 0,
+                image: course['image'] ?? 'assets/images/flutter.png', // Use mock image
+                title: course['title'] ?? 'No Title',
+                catagory: course['catagory'] ?? 'Uncategorized',
+              );
+            }).toList(),
+          ),
         ),
       ),
     );
