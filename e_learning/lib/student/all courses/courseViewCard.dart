@@ -134,8 +134,8 @@ class _CourseViewCardState extends State<CourseViewCard> {
                             widget.catagory.toUpperCase(),
                             style: GoogleFonts.plusJakartaSans(
                               fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              color: grey,
+                              fontWeight: FontWeight.w600,
+                              color: lightgrey,
                             ),
                           ),
                         ),

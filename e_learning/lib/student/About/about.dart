@@ -32,7 +32,7 @@ class _AboutScreenState extends State<AboutScreen> {
         leading: IconButton(
           icon: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Icon(Icons.arrow_back, size: 20, color: black),
+            child: Icon(Iconsax.arrow_left_2, size: 20, color: black),
           ),
           onPressed: () {
             Navigator.push(
@@ -47,9 +47,9 @@ class _AboutScreenState extends State<AboutScreen> {
         ),
         title: Text(
           'About',
-          style: GoogleFonts.poppins(
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
+          style: GoogleFonts.plusJakartaSans(
+            fontSize: 24,
+            fontWeight: FontWeight.w800,
             color: black,
           ),
         ),
@@ -86,9 +86,9 @@ class _AboutScreenState extends State<AboutScreen> {
               Center(
                 child: Text(
                   'EduApp E-Learning Platform',
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.plusJakartaSans(
                     fontSize: 20,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w800,
                     color: black,
                   ),
                 ),
@@ -96,9 +96,9 @@ class _AboutScreenState extends State<AboutScreen> {
               Center(
                 child: Text(
                   'Version 1.0.0',
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
                     color: lightgrey,
                   ),
                 ),
@@ -107,56 +107,60 @@ class _AboutScreenState extends State<AboutScreen> {
               // Description
               Text(
                 'About Our Platform',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.plusJakartaSans(
                   fontSize: 16,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w800,
                   color: black,
-                ),
-              ),
-              Text(
-                'Our E-Learning Platform is designed to provide students with a comprehensive and engaging learning experience. We offer a wide range of courses taught by expert instructors to help you achieve your educational goals.',
-                style: GoogleFonts.poppins(
-                  fontSize: 14,
-                  color: lightgrey,
-                  height: 1.5,
                 ),
               ),
               SizedBox(height: 10),
+              Text(
+                'Our E-Learning Platform is designed to provide students with a comprehensive and engaging learning experience. We offer a wide range of courses taught by expert instructors to help you achieve your educational goals.',
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: grey,
+                  height: 1.5,
+                ),
+              ),
+              SizedBox(height: 20),
               // Features
               Text(
                 'Key Features',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.plusJakartaSans(
                   fontSize: 16,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w800,
                   color: black,
                 ),
               ),
+              SizedBox(height: 10),
               _buildFeatureItem('Access to 100+ courses across various subjects'),
               _buildFeatureItem('Learn at your own pace with 24/7 access'),
               _buildFeatureItem('Interactive video lessons and quizzes'),
               _buildFeatureItem('Download content for offline learning'),
               _buildFeatureItem('Track your progress with detailed analytics'),
               _buildFeatureItem('Connect with instructors and fellow students'),
-              SizedBox(height: 10),
+              SizedBox(height: 20),
               // Contact Info
               Text(
                 'Contact Us',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.plusJakartaSans(
                   fontSize: 16,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w800,
                   color: black,
                 ),
               ),
+              SizedBox(height: 10),
               _buildContactItem(Iconsax.sms, 'support@elearningplatform.com'),
               _buildContactItem(Iconsax.call, '+94 76 123 4567'),
               _buildContactItem(Iconsax.location, '123 Education Street, Kandy'),
-              SizedBox(height: 30),
+              SizedBox(height: 20),
               // Copyright
               Center(
                 child: Text(
                   '© 2025 EduApp E-Learning Platform. All rights reserved.',
-                  style: GoogleFonts.poppins(
-                    fontSize: 12,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 10,
                     color: lightgrey,
                   ),
                 ),
@@ -177,16 +181,17 @@ class _AboutScreenState extends State<AboutScreen> {
           Icon(
             Iconsax.tick_circle,
             color: darkblue,
-            size: 16,
+            size: 14,
           ),
           SizedBox(width: 10),
           Expanded(
             child: Text(
               feature,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.plusJakartaSans(
                 fontSize: 14,
-                color: lightgrey,
-                height: 1.3,
+                fontWeight: FontWeight.w400,
+                color: grey,
+                height: 1.5,
               ),
             ),
           ),
@@ -203,14 +208,16 @@ class _AboutScreenState extends State<AboutScreen> {
           Icon(
             icon,
             color: darkblue,
-            size: 16,
+            size: 14,
           ),
           SizedBox(width: 10),
           Text(
             text,
             style: GoogleFonts.poppins(
               fontSize: 14,
-              color: lightgrey,
+              color: grey,
+              height: 1.5,
+              fontWeight: FontWeight.w400,
             ),
           ),
         ],

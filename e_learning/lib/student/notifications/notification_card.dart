@@ -32,8 +32,8 @@ class NotificationCard extends StatelessWidget {
             color: red,
             child: Icon(
               Iconsax.trash,
-              color: Colors.white,
-              size: 24,
+              color: white,
+              size: 20,
             ),
           ),
           onDismissed: (direction) {
@@ -62,24 +62,24 @@ class NotificationCard extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: GoogleFonts.poppins(
-                        fontSize: 12,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: black,
                       ),
                     ),
                     Text(
                       time,
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.plusJakartaSans(
                         fontSize: 10,
-                        color: lightgrey,
+                        color: grey,
                       ),
                     ),
                   ],
                 ),
                 Text(
                   message,
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.plusJakartaSans(
                     fontSize: 12,
                     color: black,
                   ),

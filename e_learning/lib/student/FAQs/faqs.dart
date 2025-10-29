@@ -60,7 +60,7 @@ class _FAQsScreenState extends State<FAQsScreen> {
         leading: IconButton(
           icon: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Icon(Icons.arrow_back, size: 20, color: black),
+            child: Icon(Iconsax.arrow_left_2, size: 20, color: black),
           ),
           onPressed: () {
             Navigator.push(
@@ -75,9 +75,9 @@ class _FAQsScreenState extends State<FAQsScreen> {
         ),
         title: Text(
           'FAQs',
-          style: GoogleFonts.poppins(
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
+          style: GoogleFonts.plusJakartaSans(
+            fontSize: 24,
+            fontWeight: FontWeight.w800,
             color: black,
           ),
         ),
@@ -102,10 +102,10 @@ class _FAQsScreenState extends State<FAQsScreen> {
 
   Widget _buildFAQItem(Map<String, String> faq) {
     return Container(
-      margin: EdgeInsets.only(bottom: 5),
+      margin: EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         color: white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.1),
@@ -123,7 +123,7 @@ class _FAQsScreenState extends State<FAQsScreen> {
           tilePadding: EdgeInsets.all(10),
           title: Text(
             faq['question']!,
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.plusJakartaSans(
               fontSize: 14,
               fontWeight: FontWeight.w500,
               color: black,
@@ -135,9 +135,10 @@ class _FAQsScreenState extends State<FAQsScreen> {
               padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
               child: Text(
                 faq['answer']!,
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.plusJakartaSans(
                   fontSize: 12,
-                  color: lightgrey,
+                  color: grey,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),

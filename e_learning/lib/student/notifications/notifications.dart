@@ -111,9 +111,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     children: [
                       Text(
                         'Notifications',
-                        style: GoogleFonts.poppins(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w800,
                           color: black,
                         ),
                       ),
@@ -136,9 +136,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                               padding: const EdgeInsets.only(bottom: 5),
                               child: Text(
                                 dateGroup,
-                                style: GoogleFonts.poppins(
+                                style: GoogleFonts.plusJakartaSans(
                                   fontSize: 14,
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.w800,
                                   color: black,
                                 ),
                               ),
