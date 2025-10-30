@@ -7,10 +7,11 @@ import 'package:iconsax/iconsax.dart';
 import '../../color.dart';
 import '../../login/login.dart';
 // import '../../services/userServices.dart'; // Comment out real service
-import '../../shared/bottomNavBar.dart';
+import '../../shared/bottomNavBAr.dart';
 import '../edit_profile/editProfile.dart'; // Updated import path
 import '../FAQs/faqs.dart'; // Import FAQs screen
-import '../About/about.dart'; // Import About screen
+import '../About/presentation/pages/about.dart'; // Import About screen
+import 'logout_confirmation_dialog.dart'; // Import the new logout confirmation dialog
 
 class StudentProfile extends StatefulWidget {
   const StudentProfile({
@@ -846,13 +847,25 @@ class _StudentProfileState extends State<StudentProfile> {
                         });
                       },
                       onTap: () async {
-                        await clearAccessToken();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Login(),
-                          ),
-                        );
+                        // Show logout confirmation dialog
+                        final bool shouldLogout = await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return LogoutConfirmationDialog();
+                          },
+                        ) ?? false;
+
+                        // If user confirmed logout
+                        if (shouldLogout) {
+                          await clearAccessToken();
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Login(),
+                            ),
+                            (route) => false,
+                          );
+                        }
                       },
                       child: Container(
                         width: double.infinity,

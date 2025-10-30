@@ -2,7 +2,7 @@ import 'package:e_learning/admin/add%20courses/editCourses.dart';
 import 'package:e_learning/admin/admin%20courses/adminMaterials.dart';
 import 'package:e_learning/services/courseServices.dart'; // Import the service for fetching course details
 import 'package:e_learning/student/all%20courses/allCourses.dart';
-import 'package:e_learning/student/my%20courses/myCourses.dart';
+import 'package:e_learning/student/my%20courses/presentation/pages/myCourses.dart';
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

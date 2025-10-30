@@ -1,4 +1,4 @@
-import 'package:e_learning/student/my%20courses/myCourses.dart';
+import 'package:e_learning/student/my%20courses/presentation/pages/myCourses.dart';
 import 'package:flutter/material.dart';
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:google_fonts/google_fonts.dart';

@@ -1,12 +1,13 @@
 import 'package:e_learning/services/courseServices.dart'; // Import the service for fetching course details
 import 'package:e_learning/student/all%20courses/allCourses.dart';
-import 'package:e_learning/student/my%20courses/myCourses.dart';
+import 'package:e_learning/student/my%20courses/presentation/pages/myCourses.dart';
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/gestures.dart'; // Add this import for TapGestureRecognizer
 
 import '../../color.dart';
 import '../../services/countServices.dart';
@@ -19,6 +20,7 @@ import 'actionButton.dart'; // Import the ActionButton widget
 import 'lessons.dart'; // Import the Lessons widget
 import 'myClipper.dart'; // Import the MyClipper class
 import 'sharedPreferencesHelper.dart'; // Import the SharedPreferencesHelper class
+import 'reviews.dart'; // Import the new Reviews widget
 
 class CourseDescription extends StatefulWidget {
   final int course_id;
@@ -55,11 +57,12 @@ class _CourseDescriptionState extends State<CourseDescription>
   int materialCount = 0;
   int subCount = 0;
   List<dynamic> _addedmaterials = [];
+  bool _showFullDescription = false; // Track if full description is shown
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     fetchCourseDetails();
     fetchUserById();
     fetchMaterialCountByCourseId();
@@ -274,14 +277,69 @@ class _CourseDescriptionState extends State<CourseDescription>
                         ],
                       ),
                       SizedBox(height: 20),
-                      Text(
-                        widget.description,
-                        textAlign: TextAlign.justify,
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: grey,
-                        ),
+                      // Modified description with "See More" link within the text
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          !_showFullDescription
+                              ? Text.rich(
+                                  TextSpan(
+                                    style: GoogleFonts.plusJakartaSans(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: grey,
+                                      letterSpacing: -0.2,
+                                    ),
+                                    children: [
+                                      TextSpan(text: _getTruncatedText(widget.description)),
+                                      TextSpan(
+                                        text: ' See more',
+                                        style: GoogleFonts.plusJakartaSans(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color: const Color.fromARGB(255, 75, 123, 245),
+                                        ),
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () {
+                                            setState(() {
+                                              _showFullDescription = true;
+                                            });
+                                          },
+                                      ),
+                                    ],
+                                  ),
+                                  textAlign: TextAlign.justify,
+                                )
+                              : Text(
+                                  widget.description,
+                                  textAlign: TextAlign.justify,
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: grey,
+                                    letterSpacing: -0.2,
+                                  ),
+                                ),
+                          if (_showFullDescription)
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _showFullDescription = false;
+                                  });
+                                },
+                                child: Text(
+                                  'Show less',
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: lightgrey,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                       SizedBox(height: 20),
                      
@@ -290,10 +348,10 @@ class _CourseDescriptionState extends State<CourseDescription>
                         tabs: [
                           Tab(
                             child: Text(
-                              'About',
+                              'Preview',
                               style: GoogleFonts.plusJakartaSans(
                                 fontSize: 14,
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w600,
                                 color: _tabController.index == 0
                                     ? black
                                     : lightgrey,
@@ -305,13 +363,25 @@ class _CourseDescriptionState extends State<CourseDescription>
                               'Lessons',
                               style: GoogleFonts.plusJakartaSans(
                                 fontSize: 14,
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w600,
                                 color: _tabController.index == 1
                                     ? black
                                     : lightgrey,
                               ),
                             ),
-                          )
+                          ),
+                          Tab(
+                            child: Text(
+                              'Reviews',
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: _tabController.index == 2
+                                    ? black
+                                    : lightgrey,
+                              ),
+                            ),
+                          ),
                         ],
                         indicator: BoxDecoration(
                           border: Border(
@@ -322,11 +392,6 @@ class _CourseDescriptionState extends State<CourseDescription>
                             ),
                           ),
                         ),
-                        onTap: (index) {
-                          setState(() {
-                            _tabController.index = index;
-                          });
-                        },
                       ),
                       SizedBox(height: 20),
                       isLoading
@@ -345,35 +410,24 @@ class _CourseDescriptionState extends State<CourseDescription>
                                           what_will: widget.what_will,
                                           active: active,
                                           pending: pending,
+                                          course_id: widget.course_id, // Add course_id parameter
                                         ),
                                         SizedBox(height: 20),
-                                        Align(
-                                          alignment: Alignment.bottomRight,
-                                          child: getActionButton(),
-                                        ),
+                                        // Remove the separate action button since it's now included in AboutCourse
                                       ],
                                     ),
                                   ),
                                   SingleChildScrollView(
                                     child: Column(
-                                      children:
-                                          _addedmaterials.map((addedmaterial) {
-                                        return Lessons(
-                                          course_id:
-                                              addedmaterial['course_id'] ?? 0,
-                                          material_id:
-                                              addedmaterial['material_id'] ?? 0,
-                                          order_number:
-                                              addedmaterial['order_number'] ??
-                                                  0,
-                                          material_file:
-                                              addedmaterial['material_file'] ??
-                                                  '',
-                                          title: addedmaterial['title'] ?? '',
-                                        );
-                                      }).toList(),
+                                      children: [
+                                        Lessons(
+                                          lessons: _addedmaterials,
+                                        ),
+                                      ],
                                     ),
                                   ),
+                                  // Add the Reviews tab
+                                  Reviews(),
                                 ],
                               ),
                             ),
@@ -394,5 +448,22 @@ class _CourseDescriptionState extends State<CourseDescription>
       pending: pending,
       course_id: widget.course_id,
     );
+  }
+
+  // Helper method to get text that fits in approximately 4 lines
+  String _getTruncatedText(String text) {
+    // This is a simple approximation - in a real implementation you might want to
+    // use a more sophisticated approach to measure text
+    int maxLength = 200; // Approximate length for 4 lines
+    if (text.length <= maxLength) {
+      return text;
+    }
+    // Try to truncate at a word boundary
+    String truncated = text.substring(0, maxLength);
+    int lastSpace = truncated.lastIndexOf(' ');
+    if (lastSpace > 0) {
+      truncated = truncated.substring(0, lastSpace);
+    }
+    return truncated;
   }
 }

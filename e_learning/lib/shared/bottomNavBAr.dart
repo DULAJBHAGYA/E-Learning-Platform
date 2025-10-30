@@ -1,12 +1,12 @@
 import 'package:e_learning/color.dart';
 import 'package:e_learning/student/all%20courses/allCourses.dart';
-import 'package:e_learning/student/my%20courses/myCourses.dart';
+import 'package:e_learning/student/my%20courses/presentation/pages/myCourses.dart';
 import 'package:e_learning/student/profile/stdProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../student/home/stdHome.dart';
+import '../student/home/presentation/pages/stdHome.dart';
 import '../student/notifications/notifications.dart'; // Import the new notifications screen
 
 class BottomNavBar extends StatefulWidget {

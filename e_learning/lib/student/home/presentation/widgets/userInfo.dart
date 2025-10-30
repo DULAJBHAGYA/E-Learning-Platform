@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../color.dart';
+import '../../../../color.dart';
 
 class UserInfo extends StatelessWidget {
   const UserInfo({

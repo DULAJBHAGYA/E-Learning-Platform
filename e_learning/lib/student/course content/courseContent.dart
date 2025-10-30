@@ -1,4 +1,4 @@
-import 'package:e_learning/student/my%20courses/myCourses.dart';
+import 'package:e_learning/student/my%20courses/presentation/pages/myCourses.dart';
 import 'package:flutter/material.dart';
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -177,22 +177,36 @@ class _CourseContentState extends State<CourseContent> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
-      body: Padding(
-        padding: const EdgeInsets.all(0.0),
-        child: Column(
-          children: [
-            CourseContentHeader(
-              title: title,
-              image: image,
-              catagory: catagory,
-              progress: progress,
-            ),
-            SizedBox(height: 10),
-            Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
+      appBar: AppBar(
+        backgroundColor: background,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(EneftyIcons.arrow_left_3_outline, size: 20, color: black),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MyCourses(),
+              ),
+            );
+          },
+        ),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.only(left: 20, right: 20, bottom: 20), // Add padding for the entire screen
+          child: Column(
+            children: [
+              CourseContentHeader(
+                title: title,
+                image: image,
+                catagory: catagory,
+                progress: progress,
+              ),
+              SizedBox(height: 20),
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
                   child: Column(
                     children: _contents.map((content) {
                       final material_file = content['material_file'];
@@ -222,32 +236,32 @@ class _CourseContentState extends State<CourseContent> {
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 10),
-            if (progress > 98)
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      style: ButtonStyle(),
-                      onPressed: () async {
-                        // await updateProgress(true);
-                      },
-                      child: Text(
-                        'COMPLETED',
-                        style: GoogleFonts.poppins(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: darkblue,
+              SizedBox(height: 10),
+              if (progress > 98)
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        style: ButtonStyle(),
+                        onPressed: () async {
+                          // await updateProgress(true);
+                        },
+                        child: Text(
+                          'COMPLETED',
+                          style: GoogleFonts.poppins(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: darkblue,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -348,137 +362,279 @@ class _LessonDisplayWidgetState extends State<LessonDisplayWidget> {
       margin: const EdgeInsets.only(bottom: 10),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-        color: background,
-        borderRadius: BorderRadius.circular(20),
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(30),
       ),
-      child: ExpansionPanelList(
-        dividerColor: white,
-        expandIconColor: black,
-        elevation: 1,
-        expandedHeaderPadding: EdgeInsets.all(0),
-        expansionCallback: (int index, bool isExpanded) {
-          setState(() {
-            _isExpanded = !_isExpanded;
-          });
-        },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ExpansionPanel(
-            headerBuilder: (BuildContext context, bool isExpanded) {
-              return ListTile(
-                title: Text(
-                  widget.title,
-                  style: GoogleFonts.poppins(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
+          // Lesson header/title
+          Container(
+            padding: EdgeInsets.all(20),
+            child: Text(
+              widget.title,
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: black,
+              ),
+            ),
+          ),
+          // Horizontal divider
+          Divider(
+            color: Colors.grey[300],
+            thickness: 1,
+            height: 1,
+          ),
+          // Lesson content
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Lesson video with play icon and check circle
+                if (widget.urls.isNotEmpty && widget.urls.any((url) => url.isNotEmpty)) ...[
+                  Text(
+                    'Lesson Video',
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: black,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  GestureDetector(
+                    onTap: () {
+                      // Navigate to the first video URL
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              YoutubePlayerScreen(url: widget.urls.firstWhere((url) => url.isNotEmpty)),
+                        ),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        // Check circle icon
+                        Icon(
+                          isChecked ? EneftyIcons.tick_circle_bold : EneftyIcons.tick_circle_outline,
+                          color: isChecked ? darkblue : grey,
+                          size: 20,
+                        ),
+                        SizedBox(width: 10),
+                        Icon(
+                          EneftyIcons.video_play_outline,
+                          color: darkblue,
+                          size: 20,
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            'Play Video',
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: black,
+                            ),
+                          ),
+                        ),
+                        Icon(
+                          EneftyIcons.arrow_right_3_outline,
+                          color: grey,
+                          size: 16,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                ],
+                // Lesson material with document icon and check circle
+                Text(
+                  'Lesson Material',
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
                     color: black,
                   ),
                 ),
-              );
-            },
-            body: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                    onTap: () => _launchFileViewer(widget.material_file),
-                    child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                            color: darkblue,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Center(
-                            child: Text(
-                              'VIEW MATERIAL',
-                              style: GoogleFonts.poppins(
-                                  color: white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15),
+                SizedBox(height: 10),
+                GestureDetector(
+                  onTap: () => _launchFileViewer(widget.material_file),
+                  child: Row(
+                    children: [
+                      // Check circle icon
+                      Icon(
+                        isChecked ? EneftyIcons.tick_circle_bold : EneftyIcons.tick_circle_outline,
+                        color: isChecked ? darkblue : grey,
+                        size: 20,
+                      ),
+                      SizedBox(width: 10),
+                      Icon(
+                        EneftyIcons.document_outline,
+                        color: darkblue,
+                        size: 20,
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          'View Material',
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: black,
+                          ),
+                        ),
+                      ),
+                      Icon(
+                        EneftyIcons.arrow_right_3_outline,
+                        color: grey,
+                        size: 16,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 20),
+                // Additional resources section with check circles
+                if (widget.urls.length > 1 || (widget.urls.length == 1 && widget.urls[0] != widget.urls.firstWhere((url) => url.isNotEmpty, orElse: () => ''))) ...[
+                  Text(
+                    'Additional Resources',
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: black,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Column(
+                    children: [
+                      for (int i = 0; i < widget.urls.length; i++)
+                        if (widget.urls[i].isNotEmpty && (widget.urls.length <= 1 || widget.urls[i] != widget.urls.firstWhere((url) => url.isNotEmpty, orElse: () => ''))) ...[
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      YoutubePlayerScreen(url: widget.urls[i]),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.symmetric(vertical: 8),
+                              child: Row(
+                                children: [
+                                  // Check circle icon
+                                  Icon(
+                                    isChecked ? EneftyIcons.tick_circle_bold : EneftyIcons.tick_circle_outline,
+                                    color: isChecked ? darkblue : grey,
+                                    size: 20,
+                                  ),
+                                  SizedBox(width: 10),
+                                  Icon(
+                                    EneftyIcons.link_2_outline,
+                                    color: darkblue,
+                                    size: 20,
+                                  ),
+                                  SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      'Resource ${i + 1}',
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                        color: black,
+                                      ),
+                                    ),
+                                  ),
+                                  Icon(
+                                    EneftyIcons.arrow_right_3_outline,
+                                    color: grey,
+                                    size: 16,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        )),
+                        ],
+                    ],
                   ),
-                  for (var url in widget.urls)
-                    if (url.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GestureDetector(
+                  SizedBox(height: 20),
+                ],
+                // Assignments section with check circles
+                if (widget.assignments.isNotEmpty) ...[
+                  Text(
+                    'Assignments',
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: black,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Column(
+                    children: [
+                      for (var assignment in widget.assignments) ...[
+                        GestureDetector(
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    YoutubePlayerScreen(url: url),
+                                builder: (context) => SubmitAssignment(
+                                  username: '',
+                                  accessToken: '',
+                                  refreshToken: '',
+                                  course_id: widget.course_id,
+                                  assignment_id: assignment['assignment_id'],
+                                ),
                               ),
                             );
                           },
-                          child: Text(
-                            url,
-                            style: GoogleFonts.poppins(
-                              color: darkblue,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 15,
+                          child: Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(vertical: 8),
+                            child: Row(
+                              children: [
+                                // Check circle icon
+                                Icon(
+                                  isChecked ? EneftyIcons.tick_circle_bold : EneftyIcons.tick_circle_outline,
+                                  color: isChecked ? darkblue : grey,
+                                  size: 20,
+                                ),
+                                SizedBox(width: 10),
+                                Icon(
+                                  EneftyIcons.document_text_outline,
+                                  color: darkblue,
+                                  size: 20,
+                                ),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: Text(
+                                    assignment['title'],
+                                    style: GoogleFonts.plusJakartaSans(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: black,
+                                    ),
+                                  ),
+                                ),
+                                Icon(
+                                  EneftyIcons.arrow_right_3_outline,
+                                  color: grey,
+                                  size: 16,
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                      ),
-                  for (var assignment in widget.assignments)
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SubmitAssignment(
-                                username: '',
-                                accessToken: '',
-                                refreshToken: '',
-                                course_id: widget.course_id,
-                                assignment_id: assignment['assignment_id'],
-                              ),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          assignment['title'],
-                          style: GoogleFonts.poppins(
-                            color: black,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Checkbox(
-                        value: isChecked,
-                        onChanged: (bool? value) async {
-                          setState(() {
-                            isChecked = value!;
-                          });
-                          await _updateProgress(isChecked);
-                        },
-                      ),
-                      Text(
-                        'Done',
-                        style: GoogleFonts.poppins(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: black,
-                        ),
-                      ),
+                      ],
                     ],
                   ),
+                  SizedBox(height: 20),
                 ],
-              ),
+              ],
             ),
-            isExpanded: _isExpanded,
           ),
         ],
       ),
@@ -503,148 +659,96 @@ class CourseContentHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-        color: background,
-        borderRadius: BorderRadius.circular(20),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Stack(
             children: [
               Container(
+                height: MediaQuery.of(context).size.height * 0.15, // Match CourseDescription height
                 width: MediaQuery.of(context).size.width,
-                height: 300,
                 decoration: BoxDecoration(
-                  color: it,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20),
-                  ),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20),
-                  ),
-                  child: Image.asset(
-                    image,
+                  image: DecorationImage(
+                    image: AssetImage(image),
                     fit: BoxFit.cover,
-                    width: MediaQuery.of(context).size.width,
-                    height: 300,
                   ),
+                  borderRadius: BorderRadius.all(Radius.circular(30)), // Match CourseDescription
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const MyCourses()));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: white,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Icon(
-                      EneftyIcons.arrow_left_3_outline,
-                      color: black,
-                      size: 20,
-                    ),
-                  ),
-                ),
-              ),
+              // Removed the back button from the image
             ],
           ),
-          SizedBox(
-            height: 5,
-          ),
+          // Content after the image
           Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Row(
+            padding: EdgeInsets.symmetric(
+              vertical: 5,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                SizedBox(height: 5),
+                Text(
+                  title,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w800,
+                    color: black,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      child: Text(
-                        title,
-                        overflow: TextOverflow.fade,
-                        style: GoogleFonts.poppins(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: black,
+                    Row(
+                      children: [
+                        // Teacher avatar
+                        CircleAvatar(
+                          radius: 16,
+                          backgroundImage: AssetImage('assets/images/dulaj.jpg'),
+                          backgroundColor: background2,
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: white,
-                          borderRadius: BorderRadius.circular(20),
+                        SizedBox(width: 10),
+                        // Teacher name
+                        Text(
+                          'John Doe',
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: grey,
+                          ),
                         ),
-                        child: Text(
-                          catagory.toUpperCase(),
-                          style: GoogleFonts.poppins(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
+                      ],
+                    ),
+                    // Progress indicator (moved from CourseDescription rating position)
+                    Row(
+                      children: [
+                        // Replace star icon with circular progress indicator
+                        Container(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            value: progress / 100,
+                            strokeWidth: 2,
+                            backgroundColor: lightgrey,
                             color: darkblue,
                           ),
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          EneftyIcons.video_play_outline,
-                          color: blue,
-                          size: 15,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
+                        SizedBox(width: 5),
                         Text(
-                          'Sessions 4/6',
-                          style: GoogleFonts.poppins(
-                            fontSize: 12,
+                          '${progress.toString()}%', // Show progress percentage instead of rating
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: lightgrey,
+                            color: grey,
                           ),
                         ),
                       ],
                     ),
                   ],
                 ),
-                Spacer(),
-                CircularPercentIndicator(
-                  radius: 45.0,
-                  lineWidth: 8.0,
-                  progressColor: darkblue,
-                  animation: true,
-                  percent: progress / 100,
-                  center: Text(
-                    '${progress.toString()}%',
-                    style: GoogleFonts.poppins(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: black,
-                    ),
-                  ),
-                ),
+                SizedBox(height: 20),
+                // Category badge (moved to match CourseDescription description position)
+                
               ],
             ),
           ),

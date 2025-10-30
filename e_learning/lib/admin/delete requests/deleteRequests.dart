@@ -1,5 +1,6 @@
 import 'package:e_learning/services/courseServices.dart';
 import 'package:e_learning/shared/searchBar.dart';
+import 'package:e_learning/shared/sideMenuBar.dart';
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

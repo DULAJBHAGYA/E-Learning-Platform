@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../color.dart';
 import '../../services/enrollServices.dart';
-import '../my%20courses/myCourses.dart';
+import '../my courses/presentation/pages/myCourses.dart';
 import 'sharedPreferencesHelper.dart';
 
 class ActionButton extends StatefulWidget {

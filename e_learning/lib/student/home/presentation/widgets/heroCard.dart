@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../color.dart';
+import '../../../../color.dart';
 
 class HeroCard extends StatelessWidget {
   const HeroCard({Key? key}) : super(key: key);
@@ -9,7 +9,7 @@ class HeroCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 130,
+      height: 150,
       width: double.infinity,
       decoration: BoxDecoration(
         color: darkblue,
@@ -21,8 +21,8 @@ class HeroCard extends StatelessWidget {
           children: [
             // Left side - Image
             Container(
-              width: 150,
-              height: 150,
+              width: 180,
+              height: 180,
               child: Image.asset(
                 'assets/images/heroImage.png',
                 errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
@@ -44,7 +44,7 @@ class HeroCard extends StatelessWidget {
                   Text(
                     'Learn New Skills',
                     style: GoogleFonts.plusJakartaSans(
-                      fontSize: 15,
+                      fontSize: 16,
                       fontWeight: FontWeight.w700,
                       color: black,
                     ),
@@ -52,7 +52,7 @@ class HeroCard extends StatelessWidget {
                   Text(
                     'Expand your knowledge with our courses',
                     style: GoogleFonts.plusJakartaSans(
-                      fontSize: 12,
+                      fontSize: 14,
                       color: black,
                       fontWeight: FontWeight.w500,
                     ),
@@ -68,14 +68,14 @@ class HeroCard extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      padding: EdgeInsets.fromLTRB(20, 2, 20, 2),
+                      padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                       elevation: 0,
                     ),
                     child: Text(
                       'Get Started',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
                         color: white,
                       ),
                     ),

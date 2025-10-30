@@ -2,6 +2,7 @@ import 'package:e_learning/admin/add%20courses/add%20materials/addMaterial.dart'
 import 'package:e_learning/admin/add%20courses/newCourse.dart';
 import 'package:e_learning/color.dart';
 import 'package:e_learning/shared/searchBar.dart';
+import 'package:e_learning/shared/sideMenuBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

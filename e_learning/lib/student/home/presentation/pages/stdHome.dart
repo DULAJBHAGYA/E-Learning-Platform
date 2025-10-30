@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../color.dart';
-import '../../shared/bottomNavBar.dart';
-import '../../shared/searchBar.dart';
-import 'heroCard.dart';
-import 'userInfo.dart';
-import 'topArticles.dart';
+import '../../../../color.dart';
+import '../../../../shared/bottomNavBAr.dart';
+import '../../../../shared/searchBar.dart';
+import '../widgets/heroCard.dart';
+import '../widgets/userInfo.dart';
+import '../widgets/topArticles.dart';
 
 class StudentHome extends StatefulWidget {
   const StudentHome({
